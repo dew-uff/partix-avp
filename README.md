@@ -1,4 +1,4 @@
 partixavp
 =========
 
-Particionamento Vitural Adaptativo do Partix
+Particionamento Virtual Adaptativo do Partix
