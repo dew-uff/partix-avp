@@ -1,0 +1,12 @@
+ <results> 
+ { 
+   for $article in doc('dblp.xml')/dblp/article[position() >= 278632 and position() < 279379] 
+   where $article/journal = "ACM SIGMOD Digital Review" 
+ return 
+  <ACM_articles> 
+    {$article/title} 
+    {$article/year} 
+    {$article/volume} 
+  </ACM_articles> 
+ } 
+ </results>
