@@ -1,0 +1,537 @@
+<mediadorxml.catalog.util.Catalog>
+  <catalogName>Catalogo_Experimentos</catalogName>
+  <globalViews>
+  
+  
+  
+  
+    <!--  CENARIO 1   -->
+    
+   	<!-- Cloja -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c1</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Cloja_c1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Cloja_c1</viewName>
+      <xsdFile>Cloja_c1.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Corders -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c1</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Corders_c1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Corders_c1</viewName>
+      <xsdFile>Corders_c1.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Caddress -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Caddress_c1</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Caddress_c1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Caddress_c1</viewName>
+      <xsdFile>Caddress_c1.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Ccountry -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Ccountry_c1</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Ccountry_c1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Ccountry_c1</viewName>
+      <xsdFile>Ccountry_c1.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    
+    
+    <!--  CENARIO 2   -->
+    	
+    <!-- Cloja --> 
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c2</referenceCollection>
+          <selectionPredicates/>
+          <projectionPredicates>
+            <string>/Loja</string>
+          	<string>{/Loja/Itens}</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c2_fv1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c2</referenceCollection>
+          <selectionPredicates/>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c2_fv2.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Cloja_c2</viewName>
+      <xsdFile>Cloja_c2.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Corders -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c2</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &lt;= 4000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c2_fh1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c2</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &gt; 4000</string>
+          	<string>/order/total &lt;= 8000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c2_fh2.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c2</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &gt; 8000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c2_fh3.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Corders_c2</viewName>
+      <xsdFile>Corders_c2.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Caddress -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Caddress_c2</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Caddress_c2.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Caddress_c2</viewName>
+      <xsdFile>Caddress_c2.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Ccountry -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Ccountry_c2</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Ccountry_c2.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Ccountry_c2</viewName>
+      <xsdFile>Ccountry_c2.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    
+    
+    <!--  CENARIO 3   -->
+    
+    <!-- Cloja --> 
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates/>
+          <projectionPredicates>
+            <string>/Loja</string>
+          	<string>{/Loja/Itens}</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao = "Brinquedos"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy2.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao = "Games"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy3.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao = "Perfumaria"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy4.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao = "Eletronicos"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy5.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao = "CD"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy6.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao = "DVD"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy7.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao = "Livraria"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy8.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Cloja_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/Loja/Itens/Item/Secao != "Brinquedos"</string>
+          	<string>/Loja/Itens/Item/Secao != "Games"</string>
+          	<string>/Loja/Itens/Item/Secao != "Perfumaria"</string>
+          	<string>/Loja/Itens/Item/Secao != "Eletronicos"</string>
+          	<string>/Loja/Itens/Item/Secao != "CD"</string>
+          	<string>/Loja/Itens/Item/Secao != "DVD"</string>
+          	<string>/Loja/Itens/Item/Secao != "Livraria"</string>
+          </selectionPredicates>
+          <projectionPredicates>
+            <string>/Loja/Itens</string>
+       	  </projectionPredicates>
+          <viewName>Cloja_c3_fy9.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Cloja_c3</viewName>
+      <xsdFile>Cloja_c3.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Corders -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &lt;= 2000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c3_fh1.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &gt; 2000</string>
+          	<string>/order/total &lt;= 4000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c3_fh2.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &gt; 4000</string>
+          	<string>/order/total &lt;= 6000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c3_fh3.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &gt; 6000</string>
+          	<string>/order/total &lt;= 8000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c3_fh4.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &gt; 8000</string>
+          	<string>/order/total &lt;= 10000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c3_fh5.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Corders_c3</referenceCollection>
+          <selectionPredicates>
+          	<string>/order/total &gt; 10000</string>
+          </selectionPredicates>
+          <projectionPredicates/>
+          <viewName>Corders_c3_fh6.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Corders_c3</viewName>
+      <xsdFile>Corders_c3.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Caddress -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost2:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Caddress_c3</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Caddress_c3.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Caddress_c3</viewName>
+      <xsdFile>Caddress_c3.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    <!-- Ccountry -->    	
+    <mediadorxml.catalog.util.GlobalView>
+      <localViews>
+        <mediadorxml.catalog.util.LocalView>
+          <wrapperLocation>
+            <mediadorxml.catalog.util.WrapperLocation>
+              <uri>http://localhost1:8080/WrapperExist/services/XQueryWrapper</uri>
+              <communicationWeight>10.0</communicationWeight>
+            </mediadorxml.catalog.util.WrapperLocation>
+          </wrapperLocation>
+          <referenceCollection>Ccountry_c3</referenceCollection>
+          <selectionPredicates/>          
+          <projectionPredicates/>
+          <viewName>Ccountry_c3.xml</viewName>
+          <totalNodes>100</totalNodes>
+        </mediadorxml.catalog.util.LocalView>
+      </localViews>
+      <viewName>Ccountry_c3</viewName>
+      <xsdFile>Ccountry_c3.xsl</xsdFile>
+    </mediadorxml.catalog.util.GlobalView>
+    
+  </globalViews>
+</mediadorxml.catalog.util.Catalog>
