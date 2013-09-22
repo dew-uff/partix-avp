@@ -1,0 +1,14 @@
+#PBS -l nodes=2:ppn=8
+#PBS -l walltime=00:30:00
+#PBS -S /bin/bash
+#PBS -N carla2.cmd
+#PBS -j oe
+#PBS -V
+#PBS -m ae
+#PBS -M vcarla@gmail.com
+# change directory
+cd ${PBS_O_WORKDIR}
+echo Java Job: ${PBS_JOBID}
+which java
+sort ${PBS_NODEFILE} | uniq > ~/tmp/${PBS_JOBID}
+~/teste_copy/exp/hydra2.pbs ~/tmp/${PBS_JOBID} 16 "${PBS_JOBID}.conf"

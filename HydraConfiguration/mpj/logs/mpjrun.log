@@ -1,0 +1,14 @@
+ DEBUG runtime  - Processes Requested 16 are greater than than machines 2
+ DEBUG runtime  - divisor 8
+ DEBUG runtime  - remainder 0
+ DEBUG runtime  - Connecting to r1i0n1@10000
+ DEBUG runtime  - Processes Requested 16 are greater than than machines 2
+ DEBUG runtime  - divisor 8
+ DEBUG runtime  - remainder 0
+ DEBUG runtime  - Connecting to r1i0n1@10000
+ DEBUG runtime  - Connecting to r1i0n3@10000
+ DEBUG runtime  - Connecting to r1i0n1@10000
+ DEBUG runtime  - Processes Requested 2 are greater than than machines 1
+ DEBUG runtime  - divisor 2
+ DEBUG runtime  - remainder 0
+ DEBUG runtime  - Connecting to localhost@10000
