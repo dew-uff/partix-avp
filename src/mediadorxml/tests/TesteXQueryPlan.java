@@ -67,10 +67,10 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 	private JRadioButton jRadioButtonResultado = null;	
 	
 	private String xquery = null;
-	private String userInput = null; // indica a query original do usuário.
+	private String userInput = null; // indica a query original do usuï¿½rio.
 	
-	// docQueries: recebe as sub-consultas com expressões doc(), geradas quando a consulta informada pelo usuário possui a expressão collection().
-	// para cada documento existente na coleção informada, uma nova sub-consulta é gerada.
+	// docQueries: recebe as sub-consultas com expressï¿½es doc(), geradas quando a consulta informada pelo usuï¿½rio possui a expressï¿½o collection().
+	// para cada documento existente na coleï¿½ï¿½o informada, uma nova sub-consulta ï¿½ gerada.
 	private ArrayList<String> docQueries = null;
 	// docQueriesWithoutFragmentation: recebe as proprias consultas de entrada, quando nao ha relacao de 1 para n, dentro do documento XML consultado.
 	private ArrayList<String> docQueriesWithoutFragmentation = null;
@@ -134,7 +134,7 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 			if ( sbq.getSubQueries()!=null && sbq.getSubQueries().size() > 0 ){
 				
 			    results = "<<<< Foram gerados " + sbq.getSubQueries().size() + 
-								 " fragmentos na fragmentação virtual simples >>>> \r\n\r\n";
+								 " fragmentos na fragmentaï¿½ï¿½o virtual simples >>>> \r\n\r\n";
 				int i = 1;
 				
 				for ( String initialFragments : sbq.getSubQueries() ) {
@@ -158,8 +158,8 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 				
 				if ( this.docQueriesWithoutFragmentation != null && this.docQueriesWithoutFragmentation.size() >0 ) { // para consulta que nao foram fragmentadas pois nao ha relacionamento de 1 para n.
 
-					results = "<<<<  Não foram gerados fragmentos, pois os elementos dos documentos especificados na consulta \r\n não possuem relacionamento 1:N,"
-					               	+" condição necessária para a fragmentação. \r\n Desta forma, as consultas a serem executadas são:  >>>> \r\n\r\n";
+					results = "<<<<  Nï¿½o foram gerados fragmentos, pois os elementos dos documentos especificados na consulta \r\n nï¿½o possuem relacionamento 1:N,"
+					               	+" condiï¿½ï¿½o necessï¿½ria para a fragmentaï¿½ï¿½o. \r\n Desta forma, as consultas a serem executadas sï¿½o:  >>>> \r\n\r\n";
 					int i = 1;
 					
 					for ( String initialFragments : this.docQueriesWithoutFragmentation ) {							
@@ -168,7 +168,7 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 					}			
 				}
 				else { // nao gerou fragmentos e nao ha consultas de entrada. Ocorreu algum erro durante o parser da consulta. 
-					results = "Erro ao gerar fragmentos. A consulta de entrada está incorreta ou não é uma consulta válida para o parser do sistema.";					
+					results = "Erro ao gerar fragmentos. A consulta de entrada estï¿½ incorreta ou nï¿½o ï¿½ uma consulta vï¿½lida para o parser do sistema.";					
 				}
 			}
 			
@@ -186,7 +186,7 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 				
 		
 		if (jTextField==null || jTextField.getText().trim().equals("")) {
-			JOptionPane.showMessageDialog(null,"Por favor, informe o número de processadores.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);					
+			JOptionPane.showMessageDialog(null,"Por favor, informe o nï¿½mero de processadores.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);					
 		}
 		else {
 		
@@ -207,25 +207,25 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 				}		
 				
 				
-				if ( q.getqueryExprType()!= null && !q.getqueryExprType().contains("collection") ) { // se a consulta de entrada não contém collection, execute a fragmentação virtual.
+				if ( q.getqueryExprType()!= null && !q.getqueryExprType().contains("collection") ) { // se a consulta de entrada nï¿½o contï¿½m collection, execute a fragmentaï¿½ï¿½o virtual.
 				
 					engine = new XQueryEngine();
-					engine.execute(xquery, false); // Para debugar o parser, passe o segundo parâmetro como true.				
+					engine.execute(xquery, true); // Para debugar o parser, passe o segundo parï¿½metro como true.				
 					
 					q.setJoinCheckingFinished(true);
 					
 					if (q.isExistsJoin()){
 						q.setOrderBy("");						
-						engine.execute(xquery, false); // Executa pela segunda vez, porém desta vez fragmenta apenas um dos joins
+						engine.execute(xquery, true); // Executa pela segunda vez, porï¿½m desta vez fragmenta apenas um dos joins
 					}				
 					
 				}
 				else {	// se contem collection			
 									
-					// Efetua o parser da consulta para identificar os elementos contidos em funções de agregação ou order by, caso existam.
+					// Efetua o parser da consulta para identificar os elementos contidos em funï¿½ï¿½es de agregaï¿½ï¿½o ou order by, caso existam.
 					q.setOrderBy("");
 					engine = new XQueryEngine();
-					engine.execute(originalQuery, false);
+					engine.execute(originalQuery, true);
 					
 					if (q.getPartitioningPath()!=null && !q.getPartitioningPath().equals("")) {
 						SubQuery sbq = SubQuery.getUniqueInstance(false); 
@@ -244,7 +244,7 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 				
 				jTextAreaInput.setText(userInput);
 			} catch (NumberFormatException n) {
-				JOptionPane.showMessageDialog(null,"O número de processadores deve ser um número inteiro.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null,"O nï¿½mero de processadores deve ser um nï¿½mero inteiro.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 				n.printStackTrace();
 			} 
 			catch (Exception e) {
@@ -303,7 +303,7 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 					jContentPane.repaint();
 					setSize(1280, 995); //(width, height)
 										
-					JOptionPane.showMessageDialog(null, "Está operação pode levar alguns segundos.\nA barra central desaparecerá após a conclusão.\n\nClique OK para continuar.");										
+					JOptionPane.showMessageDialog(null, "Estï¿½ operaï¿½ï¿½o pode levar alguns segundos.\nA barra central desaparecerï¿½ apï¿½s a conclusï¿½o.\n\nClique OK para continuar.");										
 					
 					String returnClause = jTextAreaInput.getText().trim();
 					returnClause = returnClause.substring(returnClause.indexOf("return")+6, returnClause.length()); // obtem a string apos a clausula return.
@@ -311,17 +311,17 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 					if ( jTextAreaInput.getText().trim().indexOf("<" ) > 0 
 							|| jTextAreaInput.getText().trim().lastIndexOf(">") != jTextAreaInput.getText().trim().length()-1) {
 						
-						JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else if (jTextAreaInput.getText().trim().toUpperCase().indexOf("/TEXT()") != -1) {
 						
-						JOptionPane.showMessageDialog(null,"O parser deste programa não aceita a função text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"O parser deste programa nï¿½o aceita a funï¿½ï¿½o text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else if (returnClause.trim().charAt(0) != '<') {
 						
-						JOptionPane.showMessageDialog(null,"É obrigatória a especificação de um elemento XML após a cláusula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"ï¿½ obrigatï¿½ria a especificaï¿½ï¿½o de um elemento XML apï¿½s a clï¿½usula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else {
@@ -332,35 +332,35 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 							
 							Query q = Query.getUniqueInstance(true);
 							
-							/* Define o tipo de consulta (collection() ou doc()) e, caso seja sobre uma coleção 
+							/* Define o tipo de consulta (collection() ou doc()) e, caso seja sobre uma coleï¿½ï¿½o 
 							 * retorna as sub-consultas geradas, armazenando-as no objeto docQueries.
 							 */
 							q.setInputQuery(inputStr);
 							docQueries = q.setqueryExprType(inputStr);
 							
-							if ( docQueries!=null && docQueries.size() > 0 ){ // é diferente de null, quando consulta de entrada for sobre uma coleção
+							if ( docQueries!=null && docQueries.size() > 0 ){ // ï¿½ diferente de null, quando consulta de entrada for sobre uma coleï¿½ï¿½o
 								
 								docQueriesWithoutFragmentation = docQueries;								
 								
 								String subQueries = "";
 								int i = 1;
 								
-								// Exibe na tela a esquerda as sub-consultas geradas para o usuário.  
+								// Exibe na tela a esquerda as sub-consultas geradas para o usuï¿½rio.  
 								for (String docQry : docQueries) {
 									subQueries = subQueries + i + "=\r\n" + docQry + "\r\n";																
 									setOutputText(docQry);	
 									i++;
 								}
 								
-								setOutputText(" <<<< Foram geradas " + (i-1) + " sub-consulta(s) para a(s) coleção(ões) de entrada. >>>> \r\n" + subQueries);
+								setOutputText(" <<<< Foram geradas " + (i-1) + " sub-consulta(s) para a(s) coleï¿½ï¿½o(ï¿½es) de entrada. >>>> \r\n" + subQueries);
 							}
 							
 							else if (q.getqueryExprType()!=null && q.getqueryExprType().equals("document")) { // consulta de entrada sobre um documento. 
 								q.setInputQuery(inputStr);
 							}
 							
-							else if (q.getqueryExprType()!=null && q.getqueryExprType().equals("collection")) { // consulta de entrada sobre uma coleção.
-								setOutputText("Erro ao gerar sub-consultas para a coleção indicada. Verifique a consulta de entrada.");
+							else if (q.getqueryExprType()!=null && q.getqueryExprType().equals("collection")) { // consulta de entrada sobre uma coleï¿½ï¿½o.
+								setOutputText("Erro ao gerar sub-consultas para a coleï¿½ï¿½o indicada. Verifique a consulta de entrada.");
 							}
 						} 							
 						catch(Exception ex){
@@ -382,17 +382,17 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 					
 					if (jTextAreaInput.getText().trim().indexOf("<") > 0 
 							|| jTextAreaInput.getText().trim().lastIndexOf(">") != jTextAreaInput.getText().trim().length()-1) {
-						JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else if (jTextAreaInput.getText().trim().toUpperCase().indexOf("/TEXT()") != -1) {
 						
-						JOptionPane.showMessageDialog(null,"O parser deste programa não aceita a função text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"O parser deste programa nï¿½o aceita a funï¿½ï¿½o text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else if (returnClause.trim().charAt(0) != '<') {
 						
-						JOptionPane.showMessageDialog(null,"É obrigatória a especificação de um elemento XML após a cláusula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"ï¿½ obrigatï¿½ria a especificaï¿½ï¿½o de um elemento XML apï¿½s a clï¿½usula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else {
@@ -468,7 +468,7 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 							}
 						
 						} catch (NumberFormatException n) {
-							JOptionPane.showMessageDialog(null,"O número de processadores deve ser um número inteiro.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"O nï¿½mero de processadores deve ser um nï¿½mero inteiro.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 							n.printStackTrace();
 						}
 						catch(Exception ex){
@@ -489,17 +489,17 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 					
 					if (jTextAreaInput.getText().trim().indexOf("<") > 0 
 							|| jTextAreaInput.getText().trim().lastIndexOf(">") != jTextAreaInput.getText().trim().length()-1) {
-						JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else if (jTextAreaInput.getText().trim().toUpperCase().indexOf("/TEXT()") != -1) {
 						
-						JOptionPane.showMessageDialog(null,"O parser deste programa não aceita a função text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"O parser deste programa nï¿½o aceita a funï¿½ï¿½o text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else if (returnClause.trim().charAt(0) != '<') {
 						
-						JOptionPane.showMessageDialog(null,"É obrigatória a especificação de um elemento XML após a cláusula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"ï¿½ obrigatï¿½ria a especificaï¿½ï¿½o de um elemento XML apï¿½s a clï¿½usula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					else {
@@ -588,20 +588,20 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 								saida.close();
 								writer.close();
 								
-								setOutputText(" <<<< Fragmentação virtual adaptativa concluída. >>>> \r\n Verifique no diretório: \r\n " 
+								setOutputText(" <<<< Fragmentaï¿½ï¿½o virtual adaptativa concluï¿½da. >>>> \r\n Verifique no diretï¿½rio: \r\n " 
 										+ cm.getAVP_Directory() + "/fragmentos.txt");
 							}
 							else {
 								// subqueries de consultas que nao sofreram fragmentacao por nao ter elementos com cardinalidade maior que 1.
 								if ( docQueriesWithoutFragmentation != null && docQueriesWithoutFragmentation.size() > 0 ) {
 									
-									setOutputText(" <<<< A consulta de entrada não gerou fragmentos virtuais simples, logo não é possível realizar a fragmentação virtual adaptativa. >>>>");
+									setOutputText(" <<<< A consulta de entrada nï¿½o gerou fragmentos virtuais simples, logo nï¿½o ï¿½ possï¿½vel realizar a fragmentaï¿½ï¿½o virtual adaptativa. >>>>");
 								}
 															
 							}					
 						
 						} catch (NumberFormatException n) {
-							JOptionPane.showMessageDialog(null,"O número de processadores deve ser um número inteiro.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"O nï¿½mero de processadores deve ser um nï¿½mero inteiro.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 							n.printStackTrace();
 						}
 						catch(Exception ex){
@@ -622,29 +622,29 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 					returnClause = returnClause.substring(returnClause.indexOf("return")+6, returnClause.length()); // obtem a string apos a clausula return.
 					
 					if (jTextField==null || jTextField.getText().trim().equals("")) {
-						JOptionPane.showMessageDialog(null,"Por favor, informe o número de processadores.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);					
+						JOptionPane.showMessageDialog(null,"Por favor, informe o nï¿½mero de processadores.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);					
 					}
 					else {					
 					
 						if (jTextAreaInput.getText().trim().indexOf("<") > 0 
 								|| jTextAreaInput.getText().trim().lastIndexOf(">") != jTextAreaInput.getText().trim().length()-1) {
 						
-							JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"A consulta de entrada deve iniciar e terminar com um elemento construtor. Exemplo: <resultado> { for $var in ... } </resultado>.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 						}
 						
 						else if (jTextAreaInput.getText().trim().toUpperCase().indexOf("/TEXT()") != -1) {
 							
-							JOptionPane.showMessageDialog(null,"O parser deste programa não aceita a função text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"O parser deste programa nï¿½o aceita a funï¿½ï¿½o text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 						}
 						
 						else if (jTextAreaInput.getText().trim().toUpperCase().indexOf("/TEXT()") != -1) {
 	
-							JOptionPane.showMessageDialog(null,"O parser deste programa não aceita a função text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"O parser deste programa nï¿½o aceita a funï¿½ï¿½o text(). Especifique somente os caminhos xpath para acessar os elementos nos documentos XML.\r\nPor favor, corrija a consulta antes de continuar.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 						}
 						
 						else if (returnClause.trim().charAt(0) != '<') {
 							
-							JOptionPane.showMessageDialog(null,"É obrigatória a especificação de um elemento XML após a cláusula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"ï¿½ obrigatï¿½ria a especificaï¿½ï¿½o de um elemento XML apï¿½s a clï¿½usula return.\r\nEx.: <results> { for $var ... return <elemName> ... </elemName> } </results>","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 						}
 						
 						else {
@@ -677,14 +677,14 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 								}
 
 							} catch (NumberFormatException n) {
-								JOptionPane.showMessageDialog(null,"O número de processadores deve ser um número inteiro.","Fragmentação Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null,"O nï¿½mero de processadores deve ser um nï¿½mero inteiro.","Fragmentaï¿½ï¿½o Virtual Adaptativa", JOptionPane.INFORMATION_MESSAGE);
 								n.printStackTrace();
 							}
 							catch(Exception ex){
 								setOutputText(ex.getMessage() + "\r\n" + ex.getStackTrace() + "\r\n\r\n--\r\n");
 							}
 							
-							executouFVS = true; // indica que a fragmentação virtual simples já foi executada uma vez.
+							executouFVS = true; // indica que a fragmentaï¿½ï¿½o virtual simples jï¿½ foi executada uma vez.
 						} // fim else que verifica se o elemento contrutor foi especificado na consulta de entrada.
 					
 					}							
@@ -722,9 +722,9 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 		}
 				
 		/**
-		 * Para evitar que o usuário altere algo na consulta de entrada e esta alteração não seja capturada ao gerar os fragmentos,
-		 * o método abaixo reseta todos os objetos que armazenam resultados e variáveis da consulta de entrada a cada vez que o 
-		 * usuário retira o foco da textarea de entrada, ou seja, a cada vez que ocorre o evento de perda de foco (focusLost).
+		 * Para evitar que o usuï¿½rio altere algo na consulta de entrada e esta alteraï¿½ï¿½o nï¿½o seja capturada ao gerar os fragmentos,
+		 * o mï¿½todo abaixo reseta todos os objetos que armazenam resultados e variï¿½veis da consulta de entrada a cada vez que o 
+		 * usuï¿½rio retira o foco da textarea de entrada, ou seja, a cada vez que ocorre o evento de perda de foco (focusLost).
 		 */
 		jTextAreaInput.addFocusListener(new java.awt.event.FocusAdapter() {   
             public void focusLost(java.awt.event.FocusEvent e) {
@@ -807,7 +807,7 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(810, 399);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Fragmentação Virtual sobre Bases de Dados XML");
+		this.setTitle("Fragmentaï¿½ï¿½o Virtual sobre Bases de Dados XML");
 		
 		clipboard = getToolkit().getSystemClipboard();
 	}

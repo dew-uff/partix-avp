@@ -1,7 +1,6 @@
 package mediadorxml.algebra;
 
 import mediadorxml.algebra.operators.AbstractOperator;
-import mediadorxml.javaccparser.ParseException;
 
 public class XqueryPlan {
 	
@@ -9,10 +8,10 @@ public class XqueryPlan {
 	protected AbstractOperator rootOperator;
 
 	/**
-	 * Construtor default. Cria o plano global de execução de uma XQuery.
+	 * Construtor default. Cria o plano global de execuï¿½ï¿½o de uma XQuery.
 	 * @param xquery
 	 */
-	public XqueryPlan(String xquery) throws ParseException, Exception{
+	public XqueryPlan(String xquery) {
 		this.xqueryStr = xquery;
 	}
 
