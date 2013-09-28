@@ -1,0 +1,16 @@
+#!/bin/bash
+JAVA_HOME=/sw/java/jre1.6.0_21
+export MPJ_HOME=$MPJ_HOME
+export PATH=$PATH:$JAVA_HOME/bin
+THISHOST=$(hostname)
+
+if ps ax | grep -v grep | grep rmiregistry > /dev/null
+then
+  echo "$THISHOST : rmiregistry already running"
+else
+  echo "$THISHOST starting rmiregistry..."
+  rmiregistry &
+fi
+sleep 1
+echo "$THISHOST : Hydra Launcher registry:"
+cd ~/teste_copy/exp; java -Djava.security.policy=rmi.server.policy -Djava.rmi.server.hostname=$THISHOST -Djava.rmi.server.codebase=file:/home/users/carlarod/teste_copy/exp/HydraLauncher.jar -jar HydraLauncher.jar $1 $2 

@@ -1,0 +1,10 @@
+<results> 
+ { 
+   for $c in doc('loja','informacoesLoja')/Loja/Itens/Item[position() >= 1 and position() < 36]/ResenhaClientes/Resenha 
+  	where $c/Cidade="Cleveland" 
+    return 
+    <cliente>        <nome> 
+           {$c/Nome} 
+        </nome> 
+</cliente>  } 
+</results> 
