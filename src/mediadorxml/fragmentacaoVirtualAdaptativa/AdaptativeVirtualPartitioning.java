@@ -3,13 +3,14 @@ package mediadorxml.fragmentacaoVirtualAdaptativa;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import mediadorxml.catalog.CatalogManager;
-import mediadorxml.fragmentacaoVirtualSimples.Query;
-import mediadorxml.fragmentacaoVirtualSimples.SubQuery;
-
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQExpression;
 import javax.xml.xquery.XQResultSequence;
+
+import mediadorxml.catalog.CatalogManager;
+import mediadorxml.database.Database;
+import mediadorxml.fragmentacaoVirtualSimples.Query;
+import mediadorxml.fragmentacaoVirtualSimples.SubQuery;
 
 public class AdaptativeVirtualPartitioning {
  
@@ -22,7 +23,7 @@ public class AdaptativeVirtualPartitioning {
 	private int lastEnding = -1; // indica o fim do ultimo fragmento gerado na fase de ajuste
 	private int beginningOfInterval; // inicio do intervalo analisado
 	private int endOfInterval; // fim do intervalo analisado
-	private int totalTimes = 0; // indica quantas vezes houve aumento no tempo de execução.
+	private int totalTimes = 0; // indica quantas vezes houve aumento no tempo de execuï¿½ï¿½o.
 	protected ArrayList<String> adjustedFragments = null; // contem todos os fragmentos gerados apos a fase de ajuste de tamanho.
 	
 	public ArrayList<String> getFinalFragments() {
@@ -167,12 +168,12 @@ public class AdaptativeVirtualPartitioning {
 			// obtem o inicio e fim do intervalo ajustado.
 			if ( this.getLastEnding() == -1) { // ainda nao ajustou fragmento algum.			
 				
-				newBeginning =  newBeginning + Integer.toString(this.getBeginningOfInterval()); // o inicio do fragmento atual, é o próprio início do intervalo gerado na FVS.
+				newBeginning =  newBeginning + Integer.toString(this.getBeginningOfInterval()); // o inicio do fragmento atual, ï¿½ o prï¿½prio inï¿½cio do intervalo gerado na FVS.
 				
 			}
 			else {
 				
-				newBeginning = "[position() >= " + Integer.toString(this.getLastEnding()); // o inicio do fragmento atual é igual ao final do último fragmento ajustado.
+				newBeginning = "[position() >= " + Integer.toString(this.getLastEnding()); // o inicio do fragmento atual ï¿½ igual ao final do ï¿½ltimo fragmento ajustado.
 				
 			}
 			
@@ -237,26 +238,20 @@ public class AdaptativeVirtualPartitioning {
 	@SuppressWarnings("static-access")
 	private void executeAdjustedSubQuery() throws IOException{
 		
-		XQExpression xqe = null;
-		XQResultSequence xqr = null;
 		String results = "";
 		CatalogManager cm = CatalogManager.getUniqueInstance();
+		Database db = cm.getDatabase();
 		
 		long startTime;
 		long delay;
 		
 		try {
 			
-			ConnectionSedna con = new ConnectionSedna();
-			XQConnection xqc = con.establishSednaConnection();
-			
-			xqe = xqc.createExpression();			
-			
 			startTime = System.nanoTime(); // inicializa o contador de tempo.
-			xqr = xqe.executeQuery(this.getAdjustedFragment());	
+			results = db.executeQueryAsString(this.getAdjustedFragment());	
 			delay = ((System.nanoTime() - startTime)/1000); // obtem o tempo gasto com o processamento desta sub-consulta.			
 			
-			if ( this.getCurrentDelay() != -1) { // ja executou algum fragmento, armazenar o tempo de execução anterior antes de alterá-lo.				
+			if ( this.getCurrentDelay() != -1) { // ja executou algum fragmento, armazenar o tempo de execuï¿½ï¿½o anterior antes de alterï¿½-lo.				
 				
 				this.setLastDelay(this.getCurrentDelay());
 			}
@@ -265,14 +260,10 @@ public class AdaptativeVirtualPartitioning {
 			
 			updateFragmentSize();
 			
-			while (xqr.next()) {				
-				results = results + xqr.getItemAsString(null);			
-			}
-			
 			Query q = Query.getUniqueInstance(true);
 			SubQuery sbq = SubQuery.getUniqueInstance(true);
 			
-			// Se nao tiver retornado resultado algum, o único elemento retornado será o constructorElement. Nao gerar XML, pois não há resultados.				
+			// Se nao tiver retornado resultado algum, o ï¿½nico elemento retornado serï¿½ o constructorElement. Nao gerar XML, pois nï¿½o hï¿½ resultados.				
 			if ( results.trim().lastIndexOf("<") != 0 ) {
 				
 				sbq.setConstructorElement(sbq.getConstructorElement(results)); // Usado para a composicao do resultado final.
@@ -296,8 +287,6 @@ public class AdaptativeVirtualPartitioning {
 				}
 			}
 			
-			xqc.close();			
-			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();			
@@ -311,9 +300,9 @@ public class AdaptativeVirtualPartitioning {
 		
 		if ( this.getLastDelay() != -1) { // ja executou ao menos 1 fragmento, e foi armazenado o tempo anterior.
 			
-			diff = this.getCurrentDelay() - this.getLastDelay(); // calcula a diferenca entre os tempos de execução.
+			diff = this.getCurrentDelay() - this.getLastDelay(); // calcula a diferenca entre os tempos de execuï¿½ï¿½o.
 						
-			if ( diff <= 0.00) { // tempo de execução do fragmento atual foi menor que tempo de execução do fragmento anterior.
+			if ( diff <= 0.00) { // tempo de execuï¿½ï¿½o do fragmento atual foi menor que tempo de execuï¿½ï¿½o do fragmento anterior.
 				
 				// aumenta o tamanho do fragmento
 				int newSize = this.getCurrentSize() + 1;
@@ -321,10 +310,10 @@ public class AdaptativeVirtualPartitioning {
 				this.setTotalTimes(0); // reinicializa o contador.
 						
 			}
-			else { // tempo de execução do fragmento atual foi maior que tempo de execução do fragmento anterior.				
+			else { // tempo de execuï¿½ï¿½o do fragmento atual foi maior que tempo de execuï¿½ï¿½o do fragmento anterior.				
 												
 				long proportionalTime = this.getLastDelay() + ( this.getLastDelay() * (this.getLastSize() / this.getCurrentSize()) );
-				// verifica se o aumento no tempo de execução é proporcionalmente menor que o tempo obtido com o fragmento anterior.
+				// verifica se o aumento no tempo de execuï¿½ï¿½o ï¿½ proporcionalmente menor que o tempo obtido com o fragmento anterior.
 				if ( diff < proportionalTime) { 
 					
 					// aumenta o tamanho do fragmento

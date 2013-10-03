@@ -6,31 +6,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQDataSource;
 import javax.xml.xquery.XQException;
-import javax.xml.xquery.XQExpression;
 import javax.xml.xquery.XQResultSequence;
 
-import ru.ispras.sedna.driver.DatabaseManager;
-import ru.ispras.sedna.driver.DriverException;
-import ru.ispras.sedna.driver.SednaConnection;
-import ru.ispras.sedna.driver.SednaStatement;
-
 import mediadorxml.catalog.CatalogManager;
-import mediadorxml.fragmentacaoVirtualAdaptativa.ConnectionSedna;
-import net.cfoster.sedna.xqj.SednaXQDataSource;
+import mediadorxml.database.Database;
 
 public class SubQuery {
 
 	protected static SubQuery sbq;
 	protected ArrayList<String> subqueries = null;
-	protected boolean sameQuery; // indica se as sub-consultas pertencem a mesma query original. Usada para as sub-consultas geradas a partir de coleções.
-	protected String constructorElement = ""; // define o elemento especificado pelo usuário para a estrutura da resposta. Ex.: <results><el1></el1>...</results>. Neste caso, o elemento é <results>.
-	protected String elementAfterConstructor = ""; // define o elemento após o construtor para a estrutura da resposta. Ex.: <results><order><el1></el1>...</order></results>. Neste caso, o elemento é <order>.
+	protected boolean sameQuery; // indica se as sub-consultas pertencem a mesma query original. Usada para as sub-consultas geradas a partir de coleï¿½ï¿½es.
+	protected String constructorElement = ""; // define o elemento especificado pelo usuï¿½rio para a estrutura da resposta. Ex.: <results><el1></el1>...</results>. Neste caso, o elemento ï¿½ <results>.
+	protected String elementAfterConstructor = ""; // define o elemento apï¿½s o construtor para a estrutura da resposta. Ex.: <results><order><el1></el1>...</order></results>. Neste caso, o elemento ï¿½ <order>.
 	protected boolean runningSubqueries;
 	protected String docIdentifier = null; // usado para identificar o documento antes de armazena-lo na colecao de resultado para os casos em que as sub-consultas nao foram fragmentadas, e sao apenas consultas a documentos.
-	private boolean updateOrderClause = true; // usado para identificar se há elementos em torno do elemento do order by e acertar a cláusula que será utilizada no retorno.
+	private boolean updateOrderClause = true; // usado para identificar se hï¿½ elementos em torno do elemento do order by e acertar a clï¿½usula que serï¿½ utilizada no retorno.
 	
 	public boolean isUpdateOrderClause() {
 		return updateOrderClause;
@@ -108,38 +99,18 @@ public class SubQuery {
 	public static String executeSubQuery(String xquery) throws IOException {
 		
 		XQResultSequence xqr = null;
-		XQExpression xqe = null;
-		XQConnection xqc = null;
 		String retorno = "";
 		CatalogManager cm = CatalogManager.getUniqueInstance();
+		Database db = cm.getDatabase();
 		
 		try {
-			
-			ConnectionSedna con = new ConnectionSedna();
-			xqc = con.establishSednaConnection();							
-			xqe = xqc.createExpression();			
-			
-			long startTime = System.nanoTime();
+			retorno = db.executeQueryAsString(xquery);
 
-			xqr = xqe.executeQuery(xquery);	
-			long delay = ((System.nanoTime() - startTime)/1000000); // milissegundos			
-			
-			if (!xqr.next()){			
-				return null;
-			}			
-			
-			do {				
-				retorno = retorno + xqr.getItemAsString(null);				
-				
-			} while (xqr.next());
-			
-			
-			
 			try {		
 				Query q = Query.getUniqueInstance(true);
 				SubQuery sbq = SubQuery.getUniqueInstance(true);
 				
-				// Se nao tiver retornado resultado algum, o único elemento retornado será o constructorElement. Nao gerar XML, pois não há resultados.				
+				// Se nao tiver retornado resultado algum, o ï¿½nico elemento retornado serï¿½ o constructorElement. Nao gerar XML, pois nï¿½o hï¿½ resultados.				
 				if ( retorno.trim().lastIndexOf("<") != 0 ) {					
 			
 					sbq.setConstructorElement(getConstructorElement(retorno)); // Usado para a composicao do resultado final.
@@ -163,8 +134,6 @@ public class SubQuery {
 					}
 				}
 				
-				xqc.close();
-				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -177,19 +146,6 @@ public class SubQuery {
 			e.printStackTrace();
 			return null;
 		}
-		finally {
-			try {
-				if (xqr!=null) xqr.close();			
-				if (xqe!=null) xqe.close();			
-				if (xqc!=null) xqc.close();				
-			} catch (Exception e2) {
-				
-				System.out.println("Subquery.executeSubQuery class: Erro ao fechar conexão.");
-				e2.printStackTrace();
-				return null;
-			}
-		}		
-		
 	}
 	
 	public static String addOrderId(String originalPartialResult, String intervalBeginning){
@@ -229,33 +185,14 @@ public class SubQuery {
 	
 	public static void deleteCollection() throws IOException{
 		
-		SednaConnection con = null;
-		SednaStatement st = null;	
-		CatalogManager cm = CatalogManager.getUniqueInstance();
-		// Verifica se a coleção já existe.
-		ExecucaoConsulta exec = new ExecucaoConsulta();
-		
-		if (exec.executeQuery("for $col in doc('$collections')/collections/collection/@name=\"tmpResultadosParciais\" return $col").equals("true")){				
-			// Apagar a coleção caso exista.
-			
-			try {
-				con = DatabaseManager.getConnection(cm.getserverName(),cm.getdatabaseName(),cm.getuserName(),cm.getuserPassword());
-				con.begin();
-				st = con.createStatement();
-				st.execute("DROP COLLECTION 'tmpResultadosParciais'");
-				
-				// Criar a coleção
-				st.execute("CREATE COLLECTION \"tmpResultadosParciais\"");
-				con.commit();
-				con.close();
-				
-			} catch (DriverException e) {
-				System.out.println("Subquery.deleteCollection: Erro ao remover colecao.");
-				e.printStackTrace();
-			}		
-										
-		}	
-
+        CatalogManager cm = CatalogManager.getUniqueInstance();
+	    Database db = cm.getDatabase();
+	    
+	    try {
+            db.deleteCollection("tmpResultadosParciais");
+        } catch (XQException e) {
+            throw new IOException(e);
+        }
 	}
 	
 	public static void storeResultInXMLDocument(String partialResult, String intervalBeginning) throws IOException{
@@ -296,64 +233,33 @@ public class SubQuery {
 	}
 	
 	/**
-	 * Armazena os documentos que contém os resultados parciais na coleção temporária. 
+	 * Armazena os documentos que contÃªm os resultados parciais na coleÃ§Ã£o temporÃ¡ria. 
 	 * @throws IOException 
 	 */
 	private static void storeXMLDocumentIntoCollection(String fileName) throws IOException{
 		
 		CatalogManager cm = CatalogManager.getUniqueInstance();
+		Database db = cm.getDatabase();
 		String absolutePathToXMLDocuments = cm.getpartialResults_Directory();
-		SednaConnection con = null;
-		SednaStatement st = null;		
-		
 		try {
-			
 			/* ALTERAR ESTA PARTE DO CODIGO PARA PASSAR O NUMERO DA PORTA, O SERVIDOR E O BANCO DE DADOS AO QUAL O USUARIO
 			 * DESEJA SE CONECTAR. FAZER UMA FUNCAO PARA ISSO E COLOCAR NA TELA PRINCIPAL UM TEXTFIELD PARA QUE O USUARIO
 			 * ESPECIFIQUE ESTES DADOS, PRINCIPALMENTE, O NOME DO BANCO DE DADOS. 
 			 * */			
-			con = DatabaseManager.getConnection(cm.getserverName(),cm.getdatabaseName(),cm.getuserName(),cm.getuserPassword());			
-			con.begin();
-			st = con.createStatement();
-			
-			// Verifica se a coleção já existe.
-			ExecucaoConsulta exec = new ExecucaoConsulta();
-			
 			SubQuery sbq = SubQuery.getUniqueInstance(true);			
 			
 			if (!sbq.isRunningSubqueries()) { // se nao for sub-consulta referentes a mesma query original, apagar a colecao com resultados antigos.
+			    db.deleteCollection("tmpResultadosParciais");
+			    db.createCollection("tmpResultadosParciais");
+			}
 			
-				if (exec.executeQuery("for $col in doc('$collections')/collections/collection/@name=\"tmpResultadosParciais\" return $col").equals("true")){				
-					// Apagar a coleção caso exista.
-					st.execute("DROP COLLECTION 'tmpResultadosParciais'");							
-				}	
+			db.loadFileInCollection("tmpResultadosParciais", absolutePathToXMLDocuments.replace("\\", "/") + fileName);
 				
-				// Criar a coleção
-				st.execute("CREATE COLLECTION \"tmpResultadosParciais\"");	
-			}		
-			
-			// Armazenar documento na coleção temporária 
-			st.execute("LOAD '" + absolutePathToXMLDocuments.replace("\\", "/") + fileName + "' '" + fileName + "' 'tmpResultadosParciais'");
-			
-			con.commit();
-					
-				
-		} catch (DriverException e) {
+		} catch (Exception e) {
 			System.out.println("SubQuery.storeXMLDocumentIntoCollection: Erro ao efetuar upload do documento " 
-					          + absolutePathToXMLDocuments.replace("\\", "/") + fileName + " para a coleção tmpResultadosParciais.");
-			
+					          + absolutePathToXMLDocuments.replace("\\", "/") + fileName + " para a coleï¿½ï¿½o tmpResultadosParciais.");
 			e.printStackTrace();
 		}
-		finally {
-			try {
-				if (con != null) con.close();
-				
-			} catch (DriverException e2) {
-				System.out.println("Subquery.executeSubQuery class: Erro ao fechar conexão.");
-				e2.printStackTrace();
-			}
-		}
-		
 	}
 	
 	/***
@@ -389,7 +295,7 @@ public class SubQuery {
 	 *              <date>{ $order/ship_date }</date>
 	 *             </order> }
 	 *      </result>
-	 * A função retornaria date.   
+	 * A funï¿½ï¿½o retornaria date.   
 	 * @param xqueryResult
 	 * @param constructorElement
 	 * @return
@@ -419,7 +325,7 @@ public class SubQuery {
 										
 					if ( posSlash != -1 ) {
 												
-						if (orderElements[i].lastIndexOf('/') == orderElements[i].length()-1) { // se houver dois elementos na clausula order by, a string estará como $order/ship_date/$order/@id, ao separar teremos $order/ship_date/, por isso, é necessário retirar a barra do final.
+						if (orderElements[i].lastIndexOf('/') == orderElements[i].length()-1) { // se houver dois elementos na clausula order by, a string estarï¿½ como $order/ship_date/$order/@id, ao separar teremos $order/ship_date/, por isso, ï¿½ necessï¿½rio retirar a barra do final.
 							orderElements[i] = orderElements[i].substring(0, orderElements[i].length()-1);
 						}
 												
@@ -451,8 +357,8 @@ public class SubQuery {
 							}
 							
 							if ( subOrder.trim().indexOf("<")  != -1 ) { // se houver elementos entre o elemento depois do construtor e o elemento do order by, obtenha-o.
-								elementAroundOrderBy = subOrder.trim().substring(subOrder.trim().indexOf("<")+1, subOrder.trim().indexOf("{")); // obtém os elementos antes do elemento do order by.Ex.:<date><sp>{$order/ship_date}</sp></date>. Retornaria date><sp>.							
-								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[\r\n\t' '>]", ""); // consome ENTER, TAB, espaço em branco e o caracter >.
+								elementAroundOrderBy = subOrder.trim().substring(subOrder.trim().indexOf("<")+1, subOrder.trim().indexOf("{")); // obtï¿½m os elementos antes do elemento do order by.Ex.:<date><sp>{$order/ship_date}</sp></date>. Retornaria date><sp>.							
+								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[\r\n\t' '>]", ""); // consome ENTER, TAB, espaï¿½o em branco e o caracter >.
 								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[<]", "/"); // Substitui os caracteres que separam os elementos de < por /.
 
 								lastDeletedElement = elementAroundOrderBy;
@@ -520,7 +426,7 @@ public class SubQuery {
 			String subXquery = xquery.substring(posPositionFunction, xquery.length());
 			subXquery = subXquery.substring(0, subXquery.indexOf("]")+1);
 			
-			// se possui simbolo <, o fragmento tem tamanho maior que 1,caso contrario, é um fragmento unitário.
+			// se possui simbolo <, o fragmento tem tamanho maior que 1,caso contrario, ï¿½ um fragmento unitï¿½rio.
 			int posSymbol = ( subXquery.indexOf("<") != -1? subXquery.indexOf("<"): subXquery.indexOf("=") );			
 	
 			int finalIntervalSpecification = subXquery.indexOf("]");

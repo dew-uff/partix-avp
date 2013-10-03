@@ -6,23 +6,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import mediadorxml.algebra.basic.TreeNode;
 import mediadorxml.catalog.util.Catalog;
-import mediadorxml.catalog.util.GlobalView;
-import mediadorxml.catalog.util.LocalView;
 import mediadorxml.config.Config;
-import mediadorxml.exceptions.GlobalViewNotFoundException;
+import mediadorxml.database.Database;
+import mediadorxml.database.DatabaseFactory;
+import mediadorxml.fragmentacaoVirtualSimples.Reference;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import mediadorxml.fragmentacaoVirtualSimples.Collection;
-import mediadorxml.fragmentacaoVirtualSimples.Index;
-import mediadorxml.fragmentacaoVirtualSimples.Reference;
-
 public class CatalogManager {
 	
 	protected Catalog _catalog;
+	protected Database _database;
 	protected static CatalogManager _catalogManager;
 	
 	protected static String UNION = "UNION";
@@ -36,10 +32,11 @@ public class CatalogManager {
 	
 	public CatalogManager() throws FileNotFoundException, IOException{
 		
-		// De-serializaÁ„o do cat·logo de XML para o objeto da classe "Catalog"
+		// De-serializa√ß√£o do cat√°logo de XML para o objeto da classe "Catalog"
 		//String catalogFile = Config.getCatalogFile();
 		XStream xstream = new XStream(new DomDriver());
 		this._catalog = (Catalog)xstream.fromXML(new InputStreamReader(Config.getCatalogFileInputStream()));
+		this._database = DatabaseFactory.createDatabase(Config.getCatalogFileInputStream());
 	}
 	
 	public CatalogManager(Catalog catalog){
@@ -47,7 +44,7 @@ public class CatalogManager {
 	}
 	
 	public void save() throws IOException{
-		// serializaÁ„o do cat·logo em XML
+		// serializa√ß√£o do cat√°logo em XML
 		String catalogFile = Config.getCatalogFile();
 		XStream xstream = new XStream(new DomDriver());
 		String xml = xstream.toXML(this._catalog);
@@ -109,5 +106,9 @@ public class CatalogManager {
 	
 	public String getportNumber(){
 		return this._catalog.getPortNumber();
+	}
+	
+	public Database getDatabase() {
+	    return _database;
 	}
 }

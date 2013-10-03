@@ -37,6 +37,7 @@
   <userName>SYSTEM</userName>
   <userPassword>MANAGER</userPassword>
   <portNumber>5050</portNumber>
+  <type>BASEX</type>
   
   <!-- Parâmetros que indicam os relacionamentos entre chave primária e estrangeira, quando a chave primária
   não é o atributo id do elemento. Assim, a fragmentação de consultas com junções só poderá ser realizada após
