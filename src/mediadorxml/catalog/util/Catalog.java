@@ -11,18 +11,20 @@ public class Catalog {
 	
 	protected String catalogName;	
 		
+	protected String type;
+	
 	/*Carla -27/11/2010*/	
 	protected ArrayList<Reference> relationships;
 	protected String cardinalityQuery;
 	protected String documentsQuery;
 	
-	// Diretórios onde os arquivo com os fragmentos e os resultados são gerados.
-	// O usuário deve especificar no catálogo o caminho do arquivo no computador local, onde o sistema está sendo executado.
+	// Diretï¿½rios onde os arquivo com os fragmentos e os resultados sï¿½o gerados.
+	// O usuï¿½rio deve especificar no catï¿½logo o caminho do arquivo no computador local, onde o sistema estï¿½ sendo executado.
 	protected String svpDirectory;	
 	protected String avpDirectory;
 	protected String partialResultDirectory;
 	
-	/* Parâmetros utilizados para conexão com o banco de dados Sedna*/
+	/* Parï¿½metros utilizados para conexï¿½o com o banco de dados Sedna*/
 	protected String serverName;
 	protected String databaseName;
 	protected String userName;
@@ -102,7 +104,7 @@ public class Catalog {
 		String xqueryReturn = this.cardinalityQuery;		
 		xqueryReturn = xqueryReturn.replace("#", documentName); // adiciona o nome do documento
 		xqueryReturn = xqueryReturn.replace("%", collectionName);  // adiciona o nome do elemento
-		xqueryReturn = xqueryReturn.replace("?", path);  // adiciona o caminho até o elemento
+		xqueryReturn = xqueryReturn.replace("?", path);  // adiciona o caminho atï¿½ o elemento
 		return xqueryReturn;
 	}
 	
@@ -112,7 +114,7 @@ public class Catalog {
 	
 	public String getFormattedDocumentsQuery(String collectionName){
 		String xqueryReturn = this.documentsQuery;
-		xqueryReturn = xqueryReturn.replace("?", collectionName); // adiciona o nome da coleção		
+		xqueryReturn = xqueryReturn.replace("?", collectionName); // adiciona o nome da coleï¿½ï¿½o		
 		return xqueryReturn;
 	}
 

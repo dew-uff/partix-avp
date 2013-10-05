@@ -21,22 +21,22 @@
   <!-- Parâmetros que indicam os diretórios onde os arquivos resultantes da fragmentação são armazenados. -->     
   
   <!-- <svpDirectory>C:/Users/carla/Desktop/Desktop/DissertacaoMestrado/SVP</svpDirectory> -->  
-  <svpDirectory>/home/hduser/tests/svp</svpDirectory>  
+  <svpDirectory>/home/hduser/mpj/svp</svpDirectory>  
   
-  <avpDirectory>/home/hduser/tests/avp</avpDirectory> 
+  <avpDirectory>/home/hduser/mpj/avp</avpDirectory> 
   <!-- <avpDirectory>C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/AVP</avpDirectory> -->
   
   <!--  <partialResultDirectory>C:/Users/carla/Desktop/Desktop/DissertacaoMestrado/partialResults/</partialResultDirectory>-->
-  <partialResultDirectory>/home/hduser/tests/temp/</partialResultDirectory>  
+  <partialResultDirectory>/home/hduser/mpj/temp/</partialResultDirectory>  
   
   <!-- Parâmetros que indicam os servidor, o banco de dados, o nome e senha do usuário e o número da porta,
   necessários para estabelecer a conexão com o SGBDX Sedna.
   -->  
   <serverName>127.0.0.1</serverName>
   <databaseName>standard</databaseName>
-  <userName>SYSTEM</userName>
-  <userPassword>MANAGER</userPassword>
-  <portNumber>5050</portNumber>
+  <userName>admin</userName>
+  <userPassword>admin</userPassword>
+  <portNumber>1984</portNumber>
   <type>BASEX</type>
   
   <!-- Parâmetros que indicam os relacionamentos entre chave primária e estrangeira, quando a chave primária

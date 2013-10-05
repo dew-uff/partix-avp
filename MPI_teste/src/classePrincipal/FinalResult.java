@@ -4,14 +4,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 
-import ru.ispras.sedna.driver.DriverException;
-import ru.ispras.sedna.driver.SednaConnection;
-import ru.ispras.sedna.driver.SednaSerializedResult;
-import ru.ispras.sedna.driver.SednaStatement;
+import javax.xml.xquery.XQException;
+
+import mediadorxml.database.Database;
+import mediadorxml.database.DatabaseFactory;
 
 public class FinalResult {
 
-	public static String getFinalResult(int totalInstances) throws IOException, DriverException{
+	public static String getFinalResult(int totalInstances) throws IOException {
 		
 		SubQuery sbq = SubQuery.getUniqueInstance(true);
 		
@@ -23,10 +23,10 @@ public class FinalResult {
 		
 		//System.out.println("FINAL RESULT -- ORDER BY::"+q.getOrderBy());
 		
-	if ( q.getAggregateFunctions() != null && q.getAggregateFunctions().size() > 0 ) { // possui funcoes de agregacao na clausula LET.
+		if ( q.getAggregateFunctions() != null && q.getAggregateFunctions().size() > 0 ) { // possui funcoes de agregacao na clausula LET.
 			
 			finalResultXquery = sbq.getConstructorElement() + "{ \r\n"
-			+	" let $c:= collection('tmpResultadosParciais')/partialResult/" + sbq.getConstructorElement().replaceAll("[</>]", "") + "\r\n"
+			+	" let $c:= collection('"+StaticInfo.TEMP_DB_COLLECTION_NAME+"')/partialResult/" + sbq.getConstructorElement().replaceAll("[</>]", "") + "\r\n"
 			//+   " where $c/element()/name()!='idOrdem'" 
 			+   " \r\n return \r\n\t" + "<" + sbq.getElementAfterConstructor().replaceAll("[</>]", "") + ">";
 
@@ -70,7 +70,7 @@ public class FinalResult {
 					}
 					
 					if (expression.indexOf("count(") >=0){
-						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores já previamente computados nos resultados parciais.
+						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores jï¿½ previamente computados nos resultados parciais.
 					}
 					
 					finalResultXquery = finalResultXquery + "{ " + expression + "}";
@@ -105,7 +105,7 @@ public class FinalResult {
 					}
 					
 					if (expression.indexOf("count(") >=0){
-						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores já previamente computados nos resultados parciais.
+						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores jï¿½ previamente computados nos resultados parciais.
 					}
 					
 					finalResultXquery = finalResultXquery + "{ " + expression + "}";
@@ -145,7 +145,7 @@ public class FinalResult {
 			}
 						
 			finalResultXquery = sbq.getConstructorElement() + " {  " 
-			  + " for $ret in collection('tmpResultadosParciais')/partialResult/" 
+			  + " for $ret in collection('"+StaticInfo.TEMP_DB_COLLECTION_NAME+"')/partialResult/" 
 			  + sbq.getConstructorElement().replaceAll("[</>]", "") + "/" + sbq.getElementAfterConstructor().replaceAll("[</>]", "")					          
 	          + " order by " + orderByClause
 	          + " return $ret"
@@ -159,7 +159,7 @@ public class FinalResult {
 			orderByClause = "$ret/idOrdem";
 			
 			finalResultXquery = sbq.getConstructorElement() + " {  "
-							  +	" for $ret in collection('tmpResultadosParciais')/partialResult" 
+							  +	" for $ret in collection('"+StaticInfo.TEMP_DB_COLLECTION_NAME+"')/partialResult" 
 					          + " let $c:= $ret/" + sbq.getConstructorElement().replaceAll("[</>]", "") + "/element()" // where $ret/element()/name()!='idOrdem'"
 					          + " order by " + orderByClause + " ascending"
 					          + " return $c" 
@@ -172,120 +172,34 @@ public class FinalResult {
 		/*ExecucaoConsulta exec = new ExecucaoConsulta();
 		String finalResult = exec.executeQuery(finalResultXquery);*/
 	
-	
-	/* MODIFICADO PARA OBTER OS RESULTADOS PARCIAIS DE CADA INSTÂNCIA */
-		
-	String retorno = "";
-	int portNumber = 50;
-	String basePath = "/home/users/carlarod/finalResult/xqueryAnswer.xml";
-	String retornoComplete = "";
-		
-		
-		while ( portNumber <= ((50 + totalInstances)-1)) {
-			
-			try {
-			ConnectionSedna con = new ConnectionSedna();
-			SednaConnection scon = con.establishSednaConnection("146.164.31.140:50" + Integer.toString(portNumber), "experiments_db"); // con.establishSednaConnection("localhost", "examplesdb");
-			scon.begin();
-			
-			SednaStatement st = scon.createStatement();
-			scon.setDebugMode(true);
-			
-			//System.out.println("Finalresult.java xquery:"+ finalResultXquery);
-			boolean res = st.execute(finalResultXquery);
-						
-			if ( res ) {
-				SednaSerializedResult rs = st.getSerializedResult();				
-				//System.out.println("Subquery.executeSubQuery: - rs.next():" + rs.next());
-				//String resp = rs.next();
-				//System.out.println("SubQuery.executeSubQuery():retorno 11="+retorno+".");
-				String item;          
-				retorno = new String();           
-								
-				while ((item = rs.next()) != null) {              
-					retorno = retorno+"\n"+item;          
-				}  
-				
-				retornoComplete = retornoComplete + retorno;
-				FileWriter f = new FileWriter(basePath,true);			
-		        f.write(retorno);
-		        f.close();	        
-		        
-				/*while ( (resp = rs.next()) != null ) {				
-					//retorno = retorno + rs.next();
-					retorno = retorno + resp;
-					System.out.println("SubQuery.executeSubQuery():retorno="+retorno+".");
-				}*/
-				
-				//System.out.println("Subquery.executeSubQuery: - document:"  + "\r\n" + retorno + ".");
-			}
-			
-			portNumber =  portNumber + 1;
-		
-			scon.commit();			
-			scon.close();
-			
-			} catch (DriverException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-			
-			if ( q.getAggregateFunctions() != null && q.getAggregateFunctions().size() > 0 ) { // Possui funcoes de agregacao no resultado.
-							
-				sbq.deleteCollection("32");
-				
-				ConnectionSedna con = new ConnectionSedna();
-				SednaConnection scon = con.establishSednaConnection("146.164.31.140:5082", "experiments_db"); // con.establishSednaConnection("localhost", "examplesdb");
-				SednaStatement st = scon.createStatement();
-				
-				// Verifica se a coleção já existe.
-				ExecucaoConsulta exec = new ExecucaoConsulta();			
-				//System.out.println("SubQuery.storeXMLDocumentIntoCollection(): runningSubqueries:" + sbq.isRunningSubqueries());
-				
-				
-					if (exec.executeQuery("for $col in doc('$collections')/collections/collection/@name=\'tmpResultadosParciais' return $col", "32").equals("true")){				
-						// Apagar a coleção caso exista.				
-						st.execute("DROP COLLECTION 'tmpResultadosParciais'");
+		/* MODIFICADO PARA OBTER OS RESULTADOS PARCIAIS DE CADA INSTÃ‚NCIA */
+		Database[] databases = DatabaseFactory.getAllDatabases();
 
-						// Criar a coleção
-						st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
-					}
-					else {
-						System.out
-								.println("SubQuery.storeXMLDocumentIntoCollection():criando coleção");
-						// Criar a coleção
-						st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
-					}
-						
-						
-				
-				// Armazenar documento na coleção temporária 
-				st.execute("LOAD '" + basePath.replace("\\", "/") + "' 'xqueryAnswer.xml' 'tmpResultadosParciais'");
-				
-				scon.commit();
-				
-				boolean res = st.execute(finalResultXquery);
-				if ( res ) {
-					SednaSerializedResult rs = st.getSerializedResult();				
-					
-					String item;          
-					retorno = new String();            
-					
-					while ((item = rs.next()) != null) {              
-						retorno = retorno+"\n"+item;          
-					}				
-					
-					//System.out.println("Subquery.executeSubQuery: - document:"  + "\r\n" + retorno + ".");
-				}			
-				
-				scon.close();
-				
-				return retorno;
-			}
-			else {
-				return retornoComplete;
-			}		
-		
+		try {
+            StringBuilder sb = new StringBuilder();
+            for (Database db: databases) {
+                String partialResult = db.executeQueryAsString(finalResultXquery);
+                sb.append(partialResult);
+            }
+            FileWriter fw = new FileWriter(StaticInfo.FINAL_RESULT_FILEPATH);
+            fw.write(sb.toString());
+            fw.close();
+            
+            if ( q.getAggregateFunctions() != null && q.getAggregateFunctions().size() > 0 ) { // Possui funcoes de agregacao no resultado.
+            	
+                Database localDb = DatabaseFactory.getLocalDatabase();
+                localDb.deleteCollection(StaticInfo.TEMP_DB_COLLECTION_NAME);
+                localDb.createCollection(StaticInfo.TEMP_DB_COLLECTION_NAME);
+                
+                localDb.loadFileInCollection(StaticInfo.TEMP_DB_COLLECTION_NAME, StaticInfo.FINAL_RESULT_FILEPATH);
+                
+                return localDb.executeQueryAsString(finalResultXquery);
+            }
+            else {
+            	return sb.toString();
+            }
+        } catch (XQException e) {
+            throw new IOException(e);
+        }		
 	}
 }

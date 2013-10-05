@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<partix-sp>
+    <database>
+        <type>BASEX</type>
+        <host>hadoop-dev</host>
+        <port>1984</port>
+        <user>admin</user>
+        <password>admin</password>
+    </database>
+        <database>
+        <type>BASEX</type>
+        <host>hadoop1</host>
+        <port>1984</port>
+        <user>admin</user>
+        <password>admin</password>
+    </database>
+    <database>
+        <type>BASEX</type>
+        <host>hadoop2</host>
+        <port>1984</port>
+        <user>admin</user>
+        <password>admin</password>
+    </database>
+</partix-sp>

@@ -8,11 +8,11 @@ import java.util.Iterator;
 
 public class Query {
 
-	protected String queryExprType; // Indica se a consulta informada pelo usuário utiliza a cláusula doc() ou a cláusula collection();
-	protected String fragmentationAttribute; // Indica o caminho xpath do atributo de fragmentação virtual
+	protected String queryExprType; // Indica se a consulta informada pelo usuï¿½rio utiliza a clï¿½usula doc() ou a clï¿½usula collection();
+	protected String fragmentationAttribute; // Indica o caminho xpath do atributo de fragmentaï¿½ï¿½o virtual
 	protected long totalExecutionTime;
 	
-	protected synchronized long gettotalExecutionTime() {
+	public synchronized long gettotalExecutionTime() {
 		return totalExecutionTime;
 	}
 
@@ -33,7 +33,7 @@ public class Query {
 
 	protected String inputQuery=""; // Armazena a consulta de entrada
 	protected String orderBy = "";
-	protected String orderByType = ""; // indica se a ordenacao é ascending ou descending.
+	protected String orderByType = ""; // indica se a ordenacao ï¿½ ascending ou descending.
 	protected String lastReadForLetVariable = "";
 	protected String lastReturnVariable = "";
 	protected String lastReadFunction = ""; // indica a ultima funcao de agregacao lida
@@ -81,7 +81,7 @@ public class Query {
 		this.lastReturnVariable = lastReturnVariable;
 	}
 
-    protected Hashtable<String, String> aggregateFunctions; // indica as funçoes de agregação que devem ser acrescentadas no final.
+    protected Hashtable<String, String> aggregateFunctions; // indica as funï¿½oes de agregaï¿½ï¿½o que devem ser acrescentadas no final.
 	
 	public Hashtable<String, String> getAggregateFunctions() {
 		return aggregateFunctions;
@@ -114,7 +114,7 @@ public class Query {
 		
 		functionPredicate = aggregateFunction + "(" + variableName + ")" + comparisonOp;
 		
-		if ( comparisonOp!=null && !comparisonOp.equals("") ) { // count de claúsulas Where em consultas com FOR									
+		if ( comparisonOp!=null && !comparisonOp.equals("") ) { // count de claï¿½sulas Where em consultas com FOR									
 			this.getAggregateReturn().put(variableName, functionPredicate);
 		}
 		else { // count em consultas com LET.			
@@ -258,7 +258,7 @@ public class Query {
 	
 	public String getPathVariable(String variableName){
 		
-		String path = this.forClauses.get(variableName); // caminho da variável
+		String path = this.forClauses.get(variableName); // caminho da variï¿½vel
 		int posComma = path.indexOf(":");		
 		String subPath = path.substring(posComma+1,path.length());		
 		
@@ -273,17 +273,17 @@ public class Query {
 	
 	public String getDocumentNameByVariableName(String variableName) {
 
-		/* this.forClauses é uma hashtable que possuem a seguinte estrutura:
-		<chave, conteudo> onde a chave é o nome da variável XML, incluindo o caracter $ (ex.: $order)
-		e conteudo é o caminho completo sobre o qual a variável está definida.
+		/* this.forClauses ï¿½ uma hashtable que possuem a seguinte estrutura:
+		<chave, conteudo> onde a chave ï¿½ o nome da variï¿½vel XML, incluindo o caracter $ (ex.: $order)
+		e conteudo ï¿½ o caminho completo sobre o qual a variï¿½vel estï¿½ definida.
 		
-		Este caminho é expresso segundo o seguinte padrão: 
+		Este caminho ï¿½ expresso segundo o seguinte padrï¿½o: 
 			nomeDocumento:nomeColecao:caminhoXpath
 			Ex.: loja:informacoesLojas:Loja/Itens/Item/Pedido
 		*/
 		
 		String path = this.forClauses.get(variableName); // definicao da variavel. Indica o documento, a colecao e o caminho xpath ao qual a variavel se refere.
-		int posComma = path.indexOf(":"); // posição do primeiro caracter (:)
+		int posComma = path.indexOf(":"); // posiï¿½ï¿½o do primeiro caracter (:)
 		String documentName = path.substring(0, posComma); // Nome do documento
 		
 		return documentName;		
@@ -292,7 +292,7 @@ public class Query {
     public String getCollectionNameByVariableName(String variableName) throws IOException{
 		
 		String path = this.forClauses.get(variableName); // definicao da variavel. Indica o documento, a colecao e o caminho xpath ao qual a variavel se refere.
-		int posComma = path.indexOf(":"); // posição do primeiro caracter (:)
+		int posComma = path.indexOf(":"); // posiï¿½ï¿½o do primeiro caracter (:)
 		String subPath = path.substring(posComma+1,path.length());
 		String collectionName = subPath.substring(0,subPath.indexOf(":"));
 

@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: lib/mpj.jar lib/log4j-1.2.11.jar lib/sedna-xmldb.jar lib/sednadriver.jar lib/sxqj-beta2.jar lib/xmldb.jar
-Main-Class: classePrincipal.HelloWorld
