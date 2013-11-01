@@ -1,6 +1,5 @@
 package mediadorxml.engine.flworprocessor;
 
-import java.io.IOException;
 import java.util.Hashtable;
 
 import mediadorxml.algebra.basic.TreeNode;
@@ -29,22 +28,16 @@ public class ForLetClause extends Clause {
 		this.processSimpleNode(node, debug);
 		
 		Query q;
-		try {
-			q = Query.getUniqueInstance(true);
-			q.setFragmentationAttribute(q.getXpath());
-			
-			Hashtable<String, String> forClauses = (Hashtable<String, String>) q.getForClauses();			
-			
-			if (!forClauses.containsKey(q.getFragmentationVariable())){ // verifica se a variável já existe na hashTable
-				String variableName = q.getFragmentationVariable();
-				String fragmentationAttributePath = q.getFragmentationAttribute();				
-				q.setForClauses(variableName,q.getLastReadDocumentExpr()+":"+ (q.getLastReadCollectionExpr()!=null && !q.getLastReadCollectionExpr().equals("")?q.getLastReadCollectionExpr()+":":"") +fragmentationAttributePath);
-			}			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		q = Query.getUniqueInstance(true);
+        q.setFragmentationAttribute(q.getXpath());
+        
+        Hashtable<String, String> forClauses = (Hashtable<String, String>) q.getForClauses();			
+        
+        if (!forClauses.containsKey(q.getFragmentationVariable())){ // verifica se a variï¿½vel jï¿½ existe na hashTable
+        	String variableName = q.getFragmentationVariable();
+        	String fragmentationAttributePath = q.getFragmentationAttribute();				
+        	q.setForClauses(variableName,q.getLastReadDocumentExpr()+":"+ (q.getLastReadCollectionExpr()!=null && !q.getLastReadCollectionExpr().equals("")?q.getLastReadCollectionExpr()+":":"") +fragmentationAttributePath);
+        }
 	}
 	
 	public Variable getVariable(){
@@ -60,36 +53,21 @@ public class ForLetClause extends Clause {
 		
 		if ("ForClause".equals(element)){					
 				
-				try {
-					Query q = Query.getUniqueInstance(true);
-					final TreeNode newNode = new TreeNode(((SimpleNode)node.jjtGetChild(0)).getText(), TreeNode.RelationTypeEnum.ROOT);					
-					q.setFragmentationVariable("$"+newNode.getLabel()); // indica a última variável XML lida, referente a um FOR.					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Query q = Query.getUniqueInstance(true);
+                final TreeNode newNode = new TreeNode(((SimpleNode)node.jjtGetChild(0)).getText(), TreeNode.RelationTypeEnum.ROOT);					
+                q.setFragmentationVariable("$"+newNode.getLabel()); // indica a ï¿½ltima variï¿½vel XML lida, referente a um FOR.					
 			
 		}
 		if ("LetClause".equals(element)){
 			final TreeNode newNode = new TreeNode(((SimpleNode)node.jjtGetChild(0)).getText(), TreeNode.RelationTypeEnum.ROOT);
-			try {
-				Query q = Query.getUniqueInstance(true);
-				q.setLastReadLetVariable("$"+newNode.getLabel()); // Variável entre o let e o := 				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Query q = Query.getUniqueInstance(true);
+            q.setLastReadLetVariable("$"+newNode.getLabel()); // Variï¿½vel entre o let e o := 				
 		}		
 		if ("QName".equals(element)){						
 			times = times+1;
-			try {
-				Query q = Query.getUniqueInstance(true);
-				if (times>1)
-					q.setLastReadCollectionExpr(node.getText());				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
+			Query q = Query.getUniqueInstance(true);
+            if (times>1)
+            	q.setLastReadCollectionExpr(node.getText());		
 		}
 		
 		if ("VarName".equals(element)){
@@ -100,26 +78,20 @@ public class ForLetClause extends Clause {
 			final TreeNode newNode = new TreeNode(((SimpleNode)node.jjtGetChild(0)).getText(), TreeNode.RelationTypeEnum.ROOT);
 			this.operator.getApt().setAptNode(newNode);
 			
-			try {
-				Query q = Query.getUniqueInstance(true);				
-				
-				if (!q.getLastReadDocumentExpr().equals("")) // se nome do documento já foi preenchido, o próximo texto é a definição do nome da coleção.
-					q.setLastReadCollectionExpr(node.getText());
-								
-				// newNode.getLabel() sempre consome a extensão .xml, no entanto, se na consulta original estiver especificado a extensão
-				// esta será necessária para consultar a cardinalidade dos elementos do caminho xpath.
-				
-				if ( q.getInputQuery().indexOf(newNode.getLabel()+".xml") != -1 )
-					q.setLastReadDocumentExpr(newNode.getLabel() + ".xml");
-				else 
-					q.setLastReadDocumentExpr(newNode.getLabel());
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Query q = Query.getUniqueInstance(true);				
+            
+            if (!q.getLastReadDocumentExpr().equals("")) // se nome do documento jï¿½ foi preenchido, o prï¿½ximo texto ï¿½ a definiï¿½ï¿½o do nome da coleï¿½ï¿½o.
+            	q.setLastReadCollectionExpr(node.getText());
+            				
+            // newNode.getLabel() sempre consome a extensï¿½o .xml, no entanto, se na consulta original estiver especificado a extensï¿½o
+            // esta serï¿½ necessï¿½ria para consultar a cardinalidade dos elementos do caminho xpath.
+            
+            if ( q.getInputQuery().indexOf(newNode.getLabel()+".xml") != -1 )
+            	q.setLastReadDocumentExpr(newNode.getLabel() + ".xml");
+            else 
+            	q.setLastReadDocumentExpr(newNode.getLabel());
 		}
-		else if ("PathExpr".equals(element)){  // Referente a uma outra variável já declarada
+		else if ("PathExpr".equals(element)){  // Referente a uma outra variï¿½vel jï¿½ declarada
 			String varName = ((SimpleNode)node.jjtGetChild(0)).getText();
 			TreeNode newNode = new TreeNode("$" + varName, TreeNode.RelationTypeEnum.ROOT);
 			this.operator.getApt().setAptNode(newNode);
@@ -129,7 +101,7 @@ public class ForLetClause extends Clause {
 			this.operator.getApt().addChild(simplePath.getTree());
 			this.variable.setNodeId(simplePath.getVarNodeId());
 			
-			// Marcação do nodo correspondente à variável
+			// Marcaï¿½ï¿½o do nodo correspondente ï¿½ variï¿½vel
 			TreeNode aptNode = this.operator.getApt().getAptNode();
 			while (aptNode.hasChield()){
 				aptNode = aptNode.getChild(0);

@@ -47,6 +47,14 @@ public class BaseXDatabase extends BaseDatabase {
     }
 
     @Override
+    public int getCardinality(String xpath, String document, String collection)
+            throws XQException {
+        String query = "let $elm := doc('" + document + "')/" + xpath + " return count($elm)";
+        
+        return Integer.parseInt(executeQueryAsString(query));
+    }
+    
+    @Override
     public String getHost() {
         BaseXXQDataSource ds = (BaseXXQDataSource) dataSource;
         return ds.getServerName();
@@ -76,4 +84,5 @@ public class BaseXDatabase extends BaseDatabase {
         // TODO Auto-generated method stub
         
     }
+
 }

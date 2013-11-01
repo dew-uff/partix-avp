@@ -32,13 +32,13 @@ public class ExistsJoinOperation {
 		this.setXquery(inputQuery);			
 	}
 	
-	public void verifyInputQuery() throws IOException{
+	public void verifyInputQuery() {
 		
 		int pos = -1;
 		String tmp = "";
-		int numberForClauses = 0; // número de claúsulas FOR		
+		int numberForClauses = 0; // nï¿½mero de claï¿½sulas FOR		
 		
-		pos = this.getXquery().toUpperCase().indexOf("FOR $"); // posição da primeira cláusula FOR.
+		pos = this.getXquery().toUpperCase().indexOf("FOR $"); // posiï¿½ï¿½o da primeira clï¿½usula FOR.
 		Query q = Query.getUniqueInstance(true);
 		
 		while ( pos >= 0 ) {		
@@ -47,11 +47,11 @@ public class ExistsJoinOperation {
 				numberForClauses++;
 			}
 			
-			//pos = this.getXquery().toUpperCase().indexOf("FOR $"); // posição da primeira cláusula DOC().						
-			tmp = this.getXquery().substring(pos+5, this.getXquery().length()); // Obtém a string após a definição de for.
+			//pos = this.getXquery().toUpperCase().indexOf("FOR $"); // posiï¿½ï¿½o da primeira clï¿½usula DOC().						
+			tmp = this.getXquery().substring(pos+5, this.getXquery().length()); // Obtï¿½m a string apï¿½s a definiï¿½ï¿½o de for.
 						
 			this.setXquery(tmp);
-			pos = this.getXquery().toUpperCase().indexOf("FOR $"); // posição da próxima cláusula FOR, se houver.*/			
+			pos = this.getXquery().toUpperCase().indexOf("FOR $"); // posiï¿½ï¿½o da prï¿½xima clï¿½usula FOR, se houver.*/			
 			
 		} 
 								
@@ -67,7 +67,7 @@ public class ExistsJoinOperation {
 		q.setVerifiedJoins( numberForClauses - 1 );
 	}	
 	
-	/* Recebe como parâmetros os caminhos dos join */
+	/* Recebe como parï¿½metros os caminhos dos join */
 	public void verifyJoins(String pathJoin1, String pathJoin2, String varJoin1, String varJoin2, String atrJoin1, String atrJoin2) throws IOException{		
 			
 		Query q = Query.getUniqueInstance(true);
@@ -75,11 +75,11 @@ public class ExistsJoinOperation {
 		
 		Hashtable<String, String> forClauses = (Hashtable<String, String>) q.getForClauses();		
 					
-		if (forClauses.containsKey("$"+varJoin1)){ // verifica se a variável das junções já existem na hashtable, de forma a substituir o nome da variável pelo caminho que ela representa.			
+		if (forClauses.containsKey("$"+varJoin1)){ // verifica se a variï¿½vel das junï¿½ï¿½es jï¿½ existem na hashtable, de forma a substituir o nome da variï¿½vel pelo caminho que ela representa.			
 			pathJoin1 = pathJoin1.replace("$"+varJoin1, q.getPathVariable("$"+varJoin1));
 		}
 				
-		if (forClauses.containsKey("$"+varJoin2)){ // verifica se a variável das junções já existem na hashtable, de forma a substituir o nome da variável pelo caminho que ela representa.			
+		if (forClauses.containsKey("$"+varJoin2)){ // verifica se a variï¿½vel das junï¿½ï¿½es jï¿½ existem na hashtable, de forma a substituir o nome da variï¿½vel pelo caminho que ela representa.			
 			pathJoin2 = pathJoin2.replace("$"+varJoin2, q.getPathVariable("$"+varJoin2));
 		}
 		
@@ -111,7 +111,7 @@ public class ExistsJoinOperation {
 		}		
 		
 		if ( cardinality !=null && cardinality2!=null && Integer.parseInt(cardinality) > 0 && Integer.parseInt(cardinality2) > 0) { // especificou o caminho completo
-			// Verificar se o atributo que possui a menor cardinalidade, uma vez que as chaves primárias, em geral, possuem menor 
+			// Verificar se o atributo que possui a menor cardinalidade, uma vez que as chaves primï¿½rias, em geral, possuem menor 
 			// cardinalidade que as chaves estrangeiras.
 			
 			if (Integer.parseInt(cardinality)<Integer.parseInt(cardinality2)) {
@@ -129,11 +129,11 @@ public class ExistsJoinOperation {
 		}
 		else { // especificou caminho incompleto. Ex.: doc()//element
 			
-			if ( cardinality != null && Integer.parseInt(cardinality) == 0) { // caminho da variavel do primeiro join é incompleto
+			if ( cardinality != null && Integer.parseInt(cardinality) == 0) { // caminho da variavel do primeiro join ï¿½ incompleto
 				cardinality = analyzeAncestral(collectionName, docName, varJoin1, q.getPathVariable("$"+varJoin1));	
 			}
 			
-			if ( cardinality != null && Integer.parseInt(cardinality) > 1) { // só pode fragmentar se houver relação 1:N.				
+			if ( cardinality != null && Integer.parseInt(cardinality) > 1) { // sï¿½ pode fragmentar se houver relaï¿½ï¿½o 1:N.				
 				
 				// Obtenho sempre a que possui a menor cardinalidade, pois eh a que representa a chave primaria entre os elementos envolvidos na juncao.
 				// No entanto, nas se pode executar a fragmentacao sobre um elemento com cardinalidade 1.
@@ -146,12 +146,12 @@ public class ExistsJoinOperation {
 				}
 			}
 			
-			if ( cardinality2 != null && Integer.parseInt(cardinality2) == 0 ) { // caminho da variavel do primeiro join é incompleto
+			if ( cardinality2 != null && Integer.parseInt(cardinality2) == 0 ) { // caminho da variavel do primeiro join ï¿½ incompleto
 							
 				cardinality2 = analyzeAncestral(collectionName, docName, varJoin2, q.getPathVariable("$"+varJoin2));			
 			}
 			
-			if ( cardinality2 != null && Integer.parseInt(cardinality2) > 1) { // só pode fragmentar se houver relação 1:N.
+			if ( cardinality2 != null && Integer.parseInt(cardinality2) > 1) { // sï¿½ pode fragmentar se houver relaï¿½ï¿½o 1:N.
 								
 				if ( q.getLastJoinCardinality() == 0 
 						|| q.getLastJoinCardinality() > Integer.parseInt( cardinality2 )
@@ -185,7 +185,7 @@ public String analyzeAncestral(String collectionName, String docName, String var
 			completePath = element; // Ex.: person.
 		}
 		
-		// A fragmentação somente será possível se algum ancestral imediato do elemento especificado tiver cardinalidade 1.
+		// A fragmentaï¿½ï¿½o somente serï¿½ possï¿½vel se algum ancestral imediato do elemento especificado tiver cardinalidade 1.
 		String xquery = " for $n in doc('$schema_" + (collectionName!=null && !collectionName.equals("")?collectionName:docName) + "')//element"
 					  + " where $n/element/@name = \"" + completePath +"\""
 					  + " and sum($n/@total_nodes) = 1"

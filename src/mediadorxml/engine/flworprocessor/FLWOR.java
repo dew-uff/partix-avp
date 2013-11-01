@@ -1,7 +1,6 @@
 package mediadorxml.engine.flworprocessor;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -36,7 +35,7 @@ public class FLWOR extends Clause{
 	
 	public FLWOR() {
 		super();
-		// Inicialização dos ArrayLists
+		// Inicializaï¿½ï¿½o dos ArrayLists
 		this.vars = new ArrayList<Variable>();		
 		this.debugStrings = new ArrayList<String>();
 		this.debugTimes = new ArrayList<Long>();	
@@ -48,17 +47,17 @@ public class FLWOR extends Clause{
 	}
 
 	public void compile(SimpleNode node, boolean debug) throws OptimizerException, FragmentReductionException, AlgebraParserException, IOException {
-		// Criação do plano de execução do FLWOR
+		// Criaï¿½ï¿½o do plano de execuï¿½ï¿½o do FLWOR
 		this.generateExecutionPlan(node, debug);
 		
 	}
 	
 	/*
-	 * Montagem do plano de execução da XQuery global através das etapas:
-	 * 	1- Plano algébrico sobre as views globais
-	 *  2- Localização das views globais
-	 *  3- Redução dos fragmentos inúteis
-	 *  4- Otimização do plano de execução e localização das operações
+	 * Montagem do plano de execuï¿½ï¿½o da XQuery global atravï¿½s das etapas:
+	 * 	1- Plano algï¿½brico sobre as views globais
+	 *  2- Localizaï¿½ï¿½o das views globais
+	 *  3- Reduï¿½ï¿½o dos fragmentos inï¿½teis
+	 *  4- Otimizaï¿½ï¿½o do plano de execuï¿½ï¿½o e localizaï¿½ï¿½o das operaï¿½ï¿½es
 	 */
 	protected void generateExecutionPlan(final SimpleNode node, final boolean debug) 
 		throws OptimizerException, FragmentReductionException, AlgebraParserException, IOException{
@@ -110,7 +109,7 @@ public class FLWOR extends Clause{
 	}
 	
 	/*
-	 * Execução do FLWOR através das suas sub-queries
+	 * Execuï¿½ï¿½o do FLWOR atravï¿½s das suas sub-queries
 	 */
 	
 	protected void processSimpleNode(SimpleNode node, boolean debug) throws AlgebraParserException, IOException{
@@ -124,58 +123,45 @@ public class FLWOR extends Clause{
 		//FOR Clause:
 		if ("ForClause".equals(element)){
 			
-			try {
-				Query q = Query.getUniqueInstance(true);
-				q.setElementConstructor(false); // Indica que não se trata da estrutura XML do resultado a ser mostrada para o usuário
-				q.setOrderByClause(false); // Indica que não se trata da clausula orderBy
-				q.setXpath(""); // Apagar o caminho do último FOR/LET, antes de começar a armazenar o caminho do FOR/LET seguinte. Cada sub-elemento XML é verificado para obter a cardinalidade deste em todo o documento.			
-				q.setLastReadCardinality(-1); // Resetar a cardinalidade, pois se refere a um novo caminho Xpath para um novo FOR.
-				//q.setAddedPredicate(false);		
-				q.setAncestralPath("");
-				
-				final ForClause forClause = new ForClause();
-				forClause.compileForLet(node, debug);				
-				this.insertForLet(forClause);			
-				processChild = false;				
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			Query q = Query.getUniqueInstance(true);
+            q.setElementConstructor(false); // Indica que nï¿½o se trata da estrutura XML do resultado a ser mostrada para o usuï¿½rio
+            q.setOrderByClause(false); // Indica que nï¿½o se trata da clausula orderBy
+            q.setXpath(""); // Apagar o caminho do ï¿½ltimo FOR/LET, antes de comeï¿½ar a armazenar o caminho do FOR/LET seguinte. Cada sub-elemento XML ï¿½ verificado para obter a cardinalidade deste em todo o documento.			
+            q.setLastReadCardinality(-1); // Resetar a cardinalidade, pois se refere a um novo caminho Xpath para um novo FOR.
+            //q.setAddedPredicate(false);		
+            q.setAncestralPath("");
+            
+            final ForClause forClause = new ForClause();
+            forClause.compileForLet(node, debug);				
+            this.insertForLet(forClause);			
+            processChild = false;			
 			
 		}
 		//------------------------------------------
 		//LET Clause:
 		else if ("LetClause".equals(element)){
 			LetClause letClause = new LetClause();
-			try {
-				Query q = Query.getUniqueInstance(true);
-				q.setElementConstructor(false); // Indica que não se trata da estrutura XML do resultado a ser mostrada para o usuário
-				q.setOrderByClause(false); // Indica que não se trata da clausula orderBy
-				q.setXpath(""); // Apagar o caminho do último FOR/LET, antes de começar a armazenar o caminho do FOR/LET seguinte.
-				//q.setAddedPredicate(false);
-				q.setAncestralPath("");
-				q.setLastReadCardinality(-1); // Resetar a cardinalidade, pois se refere a um novo caminho Xpath para um novo LET.
-				letClause.compileForLet(node, debug);
-				this.insertForLet(letClause);					
-					
-				Hashtable<String, String> letClauses = (Hashtable<String, String>) q.getLetClauses();
-				String lastReadLetVariable = q.getLastReadLetVariable();			
-				q.setLastReadSimplePathExpr(q.getXpath());			
-				
-				if (!letClauses.containsKey(lastReadLetVariable)){ // verifica se a variável deste LET já existe na hashtable
-					String lastReadForLetVariable = q.getLastReadForLetVariable(); // a variável a qual o LET referencia, um nível acima				
-					String letExpression = lastReadForLetVariable+"/"+q.getXpath();
-					q.setLetClauses(lastReadLetVariable,letExpression);
-				}			
-									
-				processChild = false;		
-				
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			Query q = Query.getUniqueInstance(true);
+            q.setElementConstructor(false); // Indica que nï¿½o se trata da estrutura XML do resultado a ser mostrada para o usuï¿½rio
+            q.setOrderByClause(false); // Indica que nï¿½o se trata da clausula orderBy
+            q.setXpath(""); // Apagar o caminho do ï¿½ltimo FOR/LET, antes de comeï¿½ar a armazenar o caminho do FOR/LET seguinte.
+            //q.setAddedPredicate(false);
+            q.setAncestralPath("");
+            q.setLastReadCardinality(-1); // Resetar a cardinalidade, pois se refere a um novo caminho Xpath para um novo LET.
+            letClause.compileForLet(node, debug);
+            this.insertForLet(letClause);					
+            	
+            Hashtable<String, String> letClauses = (Hashtable<String, String>) q.getLetClauses();
+            String lastReadLetVariable = q.getLastReadLetVariable();			
+            q.setLastReadSimplePathExpr(q.getXpath());			
+            
+            if (!letClauses.containsKey(lastReadLetVariable)){ // verifica se a variï¿½vel deste LET jï¿½ existe na hashtable
+            	String lastReadForLetVariable = q.getLastReadForLetVariable(); // a variï¿½vel a qual o LET referencia, um nï¿½vel acima				
+            	String letExpression = lastReadForLetVariable+"/"+q.getXpath();
+            	q.setLetClauses(lastReadLetVariable,letExpression);
+            }			
+            					
+            processChild = false;			
 			
 		}
 		//------------------------------------------
@@ -185,16 +171,11 @@ public class FLWOR extends Clause{
 			for (int i=0; i<where.getComparisons().size(); i++){
 				this.insertComparison(where.getComparisons().get(i));
 
-				try {
-					Query q = Query.getUniqueInstance(true);
-					q.setElementConstructor(true); // Evita consultas por cardinalidade para os predicados de seleção especificados pelo usuário na consulta de entrada.
-					q.setOrderByClause(false); // Indica que não se trata da clausula orderBy
-					q.setXpath(""); // Apagar o caminho do último FOR, antes de começar a armazenar o caminho do FOR seguinte.				
-					q.setLastReadCardinality(-1);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}							
+				Query q = Query.getUniqueInstance(true);
+                q.setElementConstructor(true); // Evita consultas por cardinalidade para os predicados de seleï¿½ï¿½o especificados pelo usuï¿½rio na consulta de entrada.
+                q.setOrderByClause(false); // Indica que nï¿½o se trata da clausula orderBy
+                q.setXpath(""); // Apagar o caminho do ï¿½ltimo FOR, antes de comeï¿½ar a armazenar o caminho do FOR seguinte.				
+                q.setLastReadCardinality(-1);							
 			}
 			
 			processChild = false;
@@ -215,7 +196,7 @@ public class FLWOR extends Clause{
 			try{				
 				q = Query.getUniqueInstance(true);
 				q.setElementConstructor(true); // Evita consultas por cardinalidade para os caminhos indicados no resultado da xquery.				
-				q.setOrderByClause(false); // Indica que não se trata da clausula orderBy
+				q.setOrderByClause(false); // Indica que nï¿½o se trata da clausula orderBy
 			}
 			catch(Exception ex){
 				//System.out.println(ex.getMessage() + "\r\n" + ex.getStackTrace());
@@ -224,7 +205,7 @@ public class FLWOR extends Clause{
 			ReturnClause ret = new ReturnClause(node, debug);
 			AbstractOperator constructReturn = ret.getOperator();		
 			
-			// Inclusão do operador SORT abaixo do Construct, caso haja ORDER BY na consulta
+			// Inclusï¿½o do operador SORT abaixo do Construct, caso haja ORDER BY na consulta
 			if (orderBy != null){
 			
 				q = Query.getUniqueInstance(true);
@@ -247,11 +228,11 @@ public class FLWOR extends Clause{
 				constructReturn = sort;
 			}
 			
-			// Processamento dos operadores de Funções de Agregação
+			// Processamento dos operadores de Funï¿½ï¿½es de Agregaï¿½ï¿½o
 			for (int i=0; i<ret.getFunctionOperatorsList().size(); i++){
 				AbstractOperator sel = ret.getFunctionOperatorsList().get(i);
 				
-				// Substituição da variável pelo NodeId (LCL)
+				// Substituiï¿½ï¿½o da variï¿½vel pelo NodeId (LCL)
 				TreeNode rootNode = sel.getApt().getAptNode().getRootNode();
 				int nodeId = this.getVarNodeId(rootNode.getLabel());
 				if (nodeId == -1){
@@ -265,11 +246,11 @@ public class FLWOR extends Clause{
 				constructReturn = sel;
 			}
 			
-			// Processamento dos Selects para preparação do Construct/Sort
+			// Processamento dos Selects para preparaï¿½ï¿½o do Construct/Sort
 			for (int i=0; i<ret.getSelectOperatorsList().size(); i++){
 				AbstractOperator sel = ret.getSelectOperatorsList().get(i);
 				
-				// Substituição da variável pelo NodeId (LCL)
+				// Substituiï¿½ï¿½o da variï¿½vel pelo NodeId (LCL)
 				TreeNode n = sel.getApt().getAptNode().getRootNode();
 				int nodeId = this.getVarNodeId(n.getLabel());
 				if (nodeId == -1){
@@ -282,7 +263,7 @@ public class FLWOR extends Clause{
 				constructReturn = sel;
 			}
 			
-			// Inclusão dos Selects referentes ao ORDER BY, se houver
+			// Inclusï¿½o dos Selects referentes ao ORDER BY, se houver
 			if (orderBy != null){			
 				q = Query.getUniqueInstance(true);
 				q.setOrderByClause(true);
@@ -295,7 +276,7 @@ public class FLWOR extends Clause{
 					n.setLabel(nodeId);
 					n.setIsKeyNode(true);
 					
-					// 0- Buscar se já existe operador de Select para a variável do order by
+					// 0- Buscar se jï¿½ existe operador de Select para a variï¿½vel do order by
 					AbstractOperator op = constructReturn;
 					AbstractOperator opEncontrado = null;
 					while (op.getParentOperator() != null){
@@ -307,12 +288,12 @@ public class FLWOR extends Clause{
 						op = op.getParentOperator();
 					}
 									
-					// 1- Se já existir, faremos um merge das árvores
+					// 1- Se jï¿½ existir, faremos um merge das ï¿½rvores
 					if (opEncontrado != null){
 						opEncontrado.getApt().mergeTree(n);
 					}
 					else{
-						// 2- Se não existir, criamos um novo operador Select para esta variável
+						// 2- Se nï¿½o existir, criamos um novo operador Select para esta variï¿½vel
 						SelectOperator sel = new SelectOperator();
 						sel.getApt().setAptNode(n);
 						constructReturn.addChild(sel);
@@ -322,7 +303,7 @@ public class FLWOR extends Clause{
 			}
 			
 			
-			//Inclusão dos operadores de seleção abaixo do último nível dos operadores de construção
+			//Inclusï¿½o dos operadores de seleï¿½ï¿½o abaixo do ï¿½ltimo nï¿½vel dos operadores de construï¿½ï¿½o
 			constructReturn.addChild(this.operator);
 			
 			
@@ -353,19 +334,19 @@ public class FLWOR extends Clause{
 		if (this.operator == null)
 			this.operator = forlet.getOperator();  // Select Operator
 		else{
-			// Verificação se o nodo raíz não é referente a uma outra variável
+			// Verificaï¿½ï¿½o se o nodo raï¿½z nï¿½o ï¿½ referente a uma outra variï¿½vel
 			TreeNode n = forlet.getOperator().getApt().getAptRootNode();
 			String label = n.getLabel();
-			//Se começar com "$" faz referência a outra variável
+			//Se comeï¿½ar com "$" faz referï¿½ncia a outra variï¿½vel
 			if (label.charAt(0) == '$'){
 				
 				int varId = this.getVarNodeId(label.substring(1, label.length()));
-				// Inclusão da árvore abaixo do nodo da variável
+				// Inclusï¿½o da ï¿½rvore abaixo do nodo da variï¿½vel
 				TreeNode varNode = this.operator.findNodeInPlanById(varId);				
 				
 				try {
 					Query q = Query.getUniqueInstance(true);
-					// Obtém o nome do documento, o nome da coleção e o caminho xpath da variável a qual o LET faz referência.
+					// Obtï¿½m o nome do documento, o nome da coleï¿½ï¿½o e o caminho xpath da variï¿½vel a qual o LET faz referï¿½ncia.
 					String documentName = q.getDocumentNameByVariableName(label);
 					String collectionName = q.getCollectionNameByVariableName(label);
 					String xpath = q.getXpathByVariableName(label);
@@ -380,16 +361,16 @@ public class FLWOR extends Clause{
 					// cardinalityFor: indica a cardinalidade do ultimo elemento do caminhoXpath indica no FOR ao qual este LET referencia.
 					String cardinalityFor = ExecucaoConsulta.executeQuery(cm.getFormattedQuery(documentName, (collectionName!=null && !collectionName.equals("")?", '"+collectionName+"'":""), xpath));
 					
-					/* Se cardinalityFor não for maior que 1, o predicado de seleção deve ser adicionado no LET, caso contrário, não adicione.
+					/* Se cardinalityFor nï¿½o for maior que 1, o predicado de seleï¿½ï¿½o deve ser adicionado no LET, caso contrï¿½rio, nï¿½o adicione.
 					 * Ex.1:    for $c in doc('loja','informacoesLoja')/Loja/Itens/Item
   							   let $a := $c/ResenhaClientes/Resenha
-  						Supondo que /Loja/Itens/Item já foi fragmentado como /Loja/Itens/Item[position >= vMin and position < vMax]
-  						o LET não precisa de fragmentação, pois o caminho da variável ao qual se refere já foi fragmentado.
+  						Supondo que /Loja/Itens/Item jï¿½ foi fragmentado como /Loja/Itens/Item[position >= vMin and position < vMax]
+  						o LET nï¿½o precisa de fragmentaï¿½ï¿½o, pois o caminho da variï¿½vel ao qual se refere jï¿½ foi fragmentado.
   						
   					   Ex.2:    for $c in doc('loja','informacoesLoja')/Loja/Itens
   							     let $a := $c/Item/ResenhaClientes/Resenha
-  						Neste caso, o LET precisa ser fragmentado, pois o atributo de fragmentação, cuja cardinalidade é maior que 1 
-  						está especificado nele e não no FOR.  						
+  						Neste caso, o LET precisa ser fragmentado, pois o atributo de fragmentaï¿½ï¿½o, cuja cardinalidade ï¿½ maior que 1 
+  						estï¿½ especificado nele e nï¿½o no FOR.  						
   							     
 					 * */
 
@@ -416,27 +397,27 @@ public class FLWOR extends Clause{
 						
 								String OriginalPath = xpath + (!q.getXpath().equals("")?"/"+q.getXpath():q.getXpath());
 	
-								/* Se o caminho do let está correto, adicione os predicados.
+								/* Se o caminho do let estï¿½ correto, adicione os predicados.
 								 * Ex.:   for $order in doc('loja','informacoesLoja')/Loja/Itens
 								 * 		  let $l := $order/Item/ResenhaClientes ...
-								 * Adicione, pois OriginalPath é Loja/Itens/Item/ResenhaClientes, considerando o elemento Item como escolhido
-								 * para a fragmentacao, o subcaminho Loja/Itens/Item será fragmentado. Pois 
-								 * No entanto, se tivéssemos:
+								 * Adicione, pois OriginalPath ï¿½ Loja/Itens/Item/ResenhaClientes, considerando o elemento Item como escolhido
+								 * para a fragmentacao, o subcaminho Loja/Itens/Item serï¿½ fragmentado. Pois 
+								 * No entanto, se tivï¿½ssemos:
 								 * 		  for $order in doc('loja','informacoesLoja')/Loja/Itens
 								 * 		  let $l := $order/Item/ResenhaClientes/Cliente/Compra/Item/Preco
-								 * O sistema reconhece que o Item para a fragmentacao é Loja/Itens/Item e não 
+								 * O sistema reconhece que o Item para a fragmentacao ï¿½ Loja/Itens/Item e nï¿½o 
 								 * Loja/Itens/Item/ResenhaClientes/Cliente/Compra/Item.  
 							     */
 								
-								if ( OriginalPath.indexOf(xpath + LETPath) != -1 && !q.isAddedPredicate() ) { // Se ainda não adicionou nenhum predicado no caminho xpath da variável em questão.								
+								if ( OriginalPath.indexOf(xpath + LETPath) != -1 && !q.isAddedPredicate() ) { // Se ainda nï¿½o adicionou nenhum predicado no caminho xpath da variï¿½vel em questï¿½o.								
 								
 									SimpleVirtualPartitioning svp = SimpleVirtualPartitioning.getUniqueInstance(true);								
 									svp.setCardinalityOfElement(Integer.parseInt(cardinality.replace(".0", "")));								
 									
-									// cria os sub-intervalos para a variável relacionada ao caminho xpath lido.								
+									// cria os sub-intervalos para a variï¿½vel relacionada ao caminho xpath lido.								
 									svp.getSelectionPredicate(-1,q.getFragmentationVariable());								
 																									
-									q.setAddedPredicate(true); // Evita a adição do mesmo predicado nos sub-elementos restantes com cardinalidade maior que 1.							
+									q.setAddedPredicate(true); // Evita a adiï¿½ï¿½o do mesmo predicado nos sub-elementos restantes com cardinalidade maior que 1.							
 									 
 									int posLetVariable = q.getInputQuery().indexOf(q.getLastReadLetVariable());
 									String pathReplaceTo = q.getInputQuery().substring(posLetVariable,q.getInputQuery().length()); // substring da variavel Let ate o final
@@ -478,12 +459,12 @@ public class FLWOR extends Clause{
 	
 	protected void insertComparison(ComparisonExpr comp) throws IOException{
 		
-		// Verificação se a comparação era predicado de junção
+		// Verificaï¿½ï¿½o se a comparaï¿½ï¿½o era predicado de junï¿½ï¿½o
 		if (comp.isJoinComparison()){
-			// Inserir predicado de junção no operador Join
+			// Inserir predicado de junï¿½ï¿½o no operador Join
 			this.insertJoinPredicate(comp);
 		}
-		// Se for comparação utilizando uma função tipo agregaçao (count, avg)
+		// Se for comparaï¿½ï¿½o utilizando uma funï¿½ï¿½o tipo agregaï¿½ao (count, avg)
 		else if (comp.isFunctionComparison()){
 			this.insertFunctionFilter(comp);
 		}
@@ -493,20 +474,20 @@ public class FLWOR extends Clause{
 	}
 	
 	protected void insertTreeNodeSimplePath(TreeNode node){
-		// Variável da comparação
+		// Variï¿½vel da comparaï¿½ï¿½o
 		String varName = node.getLabel();
 		
-		// Busca do NodeId referente à variável
+		// Busca do NodeId referente ï¿½ variï¿½vel
 		int nodeId = this.getVarNodeId(varName);
 		
-		// Busca do nodo onde a comparação será inserida
+		// Busca do nodo onde a comparaï¿½ï¿½o serï¿½ inserida
 		TreeNode nodePosition = this.operator.findNodeInPlanById(nodeId);
 		
-		// Remoção do Root node com a variável
+		// Remoï¿½ï¿½o do Root node com a variï¿½vel
 		node = node.getChild(0);
 		node.setParentNode(null);
 		
-		// Inclusão do nodo de comparação no plano
+		// Inclusï¿½o do nodo de comparaï¿½ï¿½o no plano
 		nodePosition.addChild(node);
 	}
 	
@@ -528,7 +509,7 @@ public class FLWOR extends Clause{
 			TreeNode joinNode = join.getApt().getAptRootNode();
 			
 			int inseridos = 0;
-			// Inclusão dos nodos do predicado de junção no operador Join
+			// Inclusï¿½o dos nodos do predicado de junï¿½ï¿½o no operador Join
 			if (joinNode.getChild(0).getLabelLCLid() == lclKN1){
 				joinNode.getChild(0).addChild(n1.getChild(0));
 				inseridos++;
@@ -546,23 +527,23 @@ public class FLWOR extends Clause{
 				inseridos++;
 			}						
 						
-			// Inclusão do predicado de junção
+			// Inclusï¿½o do predicado de junï¿½ï¿½o
 			if (inseridos == 2){
 				join.getPredicateList().add(pred);
 			}
 			else if (inseridos == 1){
-				// Verificação se um dos filhos aponta para outro Join
+				// Verificaï¿½ï¿½o se um dos filhos aponta para outro Join
 				TreeNode refNode0 = join.findNodeInChildrenById(joinNode.getChild(0).getLabelLCLid());
 				TreeNode refNode1 = join.findNodeInChildrenById(joinNode.getChild(1).getLabelLCLid());
 				if ((refNode0.getLabel().equals("Join_root")) || (refNode1.getLabel().equals("Join_root"))){
-					// Como um dos filhos é outro Join, o predicado é deste Join
+					// Como um dos filhos ï¿½ outro Join, o predicado ï¿½ deste Join
 					join.getPredicateList().add(pred);
 				}
 			}
 		}		
 		
 		Query q = Query.getUniqueInstance(true);
-		if ( !q.isJoinCheckingFinished() ){ // Se não concluiu a verificação de qual junção possui menor cardinalidade.
+		if ( !q.isJoinCheckingFinished() ){ // Se nï¿½o concluiu a verificaï¿½ï¿½o de qual junï¿½ï¿½o possui menor cardinalidade.
 			
 			int idVar1 = Integer.parseInt(pred.substring(0, pred.indexOf("=")));
 			int idVar2 = Integer.parseInt(pred.substring(pred.indexOf("=")+1, pred.length()));
@@ -598,17 +579,17 @@ public class FLWOR extends Clause{
 	
 	protected void insertFunctionFilter(ComparisonExpr comp){
 		
-		// Criação de um operador para a função
+		// Criaï¿½ï¿½o de um operador para a funï¿½ï¿½o
 		FunctionOperator funcOp = FunctionOperator.buildFunction(comp.getFunctionName());
 		
 		TreeNode node = comp.getTreeNode().getRootNode();		
 		String label = node.getLabel();		
 		
-		// Atualização do nodo raíz para trocar o nome da variável pelo seu LCL
+		// Atualizaï¿½ï¿½o do nodo raï¿½z para trocar o nome da variï¿½vel pelo seu LCL
 		node.setLabel(this.getVarNodeId(node.getLabel()));
 		node.setIsKeyNode(true);
 		
-		// Inclusão do predicado do TreeNode no predicado do operador
+		// Inclusï¿½o do predicado do TreeNode no predicado do operador
 		TreeNode lastNode = node;
 		while(lastNode.hasChield()){
 			lastNode = lastNode.getChild(0);
@@ -616,12 +597,12 @@ public class FLWOR extends Clause{
 		}
 		Predicate pred = lastNode.getPredicate();
 		String lastNodeLCL = lastNode.getLCL(); 
-		lastNode.setPredicate(null); // remoção do predicado do nodo
+		lastNode.setPredicate(null); // remoï¿½ï¿½o do predicado do nodo
 		
 		funcOp.getApt().setAptNode(node);
-		funcOp.getPredicateList().add(lastNodeLCL + pred.toString());  // inclusão do predicado no operador		
+		funcOp.getPredicateList().add(lastNodeLCL + pred.toString());  // inclusï¿½o do predicado no operador		
 		
-		// Inclusão do Operador da função no plano algébrico global
+		// Inclusï¿½o do Operador da funï¿½ï¿½o no plano algï¿½brico global
 		funcOp.addChild(this.operator);
 		this.operator = funcOp;
 		

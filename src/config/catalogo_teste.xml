@@ -16,7 +16,7 @@
   <!-- Consulta que obtém os nomes dos documentos dentro de uma coleção, separando-os por vírgula.
        O caracter (?) deve ser substituído pelo nome da coleção a ser consultada.
   -->     
-  <documentsQuery> for $c in doc('$documents')//collection[@name='?']/document/@name return concat( substring($c,1),',') </documentsQuery>
+  <documentsQuery>for $doc in collection('?') return concat( document-uri($doc),',')</documentsQuery>
   
   <!-- Parâmetros que indicam os diretórios onde os arquivos resultantes da fragmentação são armazenados. -->     
   

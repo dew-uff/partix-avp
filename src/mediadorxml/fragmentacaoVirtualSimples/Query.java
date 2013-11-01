@@ -1,23 +1,21 @@
 package mediadorxml.fragmentacaoVirtualSimples;
 
 import java.io.IOException;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 
 import mediadorxml.catalog.CatalogManager;
 
 public class Query {
 
-	protected String queryExprType; // Indica se a consulta informada pelo usuário utiliza a cláusula doc() ou a cláusula collection();
-	protected String fragmentationAttribute; // Indica o caminho xpath do atributo de fragmentação virtual	
-	protected String virtualPartitioningVariable; // Indicação da variável de fragmentação, nos casos em que existem junções
+	protected String queryExprType; // Indica se a consulta informada pelo usuï¿½rio utiliza a clï¿½usula doc() ou a clï¿½usula collection();
+	protected String fragmentationAttribute; // Indica o caminho xpath do atributo de fragmentaï¿½ï¿½o virtual	
+	protected String virtualPartitioningVariable; // Indicaï¿½ï¿½o da variï¿½vel de fragmentaï¿½ï¿½o, nos casos em que existem junï¿½ï¿½es
 	protected int verifiedJoins;
-	protected int lastJoinCardinality; // A cardinalidade da junção, quando há mais de um For com doc() clauses 
-	protected boolean joinCheckingFinished; // indica se a verificação dos joins já acabou
-	protected int lastCollectionCardinality; // A cardinalidade da junção, quando há mais de um For, porém com collection() clauses
-	protected String ancestralPath = ""; // caminho completo até o nodo pai do elemento especificado na consulta. Ex: doc()//element;
+	protected int lastJoinCardinality; // A cardinalidade da junï¿½ï¿½o, quando hï¿½ mais de um For com doc() clauses 
+	protected boolean joinCheckingFinished; // indica se a verificaï¿½ï¿½o dos joins jï¿½ acabou
+	protected int lastCollectionCardinality; // A cardinalidade da junï¿½ï¿½o, quando hï¿½ mais de um For, porï¿½m com collection() clauses
+	protected String ancestralPath = ""; // caminho completo atï¿½ o nodo pai do elemento especificado na consulta. Ex: doc()//element;
 	private boolean existsJoin;
 	
 	public boolean isExistsJoin() {
@@ -44,7 +42,7 @@ public class Query {
 		this.partitioningPath = partitioningPath;
 	}
 
-	protected String partitioningPath; // O caminho até o atributo de fragmentação, quando há mais de um For, porém com collection() clauses
+	protected String partitioningPath; // O caminho atï¿½ o atributo de fragmentaï¿½ï¿½o, quando hï¿½ mais de um For, porï¿½m com collection() clauses
 	
 	public int getLastCollectionCardinality() {
 		return lastCollectionCardinality;
@@ -99,7 +97,7 @@ public class Query {
 
 	protected String inputQuery=""; // Armazena a consulta de entrada
 	protected String orderBy = "";
-	protected String orderByType = ""; // indica se a ordenacao é ascending ou descending.
+	protected String orderByType = ""; // indica se a ordenacao ï¿½ ascending ou descending.
 	protected String lastReadForLetVariable = "";
 	protected String lastReturnVariable = "";
 	protected String lastReadFunction = ""; // indica a ultima funcao de agregacao lida
@@ -147,7 +145,7 @@ public class Query {
 		this.lastReturnVariable = lastReturnVariable;
 	}
 
-    protected Hashtable<String, String> aggregateFunctions; // indica as funçoes de agregação que devem ser acrescentadas no final.
+    protected Hashtable<String, String> aggregateFunctions; // indica as funï¿½oes de agregaï¿½ï¿½o que devem ser acrescentadas no final.
 	
 	public Hashtable<String, String> getAggregateFunctions() {
 		return aggregateFunctions;
@@ -164,7 +162,7 @@ public class Query {
 		
 		functionPredicate = aggregateFunction + "(" + variableName + ")" + comparisonOp;
 		
-		if ( comparisonOp!=null && !comparisonOp.equals("") ) { // count de claúsulas Where em consultas com FOR									
+		if ( comparisonOp!=null && !comparisonOp.equals("") ) { // count de claï¿½sulas Where em consultas com FOR									
 			this.getAggregateReturn().put(variableName, functionPredicate);
 		}
 		else { // count em consultas com LET.			
@@ -291,7 +289,7 @@ public class Query {
 		return queryExprType;
 	}
 	
-	public static Query getUniqueInstance(boolean flag) throws IOException{		
+	public static Query getUniqueInstance(boolean flag) {		
 		if (!flag || _inputQuery == null)
 			_inputQuery = new Query();
 				
@@ -300,11 +298,11 @@ public class Query {
 	
 	
 	/***
-	 * Este método verifica se a consulta de entrada é aplicada sobre um documento ou sobre uma coleção.
-	 * @param inputQuery A consulta de entrada através da interface.
+	 * Este mï¿½todo verifica se a consulta de entrada ï¿½ aplicada sobre um documento ou sobre uma coleï¿½ï¿½o.
+	 * @param inputQuery A consulta de entrada atravï¿½s da interface.
 	 * @throws IOException 
 	 */
-	public ArrayList<String> setqueryExprType(String inputQuery) throws IOException{
+	public ArrayList<String> setqueryExprType(String inputQuery) throws IOException {
 				
 		int posIn = -1;						
 		int posParentese = -1;
@@ -319,19 +317,18 @@ public class Query {
 			posIn = inputQuery.indexOf("in ");			
 			posParentese = inputQuery.indexOf("(");	
 
-			if ( posIn != -1 && posParentese != -1 && posIn > posParentese) { // Não faça nada.
+			if ( posIn != -1 && posParentese != -1 && posIn > posParentese) { // NÃ£o faÃ§a nada.
 				; // A consulta de entrada possui um LET antes de um FOR. Neste sistema, as consultas de entrada ou possuem For clause ou For seguido de Let, mas nunca o oposto.
 			}
 			else {
 				documentExpr = inputQuery.substring(posIn,posParentese);
 			}
-		} // fim if expressão igual a FOR
-		
+		} // fim if expressÃ£o igual a FOR
 		else if (inputQuery!=null && inputQuery.toUpperCase().indexOf("LET ")>=0) {
 			posIn = inputQuery.indexOf(":=");		
 			posParentese = inputQuery.indexOf("(");
 			documentExpr = inputQuery.substring(posIn,posParentese);	
-		} // fim if expressão igual a LET		
+		} // fim if expressÃ£o igual a LET		
 		
 		if (documentExpr!=null && documentExpr.toUpperCase().indexOf("DOC")>=0) {			
 			queryExprType = "document";
@@ -392,7 +389,7 @@ public class Query {
 	
 	public String getPathVariable(String variableName){
 		
-		String path = this.forClauses.get(variableName); // caminho da variável
+		String path = this.forClauses.get(variableName); // caminho da variï¿½vel
 		int posComma = path.indexOf(":");		
 		String subPath = path.substring(posComma+1,path.length());		
 		
@@ -410,17 +407,17 @@ public class Query {
 	
 	public String getDocumentNameByVariableName(String variableName) {
 
-		/* this.forClauses é uma hashtable que possuem a seguinte estrutura:
-		<chave, conteudo> onde a chave é o nome da variável XML, incluindo o caracter $ (ex.: $order)
-		e conteudo é o caminho completo sobre o qual a variável está definida.
+		/* this.forClauses ï¿½ uma hashtable que possuem a seguinte estrutura:
+		<chave, conteudo> onde a chave ï¿½ o nome da variï¿½vel XML, incluindo o caracter $ (ex.: $order)
+		e conteudo ï¿½ o caminho completo sobre o qual a variï¿½vel estï¿½ definida.
 		
-		Este caminho é expresso segundo o seguinte padrão: 
+		Este caminho ï¿½ expresso segundo o seguinte padrï¿½o: 
 			nomeDocumento:nomeColecao:caminhoXpath
 			Ex.: loja:informacoesLojas:Loja/Itens/Item/Pedido
 		*/
 		
 		String path = this.forClauses.get(variableName); // definicao da variavel. Indica o documento, a colecao e o caminho xpath ao qual a variavel se refere.
-		int posComma = path.indexOf(":"); // posição do primeiro caracter (:)
+		int posComma = path.indexOf(":"); // posiï¿½ï¿½o do primeiro caracter (:)
 		String documentName = path.substring(0, posComma); // Nome do documento
 		
 		return documentName;		
@@ -429,7 +426,7 @@ public class Query {
     public String getCollectionNameByVariableName(String variableName) throws IOException{
 		
 		String path = this.forClauses.get(variableName); // definicao da variavel. Indica o documento, a colecao e o caminho xpath ao qual a variavel se refere.
-		int posComma = path.indexOf(":"); // posição do primeiro caracter (:)
+		int posComma = path.indexOf(":"); // posiï¿½ï¿½o do primeiro caracter (:)
 		String subPath = path.substring(posComma+1,path.length());
 		String collectionName = "";
 		

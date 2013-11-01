@@ -6,6 +6,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.xml.xquery.XQException;
+
 import mediadorxml.catalog.CatalogManager;
 
 public class DecomposeQuery {
@@ -33,7 +35,7 @@ public class DecomposeQuery {
 		this.totalNumberElements = totalNumberElements;
 	}
 
-	public static DecomposeQuery getUniqueInstance(boolean getunique) throws IOException{		
+	public static DecomposeQuery getUniqueInstance(boolean getunique) {		
 		if (decQry == null || !getunique)
 			decQry = new DecomposeQuery();
 		
@@ -63,7 +65,7 @@ public class DecomposeQuery {
     	String afterClause = "";
     	String subQuery = "";    	
     	
-    	if ( posForClause == -1 ) { // a coleção não está especificada em uma cláusula FOR, mas sim em uma cláusula LET.
+    	if ( posForClause == -1 ) { // a coleï¿½ï¿½o nï¿½o estï¿½ especificada em uma clï¿½usula FOR, mas sim em uma clï¿½usula LET.
     		posLetClause = tmp.toUpperCase().indexOf("LET " + varName.toUpperCase());    		
     		
     		if ( posLetClause >= 0 ){
@@ -80,13 +82,13 @@ public class DecomposeQuery {
 	    	docQueries = new ArrayList<String>();
 	    }
 	   	    
-	    // Cria as sub-consultas substituindo nas xqueries collection(nomeColecao) pela união dos documentos especificados em cláusulas doc();	    
+	    // Cria as sub-consultas substituindo nas xqueries collection(nomeColecao) pela uniï¿½o dos documentos especificados em clï¿½usulas doc();	    
 	    
 	    if ( decomposedQueries!=null && decomposedQueries.size() > 0) {
 	    	
 	    	this.setTotalNumberElements(0);
 	    		    	
-	    	// decomposedQueries!=null: Se houver mais de um FOR/LET na consulta de entrada, obtenha as sub-consultas do FOR/LET anterior cujo collection() já foi substituído 
+	    	// decomposedQueries!=null: Se houver mais de um FOR/LET na consulta de entrada, obtenha as sub-consultas do FOR/LET anterior cujo collection() jï¿½ foi substituï¿½do 
 	    	// por doc() e substitua os collections() do FOR/LET subsequente.
     		for ( String docqry : decomposedQueries ) {    			
     			
@@ -102,7 +104,7 @@ public class DecomposeQuery {
     	        subQuery = "";
     	    
     	    	
-    	    	if ( posForClause == -1 ) { // a coleção não está especificada em uma cláusula FOR, mas sim em uma cláusula LET.
+    	    	if ( posForClause == -1 ) { // a coleï¿½ï¿½o nï¿½o estï¿½ especificada em uma clï¿½usula FOR, mas sim em uma clï¿½usula LET.
     	    		posLetClause = tmp.toUpperCase().indexOf("LET " + varName.toUpperCase().replace(" ", ""));    		
     	    		
     	    		if ( posLetClause >= 0 ){
@@ -186,7 +188,7 @@ public class DecomposeQuery {
 		    	
 		    	String endCollection = startCollection.substring(posEndCollection+1, startCollection.length());	
 		    	
-		    	// O fim do caminho xpath até o elemento, pode ser um espaço em branco, um Enter ou um Tab.
+		    	// O fim do caminho xpath atï¿½ o elemento, pode ser um espaï¿½o em branco, um Enter ou um Tab.
 		    	int posSeparator = endCollection.indexOf(" ");
 		    	if (posSeparator == -1 || (endCollection.indexOf("\r\n") !=-1 && endCollection.indexOf("\r\n")<posSeparator))
 		    		posSeparator = endCollection.indexOf("\r\n");
@@ -232,19 +234,19 @@ public class DecomposeQuery {
 		
 		CatalogManager cm = CatalogManager.getUniqueInstance();
 		
-		xPath = xPath.substring(1, xPath.length()); // retirar a primeira barra do início do caminho xpath
+		xPath = xPath.substring(1, xPath.length()); // retirar a primeira barra do inï¿½cio do caminho xpath
 		
 		String subPath = "";
 		int posBarra = -1;
-		String cardinality;
+		//String cardinality;
 		String completePath = "";	
 						
-		/* Se o primeiro caracter não for barra, o usuário especificou o caminho xpath completo. (turma/estudantes/estudante/nome)
-		 * Caso contrário, especificou como //estudantes/estudante/nome		
+		/* Se o primeiro caracter nï¿½o for barra, o usuï¿½rio especificou o caminho xpath completo. (turma/estudantes/estudante/nome)
+		 * Caso contrï¿½rio, especificou como //estudantes/estudante/nome		
 		 * */
 		if ( xPath.charAt(0) != '/' ) { 
 		
-			posBarra = xPath.indexOf("/"); // obtém a posição da primeira barra. Ex.: turma/estudantes/estudante/nome			
+			posBarra = xPath.indexOf("/"); // obtï¿½m a posiï¿½ï¿½o da primeira barra. Ex.: turma/estudantes/estudante/nome			
 			if ( posBarra >=0 ) {	
 				completePath = xPath.substring(posBarra+1, xPath.length()); // estudantes/estudante/nome		
 				subPath = xPath.substring(0, posBarra); // turma				
@@ -253,12 +255,18 @@ public class DecomposeQuery {
 				subPath = xPath;
 			}
 			
-			cardinality = ExecucaoConsulta.executeQuery(cm.getFormattedQuery(documentName, ", '" + collectionName + "'", subPath));	
-									
-			if ( Integer.parseInt(cardinality) == 1 ) { // Não pode haver fragmentação se não houver relação 1:N; Cardinalidade do primeiro elemento
+			int cardinality = 0;
+			//cardinality = ExecucaoConsulta.executeQuery(cm.getFormattedQuery(documentName, ", '" + collectionName + "'", subPath));	
+			try {
+			    cardinality = cm.getDatabase().getCardinality(subPath, documentName, collectionName);
+			} catch (XQException e) {
+			    throw new IOException(e);
+			}
+			
+			if ( cardinality == 1 ) { // Nï¿½o pode haver fragmentaï¿½ï¿½o se nï¿½o houver relaï¿½ï¿½o 1:N; Cardinalidade do primeiro elemento
 							
 				do {
-					posBarra = completePath.indexOf("/"); // obtém a posição da barra seguinte. Ex.: estudantes/estudante/nome			
+					posBarra = completePath.indexOf("/"); // obtï¿½m a posiï¿½ï¿½o da barra seguinte. Ex.: estudantes/estudante/nome			
 					if ( posBarra >=0 ) {								
 						subPath = subPath + "/" + completePath.substring(0, posBarra); // turma/estudantes
 						completePath = completePath.substring(posBarra+1, completePath.length()); // estudante/nome
@@ -270,13 +278,18 @@ public class DecomposeQuery {
 						}
 					}
 					
-					cardinality = ExecucaoConsulta.executeQuery(cm.getFormattedQuery(documentName, ", '" + collectionName + "'", subPath));
-							
-				} while (Integer.parseInt(cardinality) <= 1 && !completePath.equals(""));				
+					//cardinality = ExecucaoConsulta.executeQuery(cm.getFormattedQuery(documentName, ", '" + collectionName + "'", subPath));
+					try {
+					    cardinality = cm.getDatabase().getCardinality(subPath, documentName, collectionName);
+					} catch (XQException e) {
+					    new IOException(e);
+					}
+					
+				} while (cardinality <= 1 && !completePath.equals(""));				
 				
 				this.setLastCompleteOriginalPath(subPath+(!completePath.equals("")?"/"+completePath:""));
 				
-				this.setTotalNumberElements( this.getTotalNumberElements() + Integer.parseInt(cardinality));		
+				this.setTotalNumberElements( this.getTotalNumberElements() + cardinality);		
 			}	
 		}
 		else { // caminho incompleto
@@ -302,7 +315,7 @@ public class DecomposeQuery {
 			}
 		}
 		else {
-			if ( (cardinalityNow > 1 && (q.getLastCollectionCardinality() > cardinalityNow || q.getLastCollectionCardinality()<=1) )) { // se a cardinalidade da última união for maior, substitui
+			if ( (cardinalityNow > 1 && (q.getLastCollectionCardinality() > cardinalityNow || q.getLastCollectionCardinality()<=1) )) { // se a cardinalidade da ï¿½ltima uniï¿½o for maior, substitui
 				
 				if ( xpath.contains(this.getLastCompleteOriginalPath())) {
 					q.setVirtualPartitioningVariable(varName);
@@ -336,7 +349,7 @@ public String analyzeAncestral(String collectionName, String docName, String var
 			completePath = element; // Ex.: person.
 		}
 		
-		// A fragmentação somente será possível se algum ancestral imediato do elemento especificado tiver cardinalidade 1.
+		// A fragmentaï¿½ï¿½o somente serï¿½ possï¿½vel se algum ancestral imediato do elemento especificado tiver cardinalidade 1.
 		String xquery = " for $n in doc('$schema_" + collectionName + "')//element"
 					  + " where $n/element/@name = \"" + completePath +"\""		
 					  + " return substring($n/@name,1)";
@@ -363,7 +376,7 @@ public String analyzeAncestral(String collectionName, String docName, String var
 			}		
 						
 			String value = "";
-			// Setar o caminho completo da variável referente a coleção de dados.
+			// Setar o caminho completo da variï¿½vel referente a coleï¿½ï¿½o de dados.
 			Hashtable<String, String> forClauses = (Hashtable<String, String>) q.getForClauses();
 									
 			if (forClauses.containsKey(varName)){

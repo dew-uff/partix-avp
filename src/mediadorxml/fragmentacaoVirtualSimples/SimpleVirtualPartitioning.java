@@ -9,10 +9,10 @@ import java.util.Set;
 public class SimpleVirtualPartitioning {
 
 	protected static SimpleVirtualPartitioning svp;	
-	protected int numberOfNodes; // número de nós disponíveis para o processamento da consulta
+	protected int numberOfNodes; // nï¿½mero de nï¿½s disponï¿½veis para o processamento da consulta
 	protected ArrayList<String> initialFragments = null;
 	protected ArrayList<String> virtualPartitioningResult = null;
-	protected boolean newDocQuery;	// indica que está iniciando o processamento de uma nova sub-consulta doc() a partir de uma consulta de entrada collection()
+	protected boolean newDocQuery;	// indica que estï¿½ iniciando o processamento de uma nova sub-consulta doc() a partir de uma consulta de entrada collection()
 	
 	public boolean isNewDocQuery() {
 		return newDocQuery;
@@ -53,12 +53,12 @@ public class SimpleVirtualPartitioning {
 		this.initialFragments.add(fragment);
 	}
 
-	protected int cardinalityOfElement; // cardinalidade do elemento utilizado para a fragmentação
+	protected int cardinalityOfElement; // cardinalidade do elemento utilizado para a fragmentaï¿½ï¿½o
 	protected Hashtable<String,Hashtable<Integer,String>> selectionPredicates = new Hashtable<String,Hashtable<Integer,String>>(); ; // vetor com todos os predicados a serem adicionados para gerar os fragmentos virtuais.
 	
-	/* Vetor com todos os predicados já adicionados a consulta original. Utilizado quando há mais de um FOR sobre caminhos diferentes, 
-	 * mas que contém o subcaminho utilizado para a fragmentação, a fim de evitar intervalos conflitantes e, consequentemente, 
-	 * fragmentos cujo resultado é um conjunto vazio.*/	 
+	/* Vetor com todos os predicados jï¿½ adicionados a consulta original. Utilizado quando hï¿½ mais de um FOR sobre caminhos diferentes, 
+	 * mas que contï¿½m o subcaminho utilizado para a fragmentaï¿½ï¿½o, a fim de evitar intervalos conflitantes e, consequentemente, 
+	 * fragmentos cujo resultado ï¿½ um conjunto vazio.*/	 
 	protected Hashtable<String,Integer> addedPredicates = new Hashtable<String,Integer>(); ;  
 	
 	public Hashtable<String, Integer> getAddedPredicates() {
@@ -69,7 +69,7 @@ public class SimpleVirtualPartitioning {
 		if (this.addedPredicates==null)
 			this.addedPredicates = new Hashtable<String, Integer>();
 		
-		this.addedPredicates.put(completePath,elementCardinality); //caminho completo que define a variável XML e cardinalidade do elemento usada para criar os fragmentos.
+		this.addedPredicates.put(completePath,elementCardinality); //caminho completo que define a variï¿½vel XML e cardinalidade do elemento usada para criar os fragmentos.
 	}
 
 	public Hashtable<String, Hashtable<Integer, String>> getSelectionPredicates() {
@@ -80,7 +80,7 @@ public class SimpleVirtualPartitioning {
 		this.selectionPredicates.put(varName,subqueries);
 	}
 
-	public static SimpleVirtualPartitioning getUniqueInstance(boolean getUnique) throws IOException{		
+	public static SimpleVirtualPartitioning getUniqueInstance(boolean getUnique) {		
 		
 		if (svp == null || !getUnique)
 			svp = new SimpleVirtualPartitioning();
@@ -95,9 +95,9 @@ public class SimpleVirtualPartitioning {
 		String newPredicate = "";		
 		Hashtable<Integer,String> predicates = new Hashtable<Integer, String>();		
 				
-		if ( index == - 1 && this.selectionPredicates.get(fragmentationVariable) == null ) { // Se índice igual a -1, sistema irá gerar os intervalos pela primeira vez.				
+		if ( index == - 1 && this.selectionPredicates.get(fragmentationVariable) == null ) { // Se ï¿½ndice igual a -1, sistema irï¿½ gerar os intervalos pela primeira vez.				
 			
-			if ( fragmentSize > 0 ) { // cardinalidade do elemento é maior que a quantidade de nós de processamento.
+			if ( fragmentSize > 0 ) { // cardinalidade do elemento ï¿½ maior que a quantidade de nï¿½s de processamento.
 				
 				for (int i = 1, j = 1; i < ( resto == 0 ? this.numberOfNodes + 1 : this.numberOfNodes ); i++, j = j + fragmentSize) {			
 						
@@ -114,7 +114,7 @@ public class SimpleVirtualPartitioning {
 				} // fim for
 				
 				int lastPosition = ( fragmentSize * this.numberOfNodes ) + resto + 1;
-				// se resto for diferente de zero, o último fragmento possui um intervalo maior que os demais 
+				// se resto for diferente de zero, o ï¿½ltimo fragmento possui um intervalo maior que os demais 
 				newPredicate = "[position() >= " + ( ( fragmentSize * (this.numberOfNodes - 1) ) + 1) 
 			  	             + " and position() < " + lastPosition + "]";
 				
@@ -123,7 +123,7 @@ public class SimpleVirtualPartitioning {
 				
 			} // fim if
 			
-			else { // número de elementos é menor que o número de processadores. 
+			else { // nï¿½mero de elementos ï¿½ menor que o nï¿½mero de processadores. 
 				
 				for (int k = 1; k <= cardinalityOfElement; k++) {
 					
@@ -138,7 +138,7 @@ public class SimpleVirtualPartitioning {
 			return "";
 		
 		}
-		else { // Sistema já conhece todos os intervalos, devolve apenas os predicados à medida que as sub-consultas são geradas
+		else { // Sistema jï¿½ conhece todos os intervalos, devolve apenas os predicados ï¿½ medida que as sub-consultas sï¿½o geradas
 			
 			predicates = selectionPredicates.get(fragmentationVariable);
 			String IntervalPosition = predicates.get(index);
@@ -159,7 +159,7 @@ public class SimpleVirtualPartitioning {
 		Hashtable<Integer,String> pred = predicates.get(variableName);		
 		
 		if (svp.isNewDocQuery()){
-			fragments = null; // reinicializa o arrayList para não utilizar os predicados já adicionados da sub-consulta anterior.
+			fragments = null; // reinicializa o arrayList para nï¿½o utilizar os predicados jï¿½ adicionados da sub-consulta anterior.
 		}
 
 		for ( int j = 0; j < pred.size(); j++ ) {
@@ -193,22 +193,22 @@ public class SimpleVirtualPartitioning {
 					completePath = completePath.substring(0, completePath.indexOf(subPath));
 					completePath = completePath + subPath;
 					
-					// Verifica se o caminho até o atributo de fragmentação já foi usado para geração de algum predicado de seleção.
-					// Em caso afirmativo retorna a cardinalidade do atributo de fragmentação no documento, caso contrário retorna zero.
+					// Verifica se o caminho atï¿½ o atributo de fragmentaï¿½ï¿½o jï¿½ foi usado para geraï¿½ï¿½o de algum predicado de seleï¿½ï¿½o.
+					// Em caso afirmativo retorna a cardinalidade do atributo de fragmentaï¿½ï¿½o no documento, caso contrï¿½rio retorna zero.
 					Integer cardinality = pathAlreadyExists(virtualFragment);								
 					
-					// se nenhum predicado de seleção foi adicionado para o mesmo caminho xpath, adicione todos os intervalos
+					// se nenhum predicado de seleï¿½ï¿½o foi adicionado para o mesmo caminho xpath, adicione todos os intervalos
 					if ( cardinality == 0 ) { 									
 						
 						virtualFragment = virtualFragment.replace(completePath, completePath + predicate);
 						virtualFragment = (j) + virtualFragment;
 						fragmentsBkp.add(virtualFragment);
 					}
-					else { // adicionar apenas os intervalos cujas sub-consultas geradas não produzem resultados vazios.
+					else { // adicionar apenas os intervalos cujas sub-consultas geradas nï¿½o produzem resultados vazios.
 						/*ex.: for $x in doc('loja','informacoesLoja')/Loja/Itens/Item[position >= 1 and position < 18]
 							   for $a in doc('loja','informacoesLoja')/Loja/Itens/Item[position >= 52 and position < 71]/ResenhaClientes
-							   O caminho /Loja/Itens/Item já teve um predicado de seleção adicionado, logo o intervalo da variável
-							   $a subsequente, deve adicionar os mesmo intervalos do predicado anterior e não predicados disjuntos,
+							   O caminho /Loja/Itens/Item jï¿½ teve um predicado de seleï¿½ï¿½o adicionado, logo o intervalo da variï¿½vel
+							   $a subsequente, deve adicionar os mesmo intervalos do predicado anterior e nï¿½o predicados disjuntos,
 							   caso a cardinalidade do elemento /Loja/Itens/Item seja a mesma para os dois FOR, o que indica que 
 							   ambos se referem ao mesmo documento, ou geram fragmentos iguais.
 					    */
@@ -229,7 +229,7 @@ public class SimpleVirtualPartitioning {
 							if (virtualFragment.substring(0, 1).equals(Integer.toString(j))) {						
 								virtualFragment = virtualFragment.replace(completePath, completePath + predicate);
 								virtualFragment = (j) + virtualFragment;
-								// Adicionar o predicado na posição correta. Como explicado no comentário acima.
+								// Adicionar o predicado na posiï¿½ï¿½o correta. Como explicado no comentï¿½rio acima.
 								fragmentsBkp.add(virtualFragment);
 							}
 						}
@@ -250,7 +250,7 @@ public class SimpleVirtualPartitioning {
 		svp.setAddedPredicates(subPath, elementCardinality);
 		fragments = fragmentsBkp;					
 		
-		if ( fragmentsBkp!=null && fragmentsBkp.size()>0 ) { // é diferente de null quando há mais de um FOR na consulta informada pelo usuário.
+		if ( fragmentsBkp!=null && fragmentsBkp.size()>0 ) { // ï¿½ diferente de null quando hï¿½ mais de um FOR na consulta informada pelo usuï¿½rio.
 									
 			this.RemoveIdentifiersFromFragments(fragmentsBkp);
 				
@@ -264,13 +264,13 @@ public class SimpleVirtualPartitioning {
 	}
 	
 	/**
-	 * Função que retorna o caminho que caracteriza o elemento escolhido como atributo de fragmentação
-	 * @param completePath String do FOR até o término do caminho Xpath do FOR que está sendo analisado.
-	 * @return O caminho até o atributo de fragmentação
+	 * Funï¿½ï¿½o que retorna o caminho que caracteriza o elemento escolhido como atributo de fragmentaï¿½ï¿½o
+	 * @param completePath String do FOR atï¿½ o tï¿½rmino do caminho Xpath do FOR que estï¿½ sendo analisado.
+	 * @return O caminho atï¿½ o atributo de fragmentaï¿½ï¿½o
 	 */
 	public String getPathPredicate(String completePath) {
 				
-		int posParenthese = completePath.indexOf(")"); // Fim da definição do documento/coleção		
+		int posParenthese = completePath.indexOf(")"); // Fim da definiï¿½ï¿½o do documento/coleï¿½ï¿½o		
 		String subPath = completePath.substring(posParenthese+1,completePath.length()); // caminho xpath	
 		
 		return subPath;
@@ -278,13 +278,13 @@ public class SimpleVirtualPartitioning {
 	}
 	
 	/**
-	 * Função que retorna a cardinalidade do elemento que já teve o predicado adicionado, ou caso não encontre, retorna zero.
-	 * @param forClausePath String do variável do FOR até o término do caminho Xpath do FOR que está sendo analisado.
-	 * @return A cardinalidade do atributo de fragmentação ou zero, caso este atributo ainda não tenha sido usado em predicados anteriores.
+	 * Funï¿½ï¿½o que retorna a cardinalidade do elemento que jï¿½ teve o predicado adicionado, ou caso nï¿½o encontre, retorna zero.
+	 * @param forClausePath String do variï¿½vel do FOR atï¿½ o tï¿½rmino do caminho Xpath do FOR que estï¿½ sendo analisado.
+	 * @return A cardinalidade do atributo de fragmentaï¿½ï¿½o ou zero, caso este atributo ainda nï¿½o tenha sido usado em predicados anteriores.
 	 */
 	public Integer pathAlreadyExists(String forClausePath){
 		
-		Hashtable<String, Integer> addePredicates = this.getAddedPredicates(); // Obtém os predicados já adicionados a consulta original.
+		Hashtable<String, Integer> addePredicates = this.getAddedPredicates(); // Obtï¿½m os predicados jï¿½ adicionados a consulta original.
 		Set<String> variableSet = addePredicates.keySet();		
 		Iterator<String> iter = variableSet.iterator();	
 			
@@ -294,7 +294,7 @@ public class SimpleVirtualPartitioning {
 		while ( iter.hasNext() && cardinality == 0 ){ // enquanto houver predicados adicionados e nenhum deles for semelhante ao predicado atual, continue.	
 			
 			String completePath = iter.next().toString();  // CompletePath = $c in doc(doc,coll)/xpath
-			String pathCompareTo = getPathPredicate(completePath); // GetPathPredicate retorna apenas a parte xpath de completePath passado como parâmetro.
+			String pathCompareTo = getPathPredicate(completePath); // GetPathPredicate retorna apenas a parte xpath de completePath passado como parï¿½metro.
 			
 			if ( pathCompareTo.indexOf("[") != -1 ) 
 				pathCompareTo = pathCompareTo.substring(0, pathCompareTo.indexOf("["));		
@@ -319,16 +319,16 @@ public class SimpleVirtualPartitioning {
 				
 				String strBeforeFor = "";
 				if ( frag.toUpperCase().indexOf("FOR ") != -1 ) {
-					// Obtém a string antes do primeiro FOR
+					// Obtï¿½m a string antes do primeiro FOR
 					strBeforeFor = frag.substring(0, frag.toUpperCase().indexOf("FOR "));
 				}	
 				else if ( frag.toUpperCase().indexOf("LET ") != -1 ) {								
-					// Obtém a string antes do primeiro LET
+					// Obtï¿½m a string antes do primeiro LET
 					strBeforeFor = frag.substring(0, frag.toUpperCase().indexOf("FOR "));							
 				}
 				
 				if ( strBeforeFor.length() > 0 ) {
-					// Retira todos os dígitos que indicam o índice do predicado, adicionado na consulta para excluir os fragmentos que geram resultado vazio.
+					// Retira todos os dï¿½gitos que indicam o ï¿½ndice do predicado, adicionado na consulta para excluir os fragmentos que geram resultado vazio.
 					String strWithoutIndex = strBeforeFor.replaceAll("[0-9]+", "");
 					// Substitui no fragmento inicial final
 					frag = frag.replace(strBeforeFor, strWithoutIndex);
@@ -345,7 +345,7 @@ public class SimpleVirtualPartitioning {
 		
 	}
 	
-	public String getSelectionPredicateToCollection(String fragmentationVariable, String virtualAttribute, String mainQuery) throws IOException {
+	public String getSelectionPredicateToCollection(String fragmentationVariable, String virtualAttribute, String mainQuery) {
 		
 		int fragmentSize = this.cardinalityOfElement / this.numberOfNodes;
 		int resto = this.cardinalityOfElement % this.numberOfNodes;		
@@ -359,7 +359,7 @@ public class SimpleVirtualPartitioning {
 		String finalQuery = "";		
 		
 		if (!mainQuery.toUpperCase().contains("FOR $")) {
-			if (fragmentationVariable.charAt(fragmentationVariable.length()-1) != ' ') { // se último caracter não for espaço, o usuário usou uma cláusula LET, cuja variável está imediatamente antes dos caracteres := 
+			if (fragmentationVariable.charAt(fragmentationVariable.length()-1) != ' ') { // se ï¿½ltimo caracter nï¿½o for espaï¿½o, o usuï¿½rio usou uma clï¿½usula LET, cuja variï¿½vel estï¿½ imediatamente antes dos caracteres := 
 				fragmentationVariable = fragmentationVariable + ":=";
 				//fragmentationVariable = fragmentationVariable + " ";
 			}
@@ -371,14 +371,14 @@ public class SimpleVirtualPartitioning {
 		}
 		
 		SubQuery sbq = SubQuery.getUniqueInstance(true);
-		// Obtém o caminho até onde o elemento de fragmentação.
+		// Obtï¿½m o caminho atï¿½ onde o elemento de fragmentaï¿½ï¿½o.
 		posVar = mainQuery.indexOf(fragmentationVariable);
 				
 		subQuery = mainQuery.substring(posVar, mainQuery.length());
 		
 		endUnion = subQuery.substring(subQuery.indexOf(")"),subQuery.length());
 		
-		if ( fragmentSize > 0 ) { // cardinalidade do elemento é maior que a quantidade de nós de processamento.
+		if ( fragmentSize > 0 ) { // cardinalidade do elemento ï¿½ maior que a quantidade de nï¿½s de processamento.
 			
 			for (int i = 1, j = 1; i < ( resto == 0 ? this.numberOfNodes + 1 : this.numberOfNodes ); i++, j = j + fragmentSize) {			
 					
@@ -408,7 +408,7 @@ public class SimpleVirtualPartitioning {
 				
 				subQueryTmp = subQuery;
 				int lastPosition = ( fragmentSize * this.numberOfNodes ) + resto + 1;
-				// se resto for diferente de zero, o último fragmento possui um intervalo maior que os demais 
+				// se resto for diferente de zero, o ï¿½ltimo fragmento possui um intervalo maior que os demais 
 				newPredicate = "[position() >= " + ( ( fragmentSize * (this.numberOfNodes - 1) ) + 1) 
 			  	             + " and position() < " + lastPosition + "]";
 				
@@ -427,7 +427,7 @@ public class SimpleVirtualPartitioning {
 			
 		} // fim if
 		
-		else { // número de elementos é menor que o número de processadores. 
+		else { // nï¿½mero de elementos ï¿½ menor que o nï¿½mero de processadores. 
 			
 			for (int k = 1; k <= cardinalityOfElement; k++) {
 				

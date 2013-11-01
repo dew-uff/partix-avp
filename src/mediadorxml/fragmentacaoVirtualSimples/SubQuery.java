@@ -76,7 +76,7 @@ public class SubQuery {
 		this.sameQuery = sameQuery;
 	}
 
-	public static SubQuery getUniqueInstance(boolean getUnique) throws IOException{		
+	public static SubQuery getUniqueInstance(boolean getUnique) {		
 		
 		if (sbq == null || !getUnique)
 			sbq = new SubQuery();
@@ -307,79 +307,74 @@ public class SubQuery {
 		
 		Query q;
 		SubQuery sbq;
-		try {
-			q = Query.getUniqueInstance(true);		
-			sbq = SubQuery.getUniqueInstance(true);
-			
-			if (!q.getOrderBy().trim().equals("")) { // se a consulta original possui order by, acrescentar na consulta final o order by original.
-				
-				String originalClause = q.getOrderBy().trim();
-				String[] orderElements = q.getOrderBy().trim().split("\\$");	
-				
-				String lastDeletedElement = "";
-				for (int i = 0; i < orderElements.length; i++) {
-					String subOrder = ""; // caminho apos a definicao da variavel. Ex.: $order/shipdate. subOrder recebe shipdate.
-					int posSlash = orderElements[i].trim().indexOf("/");		
-					
-					subOrder = xquery.substring(xquery.indexOf(elementAfterConstructor),xquery.length()) ; // consome a string posterior ao primeiro elemento depois do construtor.
-										
-					if ( posSlash != -1 ) {
-												
-						if (orderElements[i].lastIndexOf('/') == orderElements[i].length()-1) { // se houver dois elementos na clausula order by, a string estar� como $order/ship_date/$order/@id, ao separar teremos $order/ship_date/, por isso, � necess�rio retirar a barra do final.
-							orderElements[i] = orderElements[i].substring(0, orderElements[i].length()-1);
-						}
-												
-						if (subOrder.trim().indexOf(elementAfterConstructor) !=-1 && subOrder.trim().indexOf(orderElements[i])!=-1) {
-							subOrder = subOrder.trim().substring(subOrder.trim().indexOf(elementAfterConstructor), subOrder.trim().indexOf(orderElements[i])+1+orderElements[i].length()); // consome a parte posterior ao elemento do order by.
-							
-							if (subOrder.trim().indexOf(">")!=-1) {
-								subOrder = subOrder.trim().substring(subOrder.trim().indexOf(">")+1, subOrder.trim().length()); // consome o elemento depois do construtor
-							}							
-						
-							if ( !lastDeletedElement.equals("") ) {
-								
-								if (lastDeletedElement.indexOf("/")!=-1){ // dois elementos. Ex.: date/sp
-									
-									String[] last = lastDeletedElement.split("/");
-									lastDeletedElement = "";
-									
-									for (int j = last.length-1; j >=0; j--) {
-										lastDeletedElement = lastDeletedElement + "</" + last[j] + ">";									
-									}
-								}
-								else {
-									lastDeletedElement = "</" + lastDeletedElement + ">";
-								}							
-								
-								if (subOrder.trim().indexOf(lastDeletedElement)!=-1 && subOrder.trim().indexOf(orderElements[i])!=-1) { 
-									subOrder = subOrder.trim().substring(subOrder.trim().indexOf(lastDeletedElement)+lastDeletedElement.length(), subOrder.trim().indexOf(orderElements[i])+1); // consome a parte posterior ao elemento do order by.
-								}
-							}
-							
-							if ( subOrder.trim().indexOf("<")  != -1 ) { // se houver elementos entre o elemento depois do construtor e o elemento do order by, obtenha-o.
-								elementAroundOrderBy = subOrder.trim().substring(subOrder.trim().indexOf("<")+1, subOrder.trim().indexOf("{")); // obt�m os elementos antes do elemento do order by.Ex.:<date><sp>{$order/ship_date}</sp></date>. Retornaria date><sp>.							
-								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[\r\n\t' '>]", ""); // consome ENTER, TAB, espa�o em branco e o caracter >.
-								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[<]", "/"); // Substitui os caracteres que separam os elementos de < por /.
+		q = Query.getUniqueInstance(true);		
+        sbq = SubQuery.getUniqueInstance(true);
+        
+        if (!q.getOrderBy().trim().equals("")) { // se a consulta original possui order by, acrescentar na consulta final o order by original.
+        	
+        	String originalClause = q.getOrderBy().trim();
+        	String[] orderElements = q.getOrderBy().trim().split("\\$");	
+        	
+        	String lastDeletedElement = "";
+        	for (int i = 0; i < orderElements.length; i++) {
+        		String subOrder = ""; // caminho apos a definicao da variavel. Ex.: $order/shipdate. subOrder recebe shipdate.
+        		int posSlash = orderElements[i].trim().indexOf("/");		
+        		
+        		subOrder = xquery.substring(xquery.indexOf(elementAfterConstructor),xquery.length()) ; // consome a string posterior ao primeiro elemento depois do construtor.
+        							
+        		if ( posSlash != -1 ) {
+        									
+        			if (orderElements[i].lastIndexOf('/') == orderElements[i].length()-1) { // se houver dois elementos na clausula order by, a string estar� como $order/ship_date/$order/@id, ao separar teremos $order/ship_date/, por isso, � necess�rio retirar a barra do final.
+        				orderElements[i] = orderElements[i].substring(0, orderElements[i].length()-1);
+        			}
+        									
+        			if (subOrder.trim().indexOf(elementAfterConstructor) !=-1 && subOrder.trim().indexOf(orderElements[i])!=-1) {
+        				subOrder = subOrder.trim().substring(subOrder.trim().indexOf(elementAfterConstructor), subOrder.trim().indexOf(orderElements[i])+1+orderElements[i].length()); // consome a parte posterior ao elemento do order by.
+        				
+        				if (subOrder.trim().indexOf(">")!=-1) {
+        					subOrder = subOrder.trim().substring(subOrder.trim().indexOf(">")+1, subOrder.trim().length()); // consome o elemento depois do construtor
+        				}							
+        			
+        				if ( !lastDeletedElement.equals("") ) {
+        					
+        					if (lastDeletedElement.indexOf("/")!=-1){ // dois elementos. Ex.: date/sp
+        						
+        						String[] last = lastDeletedElement.split("/");
+        						lastDeletedElement = "";
+        						
+        						for (int j = last.length-1; j >=0; j--) {
+        							lastDeletedElement = lastDeletedElement + "</" + last[j] + ">";									
+        						}
+        					}
+        					else {
+        						lastDeletedElement = "</" + lastDeletedElement + ">";
+        					}							
+        					
+        					if (subOrder.trim().indexOf(lastDeletedElement)!=-1 && subOrder.trim().indexOf(orderElements[i])!=-1) { 
+        						subOrder = subOrder.trim().substring(subOrder.trim().indexOf(lastDeletedElement)+lastDeletedElement.length(), subOrder.trim().indexOf(orderElements[i])+1); // consome a parte posterior ao elemento do order by.
+        					}
+        				}
+        				
+        				if ( subOrder.trim().indexOf("<")  != -1 ) { // se houver elementos entre o elemento depois do construtor e o elemento do order by, obtenha-o.
+        					elementAroundOrderBy = subOrder.trim().substring(subOrder.trim().indexOf("<")+1, subOrder.trim().indexOf("{")); // obt�m os elementos antes do elemento do order by.Ex.:<date><sp>{$order/ship_date}</sp></date>. Retornaria date><sp>.							
+        					elementAroundOrderBy = elementAroundOrderBy.replaceAll("[\r\n\t' '>]", ""); // consome ENTER, TAB, espa�o em branco e o caracter >.
+        					elementAroundOrderBy = elementAroundOrderBy.replaceAll("[<]", "/"); // Substitui os caracteres que separam os elementos de < por /.
 
-								lastDeletedElement = elementAroundOrderBy;
-								completePath =  '$'+ orderElements[i].substring(0, posSlash) + "/" + (elementAroundOrderBy) + "/" + orderElements[i].substring(posSlash+1,orderElements[i].length());							
-								String tmp = '$'+ orderElements[i];
-								
-								originalClause = originalClause.replace(tmp, completePath);
-							}	
-							q.setOrderBy(originalClause);
-						}
-						
-			
-					}				
-				}
-				
-				sbq.setUpdateOrderClause(false);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+        					lastDeletedElement = elementAroundOrderBy;
+        					completePath =  '$'+ orderElements[i].substring(0, posSlash) + "/" + (elementAroundOrderBy) + "/" + orderElements[i].substring(posSlash+1,orderElements[i].length());							
+        					String tmp = '$'+ orderElements[i];
+        					
+        					originalClause = originalClause.replace(tmp, completePath);
+        				}	
+        				q.setOrderBy(originalClause);
+        			}
+        			
+        
+        		}				
+        	}
+        	
+        	sbq.setUpdateOrderClause(false);
+        }	
 		
 	}
 
@@ -399,18 +394,11 @@ public class SubQuery {
 		else { // nao houve fragmentacao
 			
 			SubQuery sbq;
-			try {
-				
-				sbq = SubQuery.getUniqueInstance(true);
-				int docId = Integer.parseInt(sbq.getDocIdentifier());
-				docId++;
-				intervalBeginning = Integer.toString(docId);
-				sbq.setDocIdentifier(Integer.toString(docId));
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			sbq = SubQuery.getUniqueInstance(true);
+            int docId = Integer.parseInt(sbq.getDocIdentifier());
+            docId++;
+            intervalBeginning = Integer.toString(docId);
+            sbq.setDocIdentifier(Integer.toString(docId));
 			
 		}		
 

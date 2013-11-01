@@ -729,15 +729,10 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 		jTextAreaInput.addFocusListener(new java.awt.event.FocusAdapter() {   
             public void focusLost(java.awt.event.FocusEvent e) {
             	
-            	try {           		            		
-            		Query.getUniqueInstance(false);
-					SimpleVirtualPartitioning.getUniqueInstance(false);
-	            	SubQuery.getUniqueInstance(false);	            	
-	            	DecomposeQuery.getUniqueInstance(false);	            	
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}                  
+            	Query.getUniqueInstance(false);
+                SimpleVirtualPartitioning.getUniqueInstance(false);
+                SubQuery.getUniqueInstance(false);	            	
+                DecomposeQuery.getUniqueInstance(false);                  
             }   
         });
 		
@@ -753,15 +748,10 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 		jTextField.addFocusListener(new java.awt.event.FocusAdapter() {   
             public void focusLost(java.awt.event.FocusEvent e) {
             	
-            	try {           		            		
-					Query.getUniqueInstance(false);
-					SimpleVirtualPartitioning.getUniqueInstance(false);
-	            	SubQuery.getUniqueInstance(false);	            	
-	            	DecomposeQuery.getUniqueInstance(false);	            	
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}                  
+            	Query.getUniqueInstance(false);
+                SimpleVirtualPartitioning.getUniqueInstance(false);
+                SubQuery.getUniqueInstance(false);	            	
+                DecomposeQuery.getUniqueInstance(false);                  
             }   
         });
 		

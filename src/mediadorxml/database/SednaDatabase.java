@@ -1,6 +1,8 @@
 package mediadorxml.database;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
@@ -8,6 +10,7 @@ import javax.xml.xquery.XQExpression;
 
 import net.xqj.basex.BaseXXQDataSource;
 import net.xqj.sedna.SednaXQDataSource;
+import sun.rmi.runtime.Log;
 
 public class SednaDatabase extends BaseDatabase {
 
@@ -25,19 +28,25 @@ public class SednaDatabase extends BaseDatabase {
     
     @Override
     public void deleteCollection(String collectionName) throws XQException {
-        executeCommand("DROP DB " + collectionName);
+        if (existsCollection(collectionName)) {
+            executeCommand("DROP COLLECTION '" + collectionName + "'");
+        }
     }
 
     @Override
     public void createCollection(String collectionName) throws XQException {
-        executeCommand("CREATE DB " + collectionName);
+        executeCommand("CREATE COLLECTION '" + collectionName + "'");
     }
     
     @Override
     public void createCollectionWithContent(String collectionName, String dirPath) 
             throws XQException {
-        executeCommand("CREATE DB " + collectionName + " " + dirPath);
-        
+        createCollection(collectionName);
+        File dir = new File(dirPath);
+        File[] files = dir.listFiles();
+        for(File file: files) {
+            loadFileInCollection(collectionName, file.getAbsolutePath());
+        }
     }
     
     private void executeCommand(String command) throws XQException {
@@ -46,6 +55,14 @@ public class SednaDatabase extends BaseDatabase {
         exp.executeCommand(command);
         exp.close();
         conn.close();
+    }
+    
+    @Override
+    public int getCardinality(String xpath, String document, String collection)
+            throws XQException {
+        String query = "let $elm := doc('" + document + ((collection != null && collection.length() > 0)?("', '"+ collection):"") +"')/" + xpath + " return count($elm)";
+        
+        return Integer.parseInt(executeQueryAsString(query));
     }
 
     @Override
@@ -75,7 +92,11 @@ public class SednaDatabase extends BaseDatabase {
     @Override
     public void loadFileInCollection(String collectionName, String filePath)
             throws XQException {
-        // TODO Auto-generated method stub
-        
+        File file = new File(filePath);
+        executeCommand("LOAD '" + filePath + "' '" + file.getName() + "' '" + collectionName + "'"); 
+    }
+    
+    private boolean existsCollection(String collectionName) throws XQException {
+        return getCardinality("collections/collection[@name='"+collectionName+"']", "$collections", null) > 0?true:false;
     }
 }

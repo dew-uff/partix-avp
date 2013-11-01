@@ -41,21 +41,15 @@ public class Config {
 		return config.getProperties().getProperty("CATALOGFILE", "catalog.xml");
 	}
 	
+	public static void setCatalogFile(String file){
+	    Config config = new Config();
+	    config.getProperties().setProperty("CATALOGFILE", file);
+	}
+	
 	public static FileInputStream getCatalogFileInputStream() throws FileNotFoundException, UnsupportedEncodingException{
 		Config config = new Config();
 		String catalogFile = config.getProperties().getProperty("CATALOGFILE", "catalog.xml").trim();
-		final URL url = config.getClass().getClassLoader().getResource(catalogFile);
-		if (null == url) {
-			// TODO LOG
-			//logger.warn("URL was null");
-			return null;
-		}
-		else{
-
-	        String fname   = url.getFile();			        
-	        //System.out.println(fname);
-	        return new FileInputStream(URLDecoder.decode(fname, "UTF-8"));
-		}
+        return new FileInputStream(catalogFile);
 	}
 	
 	public static int getCostEstimatorIOweight(){

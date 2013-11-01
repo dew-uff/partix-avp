@@ -17,6 +17,8 @@ public interface Database {
     
     public void createCollectionWithContent(String collectionName, String dirPath) throws XQException;
     
+    public int getCardinality(String xpath, String document, String collection) throws XQException;
+    
     public String getHost();
     
     public int getPort();
