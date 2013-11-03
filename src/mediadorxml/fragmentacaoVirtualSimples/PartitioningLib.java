@@ -172,13 +172,15 @@ public class PartitioningLib {
             FileWriter writer = new FileWriter(outputFile,false);
             PrintWriter saida = new PrintWriter(writer);
             Query q = Query.getUniqueInstance(true);
+            SimpleVirtualPartitioning svp = SimpleVirtualPartitioning.getUniqueInstance(true);
+            int cardinality = svp.getCardinalityOfElement();
             
             String fragment = sbq.getSubQueries().get(0);
             
             int selInit = fragment.indexOf("[position()");
             int selEnd = fragment.indexOf(']', selInit);
             String selection = fragment.substring(selInit, selEnd+1);
-            fragment = fragment.replace(selection, "[##]");
+            fragment = fragment.replace(selection, "[#"+cardinality+"#]");
             
             saida.print("<ORDERBY>" + q.getOrderBy() + "</ORDERBY>\r\n");
             saida.print("<ORDERBYTYPE>" + q.getOrderByType() + "</ORDERBYTYPE>\r\n");
