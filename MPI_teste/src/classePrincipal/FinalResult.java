@@ -1,8 +1,11 @@
 package classePrincipal;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
+import java.util.Vector;
 
 import ru.ispras.sedna.driver.DriverException;
 import ru.ispras.sedna.driver.SednaConnection;
@@ -11,7 +14,7 @@ import ru.ispras.sedna.driver.SednaStatement;
 
 public class FinalResult {
 
-	public static String getFinalResult(int totalInstances) throws IOException, DriverException{
+	public static String getFinalResult(int totalInstances, String basepath) throws IOException, DriverException{
 		
 		SubQuery sbq = SubQuery.getUniqueInstance(true);
 		
@@ -70,7 +73,7 @@ public class FinalResult {
 					}
 					
 					if (expression.indexOf("count(") >=0){
-						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores já previamente computados nos resultados parciais.
+						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores jï¿½ previamente computados nos resultados parciais.
 					}
 					
 					finalResultXquery = finalResultXquery + "{ " + expression + "}";
@@ -105,7 +108,7 @@ public class FinalResult {
 					}
 					
 					if (expression.indexOf("count(") >=0){
-						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores já previamente computados nos resultados parciais.
+						expression = expression.replace("count(", "sum("); // pois deve-se somar os valores jï¿½ previamente computados nos resultados parciais.
 					}
 					
 					finalResultXquery = finalResultXquery + "{ " + expression + "}";
@@ -173,19 +176,20 @@ public class FinalResult {
 		String finalResult = exec.executeQuery(finalResultXquery);*/
 	
 	
-	/* MODIFICADO PARA OBTER OS RESULTADOS PARCIAIS DE CADA INSTÂNCIA */
+	/* MODIFICADO PARA OBTER OS RESULTADOS PARCIAIS DE CADA INSTï¿½NCIA */
 		
 	String retorno = "";
-	int portNumber = 50;
-	String basePath = "/home/users/carlarod/finalResult/xqueryAnswer.xml";
+	String path = basepath + "/finalResult/xqueryAnswer.xml";
 	String retornoComplete = "";
 		
+	String[] allHosts = getAllHosts();
+
+	for(String host: allHosts) {
 		
-		while ( portNumber <= ((50 + totalInstances)-1)) {
-			
+			System.out.println("Getting partial from: " + host);
 			try {
 			ConnectionSedna con = new ConnectionSedna();
-			SednaConnection scon = con.establishSednaConnection("146.164.31.140:50" + Integer.toString(portNumber), "experiments_db"); // con.establishSednaConnection("localhost", "examplesdb");
+			SednaConnection scon = con.establishSednaConnection(host + ":5050", "xmark"); // con.establishSednaConnection("localhost", "examplesdb");
 			scon.begin();
 			
 			SednaStatement st = scon.createStatement();
@@ -207,7 +211,7 @@ public class FinalResult {
 				}  
 				
 				retornoComplete = retornoComplete + retorno;
-				FileWriter f = new FileWriter(basePath,true);			
+				FileWriter f = new FileWriter(path,true);			
 		        f.write(retorno);
 		        f.close();	        
 		        
@@ -219,8 +223,6 @@ public class FinalResult {
 				
 				//System.out.println("Subquery.executeSubQuery: - document:"  + "\r\n" + retorno + ".");
 			}
-			
-			portNumber =  portNumber + 1;
 		
 			scon.commit();			
 			scon.close();
@@ -231,37 +233,38 @@ public class FinalResult {
 			}
 		}
 			
+		System.out.println("Adding all partial results to temp collection");
 			if ( q.getAggregateFunctions() != null && q.getAggregateFunctions().size() > 0 ) { // Possui funcoes de agregacao no resultado.
 							
-				sbq.deleteCollection("32");
+				sbq.deleteCollection("00");
 				
 				ConnectionSedna con = new ConnectionSedna();
-				SednaConnection scon = con.establishSednaConnection("146.164.31.140:5082", "experiments_db"); // con.establishSednaConnection("localhost", "examplesdb");
+				SednaConnection scon = con.establishSednaConnection("localhost:5050", "xmark"); // con.establishSednaConnection("localhost", "examplesdb");
 				SednaStatement st = scon.createStatement();
 				
-				// Verifica se a coleção já existe.
+				// Verifica se a coleï¿½ï¿½o jï¿½ existe.
 				ExecucaoConsulta exec = new ExecucaoConsulta();			
 				//System.out.println("SubQuery.storeXMLDocumentIntoCollection(): runningSubqueries:" + sbq.isRunningSubqueries());
 				
 				
 					if (exec.executeQuery("for $col in doc('$collections')/collections/collection/@name=\'tmpResultadosParciais' return $col", "32").equals("true")){				
-						// Apagar a coleção caso exista.				
+						// Apagar a coleï¿½ï¿½o caso exista.				
 						st.execute("DROP COLLECTION 'tmpResultadosParciais'");
 
-						// Criar a coleção
+						// Criar a coleï¿½ï¿½o
 						st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
 					}
 					else {
 						System.out
-								.println("SubQuery.storeXMLDocumentIntoCollection():criando coleção");
-						// Criar a coleção
+								.println("SubQuery.storeXMLDocumentIntoCollection():criando coleï¿½ï¿½o");
+						// Criar a coleï¿½ï¿½o
 						st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
 					}
 						
 						
 				
-				// Armazenar documento na coleção temporária 
-				st.execute("LOAD '" + basePath.replace("\\", "/") + "' 'xqueryAnswer.xml' 'tmpResultadosParciais'");
+				// Armazenar documento na coleï¿½ï¿½o temporï¿½ria 
+				st.execute("LOAD '" + path.replace("\\", "/") + "' 'xqueryAnswer.xml' 'tmpResultadosParciais'");
 				
 				scon.commit();
 				
@@ -287,5 +290,26 @@ public class FinalResult {
 				return retornoComplete;
 			}		
 		
+	}
+	
+	private static String[] getAllHosts() {
+		
+		Vector<String> hosts = new Vector<String>();
+        try {
+        	BufferedReader br = new BufferedReader(new FileReader("machines"));
+
+            String line = null;
+
+            while ((line = br.readLine()) != null) {
+                hosts.add(line.trim());
+            }
+            
+            br.close();
+        } 
+        catch (Exception e) {
+        	e.printStackTrace();
+        }
+		
+		return hosts.toArray(new String[0]);
 	}
 }

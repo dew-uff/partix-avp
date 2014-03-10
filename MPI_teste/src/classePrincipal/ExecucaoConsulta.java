@@ -19,11 +19,11 @@ public class ExecucaoConsulta {
 		try {
 			
 			XQDataSource xqd = new SednaXQDataSource();				
-			// Para acessar outra instância alterar o número da porta e o endereço IP			
-			xqd.setProperty("port", "50"+threadId);  
+			// Para acessar outra instï¿½ncia alterar o nï¿½mero da porta e o endereï¿½o IP			
+			xqd.setProperty("port", "5050");  
 			//System.out.println("ExecucaoConsulta class: 50"+threadId);
-			xqd.setProperty("serverName", "146.164.31.140"); 
-			xqd.setProperty("databaseName", "experiments_db");
+			xqd.setProperty("serverName", "127.0.0.1"); 
+			xqd.setProperty("databaseName", "xmark");
 			
 			xqc = xqd.getConnection("SYSTEM", "MANAGER");
 			xqe = xqc.createExpression();			
@@ -35,7 +35,7 @@ public class ExecucaoConsulta {
 			long delay = ((System.nanoTime() - startTime)/1000);			
 			
 			if (!xqr.next()){
-				System.out.println("ExecucaoConsulta class: Nenhum resultado retornado. Verifique o banco de dados ao qual está conectado.");
+				System.out.println("ExecucaoConsulta class: Nenhum resultado retornado. Verifique o banco de dados ao qual estï¿½ conectado.");
 				return null;
 			}			
 			
@@ -56,7 +56,7 @@ public class ExecucaoConsulta {
 				if (xqe!=null) xqe.close();			
 				if (xqc!=null) xqc.close();				
 			} catch (Exception e2) {
-				System.out.println("ExecucaoConsulta class: Erro ao fechar conexão.");
+				System.out.println("ExecucaoConsulta class: Erro ao fechar conexï¿½o.");
 				e2.printStackTrace();
 				return null;
 			}

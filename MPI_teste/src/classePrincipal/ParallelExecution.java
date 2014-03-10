@@ -27,6 +27,7 @@ public class ParallelExecution implements Runnable{
         private XQExpression xqe = null;
         private XQResultSequence xqr = null;
         private SubQuery sbq = null;
+		private String svpHome;
         
         private int getMyrank() {
 			return myrank;
@@ -55,7 +56,7 @@ public class ParallelExecution implements Runnable{
         		long startTime; 
         		long delay;
         		long tmp;       
-				in = new FileReader("/home/users/carlarod/SVP/fragmento_" + this.getIdentificacao() + ".txt");
+				in = new FileReader(svpHome + "/SVP/fragmento_" + this.getIdentificacao() + ".txt");
         		buff = new BufferedReader(in);
 				
 				while((line = buff.readLine()) !=null){    
@@ -64,7 +65,7 @@ public class ParallelExecution implements Runnable{
 						query = query + " " + line;
 					}
 					else {
-						// obter as cláusulas do orderby e de funçoes de agregaçao
+						// obter as clï¿½usulas do orderby e de funï¿½oes de agregaï¿½ao
 						if (line.toUpperCase().contains("<ORDERBY>")){
 							String orderByClause = line.substring(line.indexOf("<ORDERBY>")+"<ORDERBY>".length(), line.indexOf("</ORDERBY>"));
 							q.setOrderBy(orderByClause);
@@ -80,7 +81,7 @@ public class ParallelExecution implements Runnable{
 							String aggregateFunctions = line.substring(line.indexOf("<AGRFUNC>")+"<AGRFUNC>".length(), line.indexOf("</AGRFUNC>"));
 														
 							if (!aggregateFunctions.equals("") && !aggregateFunctions.equals("{}")) {
-								String[] functions = aggregateFunctions.split(","); // separa todas as funções de agregação utilizadas no return statement.
+								String[] functions = aggregateFunctions.split(","); // separa todas as funï¿½ï¿½es de agregaï¿½ï¿½o utilizadas no return statement.
 							
 								if (functions!=null) {
 									
@@ -104,18 +105,18 @@ public class ParallelExecution implements Runnable{
 					this.sbq.deleteCollection(Integer.toString(this.getIdentificacao()));
 				    this.sbq.executeSubQuery(query, Integer.toString(this.getIdentificacao()));
 				    
-				    // tempo de leitura de arquivo + execução da consulta
+				    // tempo de leitura de arquivo + execuï¿½ï¿½o da consulta
 				    delay = ((System.nanoTime() - startTime)/1000000);
 				    
 				    System.out.println("ParallelExecution.run(): - thread:" + identificacao + ", myrank:" + this.getMyrank() + " -- Execution Time:" + delay);
 				    
-				    // tempo das outras sub-consultas já executadas.
+				    // tempo das outras sub-consultas jï¿½ executadas.
 				    tmp = this.sbq.getStartTime(); 				    
    				    
-				    // soma com o tempo gasto para execução da sub-consulta atual.
+				    // soma com o tempo gasto para execuï¿½ï¿½o da sub-consulta atual.
 				    tmp = tmp + delay; 
 				    
-				    // atualiza variável
+				    // atualiza variï¿½vel
 				    q.settotalExecutionTime(q.gettotalExecutionTime() + delay);
 				    this.sbq.setStartTime(tmp);
 					
@@ -147,12 +148,13 @@ public class ParallelExecution implements Runnable{
 				
         }
         
-        public ParallelExecution(int rank, int processorsNumberPerNode) throws XQException, IOException {               
+        public ParallelExecution(int rank, int processorsNumberPerNode, String svpHome) throws XQException, IOException {               
                 this.setMyrank(rank);
-                // ALTERAR SEMPRE AQUI PARA MULTIPLICAR PELO NUMERO DE THREADS POR NÓ.
+                // ALTERAR SEMPRE AQUI PARA MULTIPLICAR PELO NUMERO DE THREADS POR Nï¿½.
         		this.setIdentificacao((this.getMyrank()*processorsNumberPerNode) + cont); 
+        		this.svpHome = svpHome;
                 
-        		// variável global
+        		// variï¿½vel global
         		cont++;
                
                //  Nao pode criar, pois os resultados sao apagados.

@@ -20,13 +20,14 @@ public class SubQuery {
 
 	protected static SubQuery sbq;
 	protected ArrayList<String> subqueries = null;
-	protected boolean sameQuery; // indica se as sub-consultas pertencem a mesma query original. Usada para as sub-consultas geradas a partir de coleções.
-	protected String constructorElement = ""; // define o elemento especificado pelo usuário para a estrutura da resposta. Ex.: <results><el1></el1>...</results>. Neste caso, o elemento é <results>.
-	protected String elementAfterConstructor = ""; // define o elemento após o construtor para a estrutura da resposta. Ex.: <results><order><el1></el1>...</order></results>. Neste caso, o elemento é <order>.
+	protected boolean sameQuery; // indica se as sub-consultas pertencem a mesma query original. Usada para as sub-consultas geradas a partir de coleï¿½ï¿½es.
+	protected String constructorElement = ""; // define o elemento especificado pelo usuï¿½rio para a estrutura da resposta. Ex.: <results><el1></el1>...</results>. Neste caso, o elemento ï¿½ <results>.
+	protected String elementAfterConstructor = ""; // define o elemento apï¿½s o construtor para a estrutura da resposta. Ex.: <results><order><el1></el1>...</order></results>. Neste caso, o elemento ï¿½ <order>.
 	protected boolean runningSubqueries;
 	protected String docIdentifier = null; // usado para identificar o documento antes de armazena-lo na colecao de resultado para os casos em que as sub-consultas nao foram fragmentadas, e sao apenas consultas a documentos.
-	private boolean updateOrderClause = true; // usado para identificar se há elementos em torno do elemento do order by e acertar a cláusula que será utilizada no retorno.
+	private boolean updateOrderClause = true; // usado para identificar se hï¿½ elementos em torno do elemento do order by e acertar a clï¿½usula que serï¿½ utilizada no retorno.
 	protected long startTime = 0;
+	protected static String basepath = null;
 	
 	protected synchronized long getStartTime() {
 		return startTime;
@@ -144,8 +145,8 @@ public class SubQuery {
 		try {
 			long starttime = System.nanoTime();		
 			ConnectionSedna con = new ConnectionSedna();					
-			String url = "146.164.31.140:50" + Integer.toString(thread);
-			String dbName = "experiments_db";
+			String url = "localhost:5050";
+			String dbName = "xmark";
 			//System.out.println("SubQuery.executeSubQuery(): thread" + threadId + "tentando se conectar com "+url + ";"+dbName);
 			scon = con.establishSednaConnection(url, dbName);
 			scon.begin();
@@ -172,7 +173,7 @@ public class SubQuery {
 				Query q = Query.getUniqueInstance(true);
 				SubQuery sbq = SubQuery.getUniqueInstance(true);		
 				
-				// Se nao tiver retornado resultado algum, o único elemento retornado será o constructorElement. Nao gerar XML, pois não há resultados.			
+				// Se nao tiver retornado resultado algum, o ï¿½nico elemento retornado serï¿½ o constructorElement. Nao gerar XML, pois nï¿½o hï¿½ resultados.			
 				if ( retorno.trim().lastIndexOf("<") != -1 ) {					
 		
 					sbq.setConstructorElement(getConstructorElement(retorno)); // Usado para a composicao do resultado final.
@@ -212,7 +213,7 @@ public class SubQuery {
 				if (scon!=null) scon.close();				
 			} catch (Exception e2) {
 				
-				System.out.println("Subquery.executeSubQuery class: Erro ao fechar conexão.");
+				System.out.println("Subquery.executeSubQuery class: Erro ao fechar conexï¿½o.");
 				e2.printStackTrace();
 				//return null;
 			}
@@ -236,12 +237,13 @@ public class SubQuery {
 	
 	public static synchronized void deleteFilesFromDirectory(){
 		
-		String basePath = "/home/users/carlarod/partialResults";
+		//String basePath = "/home/users/carlarod/partialResults";
 		//String basePath = "C:\\Users\\carla\\Desktop\\Desktop\\DissertacaoMestrado\\partialResults";
 		
 		//String basePath = "C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/partialResults/";
+		String path = basepath + "/partialResults";
 		
-		File folder = new File(basePath);
+		File folder = new File(path);
 	    File[] listOfFiles = folder.listFiles();
 
 	    for ( int i = 0; i < listOfFiles.length; i++ ) {
@@ -263,23 +265,23 @@ public class SubQuery {
 		SednaConnection con = null;
 		SednaStatement st = null;	
 		
-		// Verifica se a coleção já existe.
+		// Verifica se a coleï¿½ï¿½o jï¿½ existe.
 		ExecucaoConsulta exec = new ExecucaoConsulta();
 		//threadId = "82";
 		int thread = 50;
 		thread = thread + (Integer.parseInt(threadId));
 			
 		if (exec.executeQuery("for $col in doc('$collections')/collections/collection/@name=\'tmpResultadosParciais' return $col", Integer.toString(thread)).equals("true")){				
-			// Apagar a coleção caso exista.
+			// Apagar a coleï¿½ï¿½o caso exista.
 			
 			try {
 				//con = DatabaseManager.getConnection("localhost","examplesdb","SYSTEM","MANAGER");
-				con = DatabaseManager.getConnection("146.164.31.140:50"+Integer.toString(thread),"experiments_db","SYSTEM","MANAGER");
+				con = DatabaseManager.getConnection("localhost:5050","xmark","SYSTEM","MANAGER");
 				con.begin();
 				st = con.createStatement();
 				st.execute("DROP COLLECTION 'tmpResultadosParciais'");
 				
-				// Criar a coleção
+				// Criar a coleï¿½ï¿½o
 				st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
 				con.commit();
 				
@@ -298,11 +300,11 @@ public class SubQuery {
 		else {
 			try {
 				//con = DatabaseManager.getConnection("localhost","examplesdb","SYSTEM","MANAGER");
-				con = DatabaseManager.getConnection("146.164.31.140:50"+Integer.toString(thread),"experiments_db","SYSTEM","MANAGER");
+				con = DatabaseManager.getConnection("localhost:5050","xmark","SYSTEM","MANAGER");
 				con.begin();
 				st = con.createStatement();			
 				
-				// Criar a coleção
+				// Criar a coleï¿½ï¿½o
 				st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
 				con.commit();
 				
@@ -325,7 +327,7 @@ public class SubQuery {
 	public static void storeResultInXMLDocument(String partialResult, String intervalBeginning, String threadId){
 		
 		//String absolutePathToXMLDocuments = "C:\\Users\\carla\\Desktop\\Desktop\\DissertacaoMestrado\\partialResults\\";
-		String absolutePathToXMLDocuments = "/home/users/carlarod/partialResults/";
+		String absolutePathToXMLDocuments = basepath + "/partialResults/";
 		String fileName = "partialResult_intervalBeginning_"+ intervalBeginning + ".xml";
 		String completeFileName = absolutePathToXMLDocuments + "partialResult_intervalBeginning_"+ intervalBeginning + ".xml";
 		
@@ -361,14 +363,14 @@ public class SubQuery {
 	}
 	
 	/**
-	 * Armazena os documentos que contém os resultados parciais na coleção temporária. 
+	 * Armazena os documentos que contï¿½m os resultados parciais na coleï¿½ï¿½o temporï¿½ria. 
 	 * @throws IOException 
 	 */
 	@SuppressWarnings("static-access")
 	private static synchronized void storeXMLDocumentIntoCollection(String fileName, String threadId) throws IOException{
 				
 		//String absolutePathToXMLDocuments = "C:\\Users\\carla\\Desktop\\Desktop\\DissertacaoMestrado\\partialResults\\";
-		String absolutePathToXMLDocuments = "/home/users/carlarod/partialResults/";
+		String absolutePathToXMLDocuments = basepath + "/partialResults/";
 		//String absolutePathToXMLDocuments = "C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/partialResults/";
 		SednaConnection con = null;
 		SednaStatement st = null;
@@ -381,12 +383,12 @@ public class SubQuery {
 			
 			
 			//con = DatabaseManager.getConnection("localhost","examplesdb","SYSTEM","MANAGER");
-			con = DatabaseManager.getConnection("146.164.31.140:50"+Integer.toString(thread),"experiments_db","SYSTEM","MANAGER");
+			con = DatabaseManager.getConnection("localhost:5050","xmark","SYSTEM","MANAGER");
 			//con = DatabaseManager.getConnection("146.164.31.140:5082","experiments_db","SYSTEM","MANAGER");
 			con.begin();
 			st = con.createStatement();
 			
-			// Verifica se a coleção já existe.
+			// Verifica se a coleï¿½ï¿½o jï¿½ existe.
 			ExecucaoConsulta exec = new ExecucaoConsulta();
 			
 			SubQuery sbq = SubQuery.getUniqueInstance(true);			
@@ -394,22 +396,22 @@ public class SubQuery {
 			/*if (!sbq.isRunningSubqueries()) { // se nao for sub-consulta referentes a mesma query original, apagar a colecao com resultados antigos.
 			
 				if (exec.executeQuery("for $col in doc('$collections')/collections/collection/@name=\'tmpResultadosParciais' return $col", threadId).equals("true")){				
-					// Apagar a coleção caso exista.				
+					// Apagar a coleï¿½ï¿½o caso exista.				
 					st.execute("DROP COLLECTION 'tmpResultadosParciais'");
 
-					// Criar a coleção
+					// Criar a coleï¿½ï¿½o
 					st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
 				}
 				else {
 					System.out
-							.println("SubQuery.storeXMLDocumentIntoCollection():criando coleção");
-					// Criar a coleção
+							.println("SubQuery.storeXMLDocumentIntoCollection():criando coleï¿½ï¿½o");
+					// Criar a coleï¿½ï¿½o
 					st.execute("CREATE COLLECTION 'tmpResultadosParciais'");
 				}
 					
 			}*/		
 			
-			// Armazenar documento na coleção temporária 
+			// Armazenar documento na coleï¿½ï¿½o temporï¿½ria 
 			st.execute("LOAD '" + absolutePathToXMLDocuments.replace("\\", "/") + fileName + "' '" + fileName + "' 'tmpResultadosParciais'");
 			
 			con.commit();
@@ -421,7 +423,7 @@ public class SubQuery {
 				
 		} catch (DriverException e) {
 			System.out.println("SubQuery.storeXMLDocumentIntoCollection: Erro ao efetuar upload do documento " 
-					          + absolutePathToXMLDocuments.replace("\\", "/") + fileName + " para a coleção tmpResultadosParciais.");
+					          + absolutePathToXMLDocuments.replace("\\", "/") + fileName + " para a coleï¿½ï¿½o tmpResultadosParciais.");
 			
 			e.printStackTrace();
 		}
@@ -430,7 +432,7 @@ public class SubQuery {
 				if (con != null) con.close();			
 				
 			} catch (DriverException e2) {
-				System.out.println("Subquery.executeSubQuery class: Erro ao fechar conexão.");
+				System.out.println("Subquery.executeSubQuery class: Erro ao fechar conexï¿½o.");
 				e2.printStackTrace();
 			}
 		}
@@ -471,7 +473,7 @@ public class SubQuery {
 	 *              <date>{ $order/ship_date }</date>
 	 *             </order> }
 	 *      </result>
-	 * A função retornaria date.   
+	 * A funï¿½ï¿½o retornaria date.   
 	 * @param xqueryResult
 	 * @param constructorElement
 	 * @return
@@ -502,7 +504,7 @@ public class SubQuery {
 										
 					if ( posSlash != -1 ) {
 												
-						if (orderElements[i].lastIndexOf('/') == orderElements[i].length()-1) { // se houver dois elementos na clausula order by, a string estará como $order/ship_date/$order/@id, ao separar teremos $order/ship_date/, por isso, é necessário retirar a barra do final.
+						if (orderElements[i].lastIndexOf('/') == orderElements[i].length()-1) { // se houver dois elementos na clausula order by, a string estarï¿½ como $order/ship_date/$order/@id, ao separar teremos $order/ship_date/, por isso, ï¿½ necessï¿½rio retirar a barra do final.
 							orderElements[i] = orderElements[i].substring(0, orderElements[i].length()-1);
 						}
 						
@@ -544,9 +546,9 @@ public class SubQuery {
 							
 							
 							if ( subOrder.trim().indexOf("<")  != -1 ) { // se houver elementos entre o elemento depois do construtor e o elemento do order by, obtenha-o.
-								elementAroundOrderBy = subOrder.trim().substring(subOrder.trim().indexOf("<")+1, subOrder.trim().indexOf("{")); // obtém os elementos antes do elemento do order by.Ex.:<date><sp>{$order/ship_date}</sp></date>. Retornaria date><sp>.
+								elementAroundOrderBy = subOrder.trim().substring(subOrder.trim().indexOf("<")+1, subOrder.trim().indexOf("{")); // obtï¿½m os elementos antes do elemento do order by.Ex.:<date><sp>{$order/ship_date}</sp></date>. Retornaria date><sp>.
 								//System.out.println("getElementsAroundOrderByElement().elementAroundOrderBy 1="+elementAroundOrderBy+".");
-								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[\r\n\t' '>]", ""); // consome ENTER, TAB, espaço em branco e o caracter >.
+								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[\r\n\t' '>]", ""); // consome ENTER, TAB, espaï¿½o em branco e o caracter >.
 								//System.out.println("getElementsAroundOrderByElement().elementAroundOrderBy 2="+elementAroundOrderBy+".");
 								elementAroundOrderBy = elementAroundOrderBy.replaceAll("[<]", "/"); // Substitui os caracteres que separam os elementos de < por /.
 								//System.out.println("getElementsAroundOrderByElement().elementAroundOrderBy 3="+elementAroundOrderBy+".");
@@ -621,7 +623,7 @@ public class SubQuery {
 			String subXquery = xquery.substring(posPositionFunction, xquery.length());
 			subXquery = subXquery.substring(0, subXquery.indexOf("]")+1);
 			
-			// se possui simbolo <, o fragmento tem tamanho maior que 1,caso contrario, é um fragmento unitário.
+			// se possui simbolo <, o fragmento tem tamanho maior que 1,caso contrario, ï¿½ um fragmento unitï¿½rio.
 			int posSymbol = ( subXquery.indexOf("<") != -1? subXquery.indexOf("<"): subXquery.indexOf("=") );
 			
 			//System.out.println("SubQuery.getIntervalEnding():subquery:"+subXquery);
@@ -651,5 +653,9 @@ public class SubQuery {
 	
 		//System.out.println("subquery.getConstructorElement:"+constructorElement + ", constructorElement.indexOf(/>):"+constructorElement.indexOf("/>"));
 		return constructorElement;
+	}
+
+	public static void setBasepath(String svpHome) {
+		basepath = svpHome;
 	}
 }

@@ -20,13 +20,26 @@ public class HelloWorld {
 		String results = "";
 		long delay;
 		
-		final int THREADS_PER_NODE = 8;	
-		final int TOTAL_NUMBER_THREADS = 32; //Numero total de thread considerando todos os nós alocados
-        SubQuery sbq;  
-        SubQuery.deleteFilesFromDirectory();
-                
-		MPI.Init(args);		
+		String[] myargs = MPI.Init(args);		
+		
+		if (myargs.length < 3) {
+			System.err.println("Not enough arguments!");
+			MPI.Finalize();
+			System.exit(1);
+		}
 		myrank = MPI.COMM_WORLD.Rank();
+		
+		final int THREADS_PER_NODE = Integer.parseInt(myargs[0]);	
+		final int NUMBER_NODES = Integer.parseInt(myargs[1]);
+		final int TOTAL_NUMBER_THREADS = THREADS_PER_NODE*NUMBER_NODES; //Numero total de thread considerando todos os nï¿½s alocados
+		
+		System.out.println("SVP Home: " + myargs[2]);
+		String svpHome = myargs[2];
+		
+		SubQuery sbq;  
+        SubQuery.setBasepath(svpHome);
+		SubQuery.deleteFilesFromDirectory();
+
 		
 		Thread[] th = new Thread[THREADS_PER_NODE];		
 		sbq = new SubQuery();
@@ -35,7 +48,7 @@ public class HelloWorld {
 		//System.out.println("HelloWorld.main(): Inicializando threads:" + THREADS_PER_NODE);
 		for (int i = 0; i < THREADS_PER_NODE; i++) {
 			// Cria uma thread para cada processador.
-			th[i] = new Thread(new ParallelExecution(myrank,THREADS_PER_NODE));				
+			th[i] = new Thread(new ParallelExecution(myrank,THREADS_PER_NODE, svpHome));				
 		}
 		
 		long init = System.nanoTime();	
@@ -45,7 +58,7 @@ public class HelloWorld {
 		}
 			
 		for (int i = 0; i < THREADS_PER_NODE; i++) {
-			// Aguarda até que todas as threads sejam finalizadas.
+			// Aguarda atï¿½ que todas as threads sejam finalizadas.
 			try {
 				th[i].join();
 			} catch (InterruptedException e) {
@@ -55,37 +68,37 @@ public class HelloWorld {
 			
 		}			
 		
-        // <<<<<<<<<<<<<<<<<<<< Cada nó irá ler até 8 arquivos, pois cada um contém oito processadores. >>>>>>>>>>>>>>>>>>>>>>
-        // Usar a lei de formação: (rank*8) a ((rank+1)*8)-1 para a leitura dos arquivos. 
+        // <<<<<<<<<<<<<<<<<<<< Cada nï¿½ irï¿½ ler atï¿½ 8 arquivos, pois cada um contï¿½m oito processadores. >>>>>>>>>>>>>>>>>>>>>>
+        // Usar a lei de formaï¿½ï¿½o: (rank*8) a ((rank+1)*8)-1 para a leitura dos arquivos. 
          /* As threads do primeiro nodo devem ser identificadas de 0 a 7. 
          * As threads do segundo nodo devem ser identificadas de 8 a 15. 
          * As threads do segundo nodo devem ser identificadas de 16 a 23.
-         * E, assim, sucessivamente. A cada criação de threads, passar para o construtor da runnable de onde deve começar o contador.
+         * E, assim, sucessivamente. A cada criaï¿½ï¿½o de threads, passar para o construtor da runnable de onde deve comeï¿½ar o contador.
          */ 
        			
-		MPI.COMM_WORLD.Barrier(); // Aguarda até que todos os nós tenham finalizado seus jobs. 
+		MPI.COMM_WORLD.Barrier(); // Aguarda atï¿½ que todos os nï¿½s tenham finalizado seus jobs. 
 				
 		Query q = Query.getUniqueInstance(true);
-	    delay = (System.nanoTime() - init)/1000000; // Calcula o tempo de execução de todas as sub-consultas. Tempo retornado em milisegundos.		
+	    delay = (System.nanoTime() - init)/1000000; // Calcula o tempo de execuï¿½ï¿½o de todas as sub-consultas. Tempo retornado em milisegundos.		
 		System.out.println("Execution time total:" + q.gettotalExecutionTime());
 
-		if (myrank==0) { // Nó 0 é o nó de controle, responsável pela consolidação dos resultados.			
+		if (myrank==0) { // Nï¿½ 0 ï¿½ o nï¿½ de controle, responsï¿½vel pela consolidaï¿½ï¿½o dos resultados.			
 		
 			FinalResult fr = new FinalResult();
 			
 			try {
 				long wait = System.nanoTime();
-				results = fr.getFinalResult(TOTAL_NUMBER_THREADS);				
+				results = fr.getFinalResult(TOTAL_NUMBER_THREADS, svpHome);				
 				 
-				// caminho onde será salvo o documento com a resposta final
-				String completeFileName = "/home/users/carlarod/finalResult/xqueryAnswer.xml";		
+				// caminho onde serï¿½ salvo o documento com a resposta final
+				String completeFileName = svpHome + "/finalResult/xqueryAnswer.xml";		
 					
 			    File file = new File(completeFileName);			    
 			    FileWriter fileWriter = new FileWriter(file);
 			    PrintWriter output = new PrintWriter(fileWriter);			    
 			    output.write(results);		    
 			    
-			    // Calcula o tempo de composição do resultado. Tempo retornado em milisegundos.
+			    // Calcula o tempo de composiï¿½ï¿½o do resultado. Tempo retornado em milisegundos.
 			    delay = ((System.nanoTime() - wait)/1000000);
 				System.out.println("Composition time:" + delay);
 				
