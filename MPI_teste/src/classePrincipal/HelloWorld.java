@@ -1,6 +1,7 @@
 package classePrincipal;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,7 +9,6 @@ import java.io.PrintWriter;
 import javax.xml.xquery.XQException;
 
 import ru.ispras.sedna.driver.DriverException;
-
 import mpi.*;
 
 public class HelloWorld {
@@ -79,36 +79,36 @@ public class HelloWorld {
 		MPI.COMM_WORLD.Barrier(); // Aguarda at� que todos os n�s tenham finalizado seus jobs. 
 				
 		Query q = Query.getUniqueInstance(true);
-	    delay = (System.nanoTime() - init)/1000000; // Calcula o tempo de execu��o de todas as sub-consultas. Tempo retornado em milisegundos.		
-		System.out.println("Execution time total:" + q.gettotalExecutionTime());
 
 		if (myrank==0) { // N� 0 � o n� de controle, respons�vel pela consolida��o dos resultados.			
-		
+
+		    delay = (System.nanoTime() - init)/1000000; // Calcula o tempo de execu��o de todas as sub-consultas. Tempo retornado em milisegundos.		
+			System.out.println("Subquery phase execution time:" + delay);
+			
 			FinalResult fr = new FinalResult();
 			
 			try {
 				long wait = System.nanoTime();
-				results = fr.getFinalResult(TOTAL_NUMBER_THREADS, svpHome);				
-				 
 				// caminho onde ser� salvo o documento com a resposta final
-				String completeFileName = svpHome + "/finalResult/xqueryAnswer.xml";		
-					
-			    File file = new File(completeFileName);			    
-			    FileWriter fileWriter = new FileWriter(file);
-			    PrintWriter output = new PrintWriter(fileWriter);			    
-			    output.write(results);		    
-			    
+				//String completeFileName = svpHome + "/finalResult/xqueryAnswer.xml";
+				String completeFileName = "/usr/local/gabriel/partix-files/finalResult/xqueryAnswer.xml";
+				File file = new File(completeFileName);		
+				FileOutputStream out = new FileOutputStream(file);
+				results = fr.getFinalResult(TOTAL_NUMBER_THREADS, svpHome, out);				
+				 
 			    // Calcula o tempo de composi��o do resultado. Tempo retornado em milisegundos.
 			    delay = ((System.nanoTime() - wait)/1000000);
 				System.out.println("Composition time:" + delay);
 				
-			    if ( output!=null ){
-			    	output.close();
+			    if ( out!=null ){
+			    	out.close();
 			    }
 			    
-			    if ( fileWriter != null ){
-			    	fileWriter.close();			    	
-			    }
+			    long totalTime = ((System.nanoTime() - init)/1000000);
+			    System.out.println("Total execution time:" + totalTime);
+//			    if ( fileWriter != null ){
+//			    	fileWriter.close();			    	
+//			    }
 			
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

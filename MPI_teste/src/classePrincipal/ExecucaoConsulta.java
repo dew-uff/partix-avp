@@ -1,20 +1,25 @@
 package classePrincipal;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQDataSource;
 import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQExpression;
 import javax.xml.xquery.XQResultSequence;
-import net.cfoster.sedna.xqj.*;
+
+import net.cfoster.sedna.xqj.SednaXQDataSource;
 
 public class ExecucaoConsulta {
 
-	public static String executeQuery(String xquery, String threadId) {
+	public static String executeQuery(String xquery, String threadId, OutputStream out) {
 		
 		XQResultSequence xqr = null;
 		XQExpression xqe = null;
 		XQConnection xqc = null;
-		String retorno = "";
+		//String retorno = "";
 		
 		try {
 			
@@ -40,16 +45,19 @@ public class ExecucaoConsulta {
 			}			
 			
 			do {				
-				retorno = retorno + xqr.getItemAsString(null);														
+				out.write(xqr.getItemAsString(null).getBytes());
+				//retorno = retorno + xqr.getItemAsString(null);														
 			} while (xqr.next());
-						
-			return retorno;
 			
 		} catch (XQException e) {
 			System.out.println("ExecucaoConsulta class: Erro ao executar XQuery.");
 			e.printStackTrace();
 			return null;
+		} catch (IOException e) {
+			System.out.println("ExecucaoConsulta class: Erro ao ler resultado da consulta.");
+			e.printStackTrace();
 		}
+		
 		finally {
 			try {
 				if (xqr!=null) xqr.close();			
@@ -61,7 +69,15 @@ public class ExecucaoConsulta {
 				return null;
 			}
 		}		
+
 		
+		return null;
+	}
+	
+	public static String executeQueryAsString(String xquery, String threadId) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		executeQuery(xquery, threadId, out);
+		return out.toString();
 	}
 }
 

@@ -1,13 +1,11 @@
 package classePrincipal;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-
-import javax.xml.xquery.XQExpression;
-import javax.xml.xquery.XQResultSequence;
 
 import ru.ispras.sedna.driver.DatabaseManager;
 import ru.ispras.sedna.driver.DriverException;
@@ -131,18 +129,41 @@ public class SubQuery {
 		return this.subqueries;
 	}
 	
+    private static String getInternalQuery(String xquery) throws IOException {
+
+        int beginInternal = xquery.indexOf('{')+1;
+        int endInternal = xquery.lastIndexOf('}');
+        
+        if (beginInternal == -1 || endInternal == -1) {
+            throw new IOException("Query not well formed. Must have constructor element!");
+        }
+        
+        // internalQuery doesn't have the constructor element
+        String internalQuery = xquery.substring(beginInternal, endInternal);
+        internalQuery.trim();
+        
+        return internalQuery;
+    }
+	
 	/* Metodo para execucao das sub-consultas geradas na fragmentacao virtual simples */
 	public static void executeSubQuery(String xquery, String threadId) {
-				
+		
+		String intervalBeginning = getIntervalBeginning(xquery);
+		String filePath = "partialResult_intervalBeginning_"+ intervalBeginning + ".xml";
+		//String completePath = basepath + "/partialResults/" + filePath;
+		String completePath = "/usr/local/gabriel/partix-files/partialResults/" + filePath;
+		
+		boolean hasResults = false;
+		
 		SednaConnection scon = null;
 		SednaStatement st = null;
 		SednaSerializedResult rs = null;
-		String retorno = "";
 		
 		int thread = 50;
 		thread = thread + (Integer.parseInt(threadId));
 		
 		try {
+			Query q = Query.getUniqueInstance(true);
 			long starttime = System.nanoTime();		
 			ConnectionSedna con = new ConnectionSedna();					
 			String url = "localhost:5050";
@@ -154,56 +175,67 @@ public class SubQuery {
 			st = scon.createStatement();
 			scon.setDebugMode(true);
 			
-			boolean res = st.execute(xquery);
-		
+			String internalQuery = getInternalQuery(xquery);
 			
+			boolean res = st.execute(internalQuery);
+			
+			sbq.setConstructorElement(SubQuery.getConstructorElement(xquery));
+		
 			if ( res ) {
 				rs = st.getSerializedResult();	
-				String item;          
-				retorno = new String();            
 				
-				while ((item = rs.next()) != null) {              
-					retorno = retorno+"\n"+item;          
-				}		
+				FileOutputStream out = new FileOutputStream(completePath);
+	            boolean addheader = true;
+	            String item = null;
+	            while ((item = rs.next()) != null) {
+	                if (addheader) {
+	                    hasResults = true;
+	                    // write XML header
+	                    out.write(getTitle().getBytes());
+	                    
+	                    // write partial result root element
+	                    out.write("<partialResult>\r\n".getBytes());
+	                    
+	                    // write partial result constructor element
+	                    String header = sbq.getConstructorElement() + "\r\n";
+	                    out.write(header.getBytes());
+	                    addheader = false;
+	                    sbq.setElementAfterConstructor(SubQuery.extractElementAfterConstructor(item));
+	                }
+	                out.write(item.getBytes());
+	            }
+
+	            // if the query returned anything add the footer
+	            if (hasResults) {
+	                // close partial result constructor element
+	                String footer = sbq.getConstructorElement().replace("<", "</");
+	                out.write(footer.getBytes());
+
+	                if (!q.isOrderByClause()) { // se a consulta original nao possui order by adicione o elemento idOrdem
+	                    String partialOrderElement = "<idOrdem>" + intervalBeginning + "</idOrdem>";
+	                    out.write(partialOrderElement.getBytes());
+	                }
+
+	                // write partial result root ending element
+	                out.write("</partialResult>".getBytes());
+	            }
+	            
+	            out.close();
 			}
 			
 			scon.commit();					
 			
-			try {		
-				Query q = Query.getUniqueInstance(true);
-				SubQuery sbq = SubQuery.getUniqueInstance(true);		
-				
-				// Se nao tiver retornado resultado algum, o �nico elemento retornado ser� o constructorElement. Nao gerar XML, pois n�o h� resultados.			
-				if ( retorno.trim().lastIndexOf("<") != -1 ) {					
-		
-					sbq.setConstructorElement(getConstructorElement(retorno)); // Usado para a composicao do resultado final.
-					
-					String intervalBeginning = getIntervalBeginning(xquery);
-					
-					if ( sbq.getElementAfterConstructor().equals("") ) {
-						sbq.setElementAfterConstructor(getElementAfterConstructorElement(retorno, sbq.getConstructorElement()));
-					}
-					
-					if (sbq.isUpdateOrderClause()) {
-						getElementsAroundOrderByElement(xquery, sbq.getElementAfterConstructor());
-					}
-					
-					if (!q.isOrderByClause()) { // se a consulta original nao possui order by adicione o elemento idOrdem
-						storeResultInXMLDocument(SubQuery.addOrderId(retorno, intervalBeginning), intervalBeginning, threadId);
-					}
-					else { // se a consulta original possui order by apenas adicione o titulo do xml.
-						retorno = getTitle() + "<partialResult>\r\n" + retorno + "\r\n</partialResult>";
-						storeResultInXMLDocument(retorno, intervalBeginning, threadId);
-					}				
-					
-					long delay = (System.nanoTime()-starttime) / 1000000;
-					
+			if (hasResults) {
+				if (sbq.isUpdateOrderClause()) {
+					getElementsAroundOrderByElement(xquery, sbq.getElementAfterConstructor());
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-				
+				storeXMLDocumentIntoCollection(filePath, threadId);
+			}
+			
+			long delay = (System.nanoTime()-starttime) / 1000000;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (DriverException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,9 +250,14 @@ public class SubQuery {
 				//return null;
 			}
 		}		
-		
 	}
 	
+	private static String extractElementAfterConstructor(String item) {
+		int startpos = item.indexOf('<');
+		int endpos = item.indexOf('>');
+		return item.substring(startpos,endpos+1);
+	}
+
 	public static String addOrderId(String originalPartialResult, String intervalBeginning){
 		
 		return getTitle() + " <partialResult> \r\n" 
@@ -271,7 +308,7 @@ public class SubQuery {
 		int thread = 50;
 		thread = thread + (Integer.parseInt(threadId));
 			
-		if (exec.executeQuery("for $col in doc('$collections')/collections/collection/@name=\'tmpResultadosParciais' return $col", Integer.toString(thread)).equals("true")){				
+		if (exec.executeQueryAsString("for $col in doc('$collections')/collections/collection/@name=\'tmpResultadosParciais' return $col", Integer.toString(thread)).equals("true")){				
 			// Apagar a cole��o caso exista.
 			
 			try {
@@ -370,7 +407,8 @@ public class SubQuery {
 	private static synchronized void storeXMLDocumentIntoCollection(String fileName, String threadId) throws IOException{
 				
 		//String absolutePathToXMLDocuments = "C:\\Users\\carla\\Desktop\\Desktop\\DissertacaoMestrado\\partialResults\\";
-		String absolutePathToXMLDocuments = basepath + "/partialResults/";
+		//String absolutePathToXMLDocuments = basepath + "/partialResults/";
+		String absolutePathToXMLDocuments = "/usr/local/gabriel/partix-files/partialResults/";
 		//String absolutePathToXMLDocuments = "C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/partialResults/";
 		SednaConnection con = null;
 		SednaStatement st = null;
