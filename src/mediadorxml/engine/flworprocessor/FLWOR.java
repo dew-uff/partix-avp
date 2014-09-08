@@ -1,9 +1,16 @@
 package mediadorxml.engine.flworprocessor;
 
+import globalqueryprocessor.subquerygenerator.svp.ExecucaoConsulta;
+import globalqueryprocessor.subquerygenerator.svp.ExistsJoinOperation;
+import globalqueryprocessor.subquerygenerator.svp.Query;
+import globalqueryprocessor.subquerygenerator.svp.SimpleVirtualPartitioning;
+
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+
+import wrapper.sedna.XQueryResult;
 
 import mediadorxml.algebra.basic.Predicate;
 import mediadorxml.algebra.basic.TreeNode;
@@ -19,10 +26,6 @@ import mediadorxml.engine.flworprocessor.util.Variable;
 import mediadorxml.exceptions.AlgebraParserException;
 import mediadorxml.exceptions.FragmentReductionException;
 import mediadorxml.exceptions.OptimizerException;
-import mediadorxml.fragmentacaoVirtualSimples.ExecucaoConsulta;
-import mediadorxml.fragmentacaoVirtualSimples.ExistsJoinOperation;
-import mediadorxml.fragmentacaoVirtualSimples.Query;
-import mediadorxml.fragmentacaoVirtualSimples.SimpleVirtualPartitioning;
 import mediadorxml.javaccparser.SimpleNode;
 
 public class FLWOR extends Clause{
@@ -33,6 +36,7 @@ public class FLWOR extends Clause{
 	protected ArrayList<AbstractOperator> debugPlans;	
 	
 	private OrderByClause orderBy;
+	protected XQueryResult xqResult;
 	
 	public FLWOR() {
 		super();
@@ -656,5 +660,13 @@ public class FLWOR extends Clause{
 			}
 		}
 		return returnInt;
-	}	
+	}
+
+	public XQueryResult getXqResult() {
+		return xqResult;
+	}
+
+	public void setXqResult(XQueryResult xqResult) {
+		this.xqResult = xqResult;
+	}
 }

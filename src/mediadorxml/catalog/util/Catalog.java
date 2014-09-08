@@ -1,11 +1,12 @@
 package mediadorxml.catalog.util;
 
+import globalqueryprocessor.subquerygenerator.svp.CardinalityQuery;
+import globalqueryprocessor.subquerygenerator.svp.Collection;
+import globalqueryprocessor.subquerygenerator.svp.Index;
+import globalqueryprocessor.subquerygenerator.svp.Reference;
+
 import java.util.ArrayList;
 
-import mediadorxml.fragmentacaoVirtualSimples.CardinalityQuery;
-import mediadorxml.fragmentacaoVirtualSimples.Collection;
-import mediadorxml.fragmentacaoVirtualSimples.Index;
-import mediadorxml.fragmentacaoVirtualSimples.Reference;
 
 public class Catalog {
 	
@@ -27,6 +28,8 @@ public class Catalog {
 	protected String databaseName;
 	protected String userName;
 	protected String userPassword;
+
+	protected ArrayList<GlobalView> globalViews;
 	
 	public String getServerName() {
 		return serverName;
@@ -142,5 +145,37 @@ public class Catalog {
 	public void setRelationships(Reference ref) {
 		this.relationships = new ArrayList<Reference>();
 		this.relationships.add(ref);
-	}	
+	}
+	
+	public ArrayList getGlobalViews(){
+		return this.globalViews;
+	}
+	
+	public void setGlobalViews(ArrayList<GlobalView> globalViews){
+		this.globalViews = globalViews;
+	}
+	
+	public void setGlobalViews(GlobalView globalViews){
+		this.globalViews = new ArrayList<GlobalView>();
+		this.globalViews.add(globalViews);
+	}
+	
+	public GlobalView getGlobalView(String globalViewName){
+		for (int i=0; i<this.globalViews.size(); i++){
+			if (((GlobalView)this.globalViews.get(i)).getViewName().equals(globalViewName))
+				return (GlobalView)this.globalViews.get(i);
+		}
+		return null;
+	}
+	
+	public LocalView getLocalView(String localViewName){
+		for (int g=0; g<this.getGlobalViews().size(); g++){
+			for (int l=0; l<((GlobalView)this.getGlobalViews().get(g)).getLocalViews().size(); l++){
+				LocalView lv = (LocalView)((GlobalView)this.getGlobalViews().get(g)).getLocalViews().get(l);
+				if (lv.getViewName().equals(localViewName))
+					return lv;
+			}
+		}
+		return null;
+	}
 }

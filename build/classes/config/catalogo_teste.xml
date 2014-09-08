@@ -5,7 +5,7 @@
         O caracter (#) deve ser substituído pelo nome do documento;
         O caracter (?) deve ser substituído pelo nome do elemento.
   -->
-  <cardinalityQuery> let $elm := doc('#'%)/? return count($elm) </cardinalityQuery>
+  <cardinalityQuery> let $elm := doc('#.xml'%)/? return count($elm) </cardinalityQuery>
   <!-- O caracter # é substituído na classe Query pelo nome do documento.
   	   O caracter % é substituído por vírgula + nome da coleção caso seja um documento dentro de uma coleção.
   	   O caracter ? é substituído pelo caminho no documento xml até o elemento que se deseja consultar.
@@ -33,7 +33,7 @@
   necessários para estabelecer a conexão com o SGBDX Sedna.
   -->  
   <serverName>127.0.0.1</serverName>
-  <databaseName>dblp2</databaseName>
+  <databaseName>dblp</databaseName>
   <userName>SYSTEM</userName>
   <userPassword>MANAGER</userPassword>
   <portNumber>5050</portNumber>
@@ -47,38 +47,38 @@
   -->
    
   <relationships>      
-    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+    <globalqueryprocessor.subquerygenerator.svp.Reference>
 	  <path>site/regions/samerica/item/incategory/@category</path>
 	  <referencedBy>
-	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    <globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	    	<name>site/people/person/profile/interest/@category</name>	    
-		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+		</globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	  </referencedBy>
-    </mediadorxml.fragmentacaoVirtualSimples.Reference>
-    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+    </globalqueryprocessor.subquerygenerator.svp.Reference>
+    <globalqueryprocessor.subquerygenerator.svp.Reference>
 	  <path>orders/itens/item/incategory/@category</path>
 	  <referencedBy>
-	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    <globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	    	<name>orders/people/person/profile/interest/@category</name>	    
-		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+		</globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	  </referencedBy>
-    </mediadorxml.fragmentacaoVirtualSimples.Reference>
-    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+    </globalqueryprocessor.subquerygenerator.svp.Reference>
+    <globalqueryprocessor.subquerygenerator.svp.Reference>
 	  <path>site/regions/africa/item/@id</path>
 	  <referencedBy>
-	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    <globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	    	<name>site/closed_auctions/closed_auction/@item</name>	    
-		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+		</globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	  </referencedBy>
-    </mediadorxml.fragmentacaoVirtualSimples.Reference>
-    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+    </globalqueryprocessor.subquerygenerator.svp.Reference>
+    <globalqueryprocessor.subquerygenerator.svp.Reference>
 	  <path>site/regions/asia/item/incategory/@category</path>
 	  <referencedBy>
-	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    <globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	    	<name>site/people/person/profile/interest/@category</name>	    
-		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+		</globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	  </referencedBy>
-    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+    </globalqueryprocessor.subquerygenerator.svp.Reference>
   </relationships>
   
 </mediadorxml.catalog.util.Catalog>

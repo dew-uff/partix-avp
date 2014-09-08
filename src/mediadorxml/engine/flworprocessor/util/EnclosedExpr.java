@@ -1,5 +1,7 @@
 package mediadorxml.engine.flworprocessor.util;
 
+import globalqueryprocessor.subquerygenerator.svp.Query;
+
 import java.io.IOException;
 
 import mediadorxml.algebra.basic.TreeNode;
@@ -10,7 +12,6 @@ import mediadorxml.algebra.operators.functions.FunctionMaxOperator;
 import mediadorxml.algebra.operators.functions.FunctionMinOperator;
 import mediadorxml.algebra.operators.functions.FunctionSumOperator;
 import mediadorxml.engine.flworprocessor.Clause;
-import mediadorxml.fragmentacaoVirtualSimples.Query;
 import mediadorxml.javaccparser.SimpleNode;
 
 public class EnclosedExpr extends Clause {

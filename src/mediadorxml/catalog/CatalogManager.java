@@ -1,5 +1,9 @@
 package mediadorxml.catalog;
 
+import globalqueryprocessor.subquerygenerator.svp.Collection;
+import globalqueryprocessor.subquerygenerator.svp.Index;
+import globalqueryprocessor.subquerygenerator.svp.Reference;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,9 +20,6 @@ import mediadorxml.exceptions.GlobalViewNotFoundException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import mediadorxml.fragmentacaoVirtualSimples.Collection;
-import mediadorxml.fragmentacaoVirtualSimples.Index;
-import mediadorxml.fragmentacaoVirtualSimples.Reference;
 
 public class CatalogManager {
 	
@@ -63,8 +64,271 @@ public class CatalogManager {
 			throw(e);
 		}
 	}
-	public ArrayList<Reference> getRelationships(){
-		return this._catalog.getRelationships();
+	
+	public TreeNode getGlobalViewLocalization(String globalViewName) throws GlobalViewNotFoundException{
+		
+		// Busca a view global
+		GlobalView gv = this._catalog.getGlobalView(globalViewName);
+		
+		if (gv != null){
+			// Busca os fragmentos da view global
+			ArrayList<LocalView> lv = gv.getLocalViews();
+			return this.getLocalization(lv);
+		}
+		else
+			throw new GlobalViewNotFoundException("Global view '" + globalViewName + "' does not exist.");
+	}
+	
+	public GlobalView getGlobalView(String globalViewName){
+		return this._catalog.getGlobalView(globalViewName);
+	}
+	
+	public LocalView getLocalView(String localViewName){
+		return this._catalog.getLocalView(localViewName);
+	}
+	
+	protected TreeNode getLocalization(ArrayList<LocalView> localViews) throws UnsupportedOperationException{
+		
+		// Réplica (sem fragmentação)
+		if (this.checkAllFragments(localViews, LocalView.FragmentType.FULL)){
+			LocalView lv = localViews.get(0);
+			return new TreeNode(lv.getViewName());
+		}
+		// Todos fragmentos horizontais
+		else if (this.checkAllFragments(localViews, LocalView.FragmentType.HORIZONTAL)){
+			return this.getHorizontalLocalization(localViews);
+		}
+		// Todos fragmentos Verticais
+		else if (this.checkAllFragments(localViews, LocalView.FragmentType.VERTICAL)){
+			return this.getVerticalLocalization(localViews);
+		}
+		// Fragmentos híbridos
+		else{
+			return this.getHybridLocalization(localViews);
+		}		
+	}
+	
+	protected boolean checkAllFragments(ArrayList<LocalView> localViews, LocalView.FragmentType type){
+		for (int i=0; i<localViews.size(); i++){
+			LocalView lv = localViews.get(i);
+			if (lv.getFragmentType() != type)
+				return false;
+		}		
+		return true;
+	}
+	
+	protected TreeNode getHorizontalLocalization(ArrayList<LocalView> localViews){
+		// União de todos os fragmentos
+		LocalView lv = localViews.get(0);
+		TreeNode node = new TreeNode(lv.getViewName());
+		
+		for (int i=1; i<localViews.size(); i++){
+			
+			lv = localViews.get(i);
+			
+			// Criação de uma operação de União
+			TreeNode unionNode = new TreeNode(UNION);
+			unionNode.addChild(node);
+			unionNode.addChild(new TreeNode(lv.getViewName()));
+			
+			node = unionNode;
+		}
+		
+		return node.getRootNode();
+	}
+	
+	protected TreeNode getVerticalLocalization(ArrayList<LocalView> localViews){
+		// União de todos os fragmentos
+		LocalView lv = localViews.get(0);
+		TreeNode node = new TreeNode(lv.getViewName());
+		
+		for (int i=1; i<localViews.size(); i++){
+			
+			lv = localViews.get(i);
+			
+			// Criação de uma operação de União
+			TreeNode unionNode = new TreeNode(JOIN);
+			unionNode.addChild(node);
+			unionNode.addChild(new TreeNode(lv.getViewName()));
+			
+			node = unionNode;
+		}
+		
+		return node.getRootNode();
+	}
+	
+	protected TreeNode getHybridLocalization(ArrayList<LocalView> localViews) throws UnsupportedOperationException{
+		
+		// 1. Descoberta da fragmentação primária da híbrida
+		boolean isUnionRoot = true;
+		LocalView lvI = localViews.get(0);
+		
+		// Se há um fragmento puramente horizontal, a primária é horizontal (union no root)
+		if (lvI.getProjectionPredicates() == null || lvI.getProjectionPredicates().size() == 0){
+			isUnionRoot = true;
+		}
+		
+		// Se há um fragmento puramente vertical, a primária é vertical (join no root)
+		else if (lvI.getSelectionPredicates() == null || lvI.getSelectionPredicates().size() == 0){
+			isUnionRoot = false;
+		}
+		
+		// Se o fragmento é híbrido, procuramos o seu "par" para saber a primária
+		else {
+			for (int j=1; j<localViews.size(); j++){
+				LocalView lvJ = localViews.get(j);
+				
+				// Comparação dos fragmentos verticais
+				if (lvI.getProjectionPredicates().equals(lvJ.getProjectionPredicates())){
+					isUnionRoot = false;
+					break;
+				}
+				else if (lvI.getSelectionPredicates().equals(lvJ.getSelectionPredicates())){
+					isUnionRoot = true;
+					break;
+				}
+			}
+		}
+		
+		if (isUnionRoot){
+			return this.getHybridHorizontalLocalization(localViews);
+		}
+		else{
+			return this.getHybridVerticalLocalization(localViews);
+		}
+		
+	}
+	
+	protected TreeNode getHybridHorizontalLocalization(ArrayList<LocalView> localViews){
+		
+		// TreeNode root
+		TreeNode localization = new TreeNode(UNION);
+
+		ArrayList<LocalView> localViewsProcessed = new ArrayList<LocalView>();
+		
+		//Lista dos fragmentos puramente horizontais
+		ArrayList<LocalView> pureHorizontalLocalViews = new ArrayList<LocalView>();
+		for (int i=0; i<localViews.size(); i++){
+			LocalView lv = localViews.get(i);
+			if (lv.getProjectionPredicates() == null || lv.getProjectionPredicates().size() == 0){
+				pureHorizontalLocalViews.add(lv);
+				localViewsProcessed.add(lv);
+			}
+		}
+		
+		if (pureHorizontalLocalViews.size() > 0){
+			localization.addChild(this.getHorizontalLocalization(pureHorizontalLocalViews));
+		}
+		
+		// Fragmentos híbridos
+		ArrayList<TreeNode> treeNodesHorizontals = new ArrayList<TreeNode>();
+		for (int i=0; i<localViews.size()-1; i++){
+			LocalView lv = localViews.get(i);
+			if (!localViewsProcessed.contains(lv)){
+				// Busca dos pares deste fragmento
+				ArrayList<LocalView> viewsHybr = new ArrayList<LocalView>();
+				viewsHybr.add(lv);
+				localViewsProcessed.add(lv);
+				for (int j=i+1; j<localViews.size(); j++){
+					LocalView lvJ = localViews.get(j);
+					if (lv.getSelectionPredicates().equals(lvJ.getSelectionPredicates())){
+						viewsHybr.add(lvJ);
+						localViewsProcessed.add(lvJ);
+					}
+				}
+				// Criação do TreeNode da fragmentação vertical do fragmento horizontal
+				TreeNode n = this.getVerticalLocalization(viewsHybr);
+				treeNodesHorizontals.add(n);
+			}
+		}
+		
+		// Inclusão dos TreeNodes verticais no TreeNode principal (Horizontal)
+		for (int i=0; i<treeNodesHorizontals.size(); i++){
+			if (localization.getChildren().size() == 2){
+				
+				// Remoção de um dos filhos de localization
+				TreeNode localizationChild = localization.getChild(0);
+				localization.getChildren().remove(localizationChild);
+				
+				TreeNode unionNode = new TreeNode(UNION);
+				unionNode.addChild(treeNodesHorizontals.get(i));
+				unionNode.addChild(localizationChild);
+				
+				localization.addChild(unionNode);
+				
+			}
+			else{
+				localization.addChild(treeNodesHorizontals.get(i));				
+			}
+		}
+	
+		return localization;		
+	}
+	
+	protected TreeNode getHybridVerticalLocalization(ArrayList<LocalView> localViews) throws UnsupportedOperationException{
+		
+		// TreeNode root
+		TreeNode localization = new TreeNode(JOIN);
+
+		ArrayList<LocalView> localViewsProcessed = new ArrayList<LocalView>();
+		
+		//Lista dos fragmentos puramente verticais
+		ArrayList<LocalView> pureVerticalLocalViews = new ArrayList<LocalView>();
+		for (int i=0; i<localViews.size(); i++){
+			LocalView lv = localViews.get(i);
+			if (lv.getSelectionPredicates() == null || lv.getSelectionPredicates().size() == 0){
+				pureVerticalLocalViews.add(lv);
+				localViewsProcessed.add(lv);
+			}
+		}
+		
+		if (pureVerticalLocalViews.size() > 0){
+			localization.addChild(this.getVerticalLocalization(pureVerticalLocalViews));
+		}
+		
+		// Fragmentos híbridos
+		ArrayList<TreeNode> treeNodesHorizontals = new ArrayList<TreeNode>();
+		for (int i=0; i<localViews.size()-1; i++){
+			LocalView lv = localViews.get(i);
+			if (!localViewsProcessed.contains(lv)){
+				// Busca dos pares deste fragmento
+				ArrayList<LocalView> viewsHybr = new ArrayList<LocalView>();
+				viewsHybr.add(lv);
+				localViewsProcessed.add(lv);
+				for (int j=i+1; j<localViews.size(); j++){
+					LocalView lvJ = localViews.get(j);
+					if (lv.getProjectionPredicates().equals(lvJ.getProjectionPredicates())){
+						viewsHybr.add(lvJ);
+						localViewsProcessed.add(lvJ);
+					}
+				}
+				// Criação do TreeNode da fragmentação vertical do fragmento horizontal
+				TreeNode n = this.getHorizontalLocalization(viewsHybr);
+				treeNodesHorizontals.add(n);
+			}
+		}
+		
+		// Inclusão dos TreeNodes horizontais no TreeNode principal (Vertical)
+		for (int i=0; i<treeNodesHorizontals.size(); i++){
+			if (localization.getChildren().size() == 2){
+				
+				// Remoção de um dos filhos de localization
+				TreeNode localizationChild = localization.getChild(0);
+				localization.getChildren().remove(localizationChild);
+				
+				TreeNode joinNode = new TreeNode(JOIN);
+				joinNode.addChild(treeNodesHorizontals.get(i));
+				joinNode.addChild(localizationChild);
+				
+				localization.addChild(joinNode);
+				
+			}
+			else{
+				localization.addChild(treeNodesHorizontals.get(i));				
+			}
+		}
+	
+		return localization;		
 	}
 	
 	public String getCardinalityQuery(){
@@ -78,7 +342,7 @@ public class CatalogManager {
 	public String getFormattedDocumentsQuery(String collectionName){
 		return this._catalog.getFormattedDocumentsQuery(collectionName);
 	}
-		
+	
 	public String getSVP_Directory(){
 		return this._catalog.getSVP_Directory();
 	}
@@ -86,7 +350,7 @@ public class CatalogManager {
 	public String getAVP_Directory(){
 		return this._catalog.getAVP_Directory();
 	}
-	
+
 	public String getpartialResults_Directory(){
 		return this._catalog.getPartialResult_Directory();
 	}
@@ -110,4 +374,5 @@ public class CatalogManager {
 	public String getportNumber(){
 		return this._catalog.getPortNumber();
 	}
+	
 }

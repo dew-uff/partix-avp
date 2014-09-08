@@ -1,0 +1,55 @@
+------------------------------------------------------------
+File: AVP_LoadBalancing_query01_2nodes_10exec_tpchSF.txt
+Limits: 1 to 1087589
+------------------------------------------------------------
+Execution Number: 1
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 2
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 3
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 4
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 5
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 6
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 7
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 8
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 9
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+------------------------------------------------------------
+Execution Number: 10
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+First execution time: 0 ms
+Mean execution time (ignoring first execution): 0.0 ms

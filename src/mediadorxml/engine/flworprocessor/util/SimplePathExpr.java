@@ -1,5 +1,11 @@
 package mediadorxml.engine.flworprocessor.util;
 
+import globalqueryprocessor.subquerygenerator.svp.ExecucaoConsulta;
+import globalqueryprocessor.subquerygenerator.svp.ExistsJoinOperation;
+import globalqueryprocessor.subquerygenerator.svp.Query;
+import globalqueryprocessor.subquerygenerator.svp.SimpleVirtualPartitioning;
+import globalqueryprocessor.subquerygenerator.svp.SubQuery;
+
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -8,11 +14,6 @@ import mediadorxml.engine.flworprocessor.Clause;
 import mediadorxml.javaccparser.SimpleNode;
 
 import mediadorxml.catalog.CatalogManager;
-import mediadorxml.fragmentacaoVirtualSimples.ExecucaoConsulta;
-import mediadorxml.fragmentacaoVirtualSimples.ExistsJoinOperation;
-import mediadorxml.fragmentacaoVirtualSimples.Query;
-import mediadorxml.fragmentacaoVirtualSimples.SimpleVirtualPartitioning;
-import mediadorxml.fragmentacaoVirtualSimples.SubQuery;
 
 public class SimplePathExpr extends Clause {
 	
@@ -144,6 +145,9 @@ public class SimplePathExpr extends Clause {
 											subpath = q.getInputQuery().substring(posForClause, posPath) + this.xpath;
 										}
 			
+										System.out.println(subpath);
+										System.out.println(q.getFragmentationVariable());
+										System.out.println(Integer.parseInt(cardinality.replace(".0", "")));
 										svp.addVirtualPredicates(subpath, q.getFragmentationVariable(), Integer.parseInt(cardinality.replace(".0", "")));
 											
 									}	

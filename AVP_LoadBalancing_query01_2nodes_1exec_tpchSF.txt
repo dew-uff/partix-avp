@@ -1,0 +1,10 @@
+------------------------------------------------------------
+File: AVP_LoadBalancing_query01_2nodes_1exec_tpchSF.txt
+Limits: 1 to 1087589
+------------------------------------------------------------
+Execution Number: 1
+IO has NOT been measured
+Elapsed time = 0 milisseconds.
+------------------------------------------------------------
+First execution time: 0 ms
+Mean execution time (ignoring first execution): NaN ms

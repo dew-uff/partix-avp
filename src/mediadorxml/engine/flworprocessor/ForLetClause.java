@@ -1,5 +1,7 @@
 package mediadorxml.engine.flworprocessor;
 
+import globalqueryprocessor.subquerygenerator.svp.Query;
+
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -7,7 +9,6 @@ import mediadorxml.algebra.basic.TreeNode;
 import mediadorxml.algebra.operators.SelectOperator;
 import mediadorxml.engine.flworprocessor.util.SimplePathExpr;
 import mediadorxml.engine.flworprocessor.util.Variable;
-import mediadorxml.fragmentacaoVirtualSimples.Query;
 import mediadorxml.javaccparser.SimpleNode;
 
 public class ForLetClause extends Clause {
@@ -63,7 +64,8 @@ public class ForLetClause extends Clause {
 				try {
 					Query q = Query.getUniqueInstance(true);
 					final TreeNode newNode = new TreeNode(((SimpleNode)node.jjtGetChild(0)).getText(), TreeNode.RelationTypeEnum.ROOT);					
-					q.setFragmentationVariable("$"+newNode.getLabel()); // indica a última variável XML lida, referente a um FOR.					
+					q.setFragmentationVariable("$"+newNode.getLabel()); // indica a última variável XML lida, referente a um FOR.	
+					//System.out.println(q.getFragmentationVariable());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

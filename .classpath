@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="C:/Users/lais/workspace/XMLVirtualPartitioning/lib/sednadriver.jar"/>
 	<classpathentry kind="lib" path="C:/Users/lais/workspace/XMLVirtualPartitioning/lib/sxqj-beta2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/lais/workspace/XMLVirtualPartitioning/lib/xstream-1.1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lais/Desktop/pacote_vfinal/Carga/MediadorTatiane/WrapperSedna/lib/axis.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,11 +1,12 @@
 package mediadorxml.engine.flworprocessor.util;
 
+import globalqueryprocessor.subquerygenerator.svp.Query;
+
 import java.io.IOException;
 
 import mediadorxml.algebra.basic.Predicate;
 import mediadorxml.algebra.basic.TreeNode;
 import mediadorxml.engine.flworprocessor.Clause;
-import mediadorxml.fragmentacaoVirtualSimples.Query;
 import mediadorxml.javaccparser.SimpleNode;
 
 public class ComparisonExpr extends Clause {

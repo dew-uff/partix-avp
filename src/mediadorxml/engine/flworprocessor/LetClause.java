@@ -1,10 +1,11 @@
 package mediadorxml.engine.flworprocessor;
 
+import globalqueryprocessor.subquerygenerator.svp.Query;
+
 import java.io.IOException;
 import java.util.Hashtable;
 
 import mediadorxml.algebra.basic.TreeNode;
-import mediadorxml.fragmentacaoVirtualSimples.Query;
 import mediadorxml.javaccparser.SimpleNode;
 
 public class LetClause extends ForLetClause {
