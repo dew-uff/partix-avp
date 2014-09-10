@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 import wrapper.sedna.XQueryResult;
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import mediadorxml.algebra.util.IdGenerator;
 import mediadorxml.engine.flworprocessor.FLWOR;
 import mediadorxml.exceptions.AlgebraParserException;
@@ -18,8 +21,12 @@ public class XQueryEngine {
 	
 	protected transient StringBuilder xqueryResultStr;
 	protected transient ArrayList<FLWOR> flworList;
+<<<<<<< HEAD
 	private XQueryResult xqResult;
 	
+=======
+		
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 	public XQueryEngine(){
 		this.flworList = new ArrayList<FLWOR>();
 	}
@@ -29,18 +36,27 @@ public class XQueryEngine {
 	}
 	
 	public void execute(String xquery, boolean debug) {
+<<<<<<< HEAD
 		//System.out.println(xquery);
 		IdGenerator.reset();
 		
 		this.xqueryResultStr = new StringBuilder();
 		//this.xqResult = new XQueryResult();
 		
+=======
+		
+		IdGenerator.reset();
+		
+		this.xqueryResultStr = new StringBuilder();
+			
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 		try{
 			
 			long startParseTime = System.nanoTime();
 						
 			// Parser da XQuery			
 			XQueryParser xqParsed = new XQueryParser(new StringReader(xquery));
+<<<<<<< HEAD
 
 			SimpleNode node = xqParsed.Start();
 
@@ -72,6 +88,19 @@ public class XQueryEngine {
 			exc.printStackTrace();
 //			xqResult.setSuccess(false);
 //			xqResult.setResult(exc.getMessage());	
+=======
+			SimpleNode node = xqParsed.Start();
+			
+			long parseTime = (System.nanoTime() - startParseTime)/1000000;
+			
+			// Processamento e execução da XQuery
+			this.processSimpleNode(node, debug);
+			
+				
+		}
+		catch(Exception exc){
+			exc.printStackTrace();
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 		}
 	}
 	
@@ -84,7 +113,10 @@ public class XQueryEngine {
 		boolean processChild = true;
 		
 		String element = node.toString();
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 		if (element == "ElmtConstructor"){
 			this.xqueryResultStr.append("<");
 		}
@@ -115,11 +147,18 @@ public class XQueryEngine {
 		}
 			
 		if (processChild & (node.jjtGetNumChildren()>0)){
+<<<<<<< HEAD
 			for (int i=0; i<node.jjtGetNumChildren(); i++) {
 				this.processSimpleNode((SimpleNode)node.jjtGetChild(i), debug);
 			}
 		}
 		
+=======
+			for (int i=0; i<node.jjtGetNumChildren(); i++){
+				this.processSimpleNode((SimpleNode)node.jjtGetChild(i), debug);
+			}
+		}
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 	}
 	
 	public ArrayList getFlworList(){

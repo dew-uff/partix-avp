@@ -1,0 +1,40 @@
+#!/bin/bash
+THISHOST=$(hostname)
+MPJ_HOME=/sw/mpj/0.35
+JAVA_HOME=/sw/java/jre1.6.0_21
+export MPJ_HOME=$MPJ_HOME
+export PATH=$PATH:$MPJ_HOME/bin:$JAVA_HOME/bin
+
+if ps ax | grep -v grep | grep rmiregistry > /dev/null
+then
+  echo "$THISHOST : rmiregistry already running" 
+else
+  echo "$THISHOST starting rmiregistry..."
+  rmiregistry &
+fi
+sleep 4
+LAUNCHER=$1
+cd ~/teste_copy/exp; java -Xms1024m -Xmx2048m -Djava.security.policy=rmi.client.policy -Djava.rmi.server.codebase=file:/home/users/carlarod/teste_copy/exp/HydraStarter.jar -jar HydraStarter.jar $THISHOST $LAUNCHER 
+echo "$THISHOST : Starter registered at Hydra Launcher and triggered."
+path=`pwd`
+conf="${path}/${3}"
+echo $conf
+lines=`cat $conf | egrep -v "#" | egrep "@"`
+
+
+host=$THISHOST
+rank=999
+
+for i in `echo $lines`; do
+   host=`echo $i | cut -d "@" -f 1`
+   rank=`echo $i | cut -d "@" -f 3`
+   if [ $THISHOST == $host ]
+   then
+      break
+   fi
+done
+ 
+exec=$2
+
+cd $MPJ_HOME; java -jar $exec $rank $conf niodev $3 $4 $5 $6 $7 $8
+rm -f $conf

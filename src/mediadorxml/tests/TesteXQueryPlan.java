@@ -1,5 +1,6 @@
 package mediadorxml.tests;
 
+<<<<<<< HEAD
 import globalqueryprocessor.subquerygenerator.svp.DecomposeQuery;
 import globalqueryprocessor.subquerygenerator.svp.ExistsJoinOperation;
 import globalqueryprocessor.subquerygenerator.svp.FinalResult;
@@ -7,6 +8,8 @@ import globalqueryprocessor.subquerygenerator.svp.Query;
 import globalqueryprocessor.subquerygenerator.svp.SimpleVirtualPartitioning;
 import globalqueryprocessor.subquerygenerator.svp.SubQuery;
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -33,7 +36,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+<<<<<<< HEAD
 import localqueryprocessor.dynamicrangegenerator.avp.AdaptiveVirtualPartitioning;
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import mediadorxml.algebra.operators.AbstractOperator;
 import mediadorxml.catalog.CatalogManager;
 import mediadorxml.engine.XQueryEngine;
@@ -41,6 +47,16 @@ import mediadorxml.graphics.PlanPanel;
 import mediadorxml.javaccparser.ParseException;
 import mediadorxml.tests.graph.ImageSelection;
 
+<<<<<<< HEAD
+=======
+import mediadorxml.fragmentacaoVirtualAdaptativa.AdaptativeVirtualPartitioning;
+import mediadorxml.fragmentacaoVirtualSimples.DecomposeQuery;
+import mediadorxml.fragmentacaoVirtualSimples.ExistsJoinOperation;
+import mediadorxml.fragmentacaoVirtualSimples.FinalResult;
+import mediadorxml.fragmentacaoVirtualSimples.Query;
+import mediadorxml.fragmentacaoVirtualSimples.SimpleVirtualPartitioning;
+import mediadorxml.fragmentacaoVirtualSimples.SubQuery;
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 
 public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 
@@ -401,7 +417,11 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 						try{					
 							
 							Query q;
+<<<<<<< HEAD
 							AdaptiveVirtualPartitioning adp; 
+=======
+							AdaptativeVirtualPartitioning adp; 
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 							Integer.parseInt(jTextField.getText());
 													
 							if (!executouFVS) {
@@ -430,7 +450,11 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 									
 									if ( initialFragments.indexOf("[position() = ") == -1) { // A especificacao do inicio do intervalo nao eh uma igualdade.
 										// executa a fase de ajuste do fragmento apenas se o fragmento tiver tamanho maior que 1.
+<<<<<<< HEAD
 										adp = new AdaptiveVirtualPartitioning(initialFragments);			
+=======
+										adp = new AdaptativeVirtualPartitioning(initialFragments);			
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 									}
 									else {
 										sbq.executeSubQuery(initialFragments); // executa diretamente o fragmento.
@@ -508,7 +532,11 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 						try{					
 							CatalogManager cm = CatalogManager.getUniqueInstance();
 							Query q;
+<<<<<<< HEAD
 							AdaptiveVirtualPartitioning adp = null;	
+=======
+							AdaptativeVirtualPartitioning adp = null;	
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 							Integer.parseInt(jTextField.getText());
 							
 							String basePath = cm.getAVP_Directory() + "/fragmentos.txt";
@@ -553,7 +581,11 @@ public class TesteXQueryPlan extends JFrame implements ClipboardOwner {
 									
 									if ( initialFragments.indexOf("[position() = ") == -1) { // A especificacao do inicio do intervalo nao eh uma igualdade.
 										// executa a fase de ajuste do fragmento apenas se o fragmento tiver tamanho maior que 1.
+<<<<<<< HEAD
 										adp = new AdaptiveVirtualPartitioning(initialFragments);										
+=======
+										adp = new AdaptativeVirtualPartitioning(initialFragments);										
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 									}
 									
 									q = Query.getUniqueInstance(true);

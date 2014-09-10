@@ -1,5 +1,6 @@
 package mediadorxml.catalog.util;
 
+<<<<<<< HEAD
 import globalqueryprocessor.subquerygenerator.svp.CardinalityQuery;
 import globalqueryprocessor.subquerygenerator.svp.Collection;
 import globalqueryprocessor.subquerygenerator.svp.Index;
@@ -7,6 +8,14 @@ import globalqueryprocessor.subquerygenerator.svp.Reference;
 
 import java.util.ArrayList;
 
+=======
+import java.util.ArrayList;
+
+import mediadorxml.fragmentacaoVirtualSimples.CardinalityQuery;
+import mediadorxml.fragmentacaoVirtualSimples.Collection;
+import mediadorxml.fragmentacaoVirtualSimples.Index;
+import mediadorxml.fragmentacaoVirtualSimples.Reference;
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 
 public class Catalog {
 	
@@ -28,8 +37,11 @@ public class Catalog {
 	protected String databaseName;
 	protected String userName;
 	protected String userPassword;
+<<<<<<< HEAD
 
 	protected ArrayList<GlobalView> globalViews;
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 	
 	public String getServerName() {
 		return serverName;
@@ -145,6 +157,7 @@ public class Catalog {
 	public void setRelationships(Reference ref) {
 		this.relationships = new ArrayList<Reference>();
 		this.relationships.add(ref);
+<<<<<<< HEAD
 	}
 	
 	public ArrayList getGlobalViews(){
@@ -178,4 +191,7 @@ public class Catalog {
 		}
 		return null;
 	}
+=======
+	}	
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 }

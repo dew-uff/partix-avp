@@ -1,7 +1,10 @@
 package mediadorxml.engine.flworprocessor;
 
+<<<<<<< HEAD
 import globalqueryprocessor.subquerygenerator.svp.Query;
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -9,6 +12,10 @@ import mediadorxml.algebra.basic.TreeNode;
 import mediadorxml.algebra.operators.SelectOperator;
 import mediadorxml.engine.flworprocessor.util.SimplePathExpr;
 import mediadorxml.engine.flworprocessor.util.Variable;
+<<<<<<< HEAD
+=======
+import mediadorxml.fragmentacaoVirtualSimples.Query;
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import mediadorxml.javaccparser.SimpleNode;
 
 public class ForLetClause extends Clause {
@@ -64,8 +71,12 @@ public class ForLetClause extends Clause {
 				try {
 					Query q = Query.getUniqueInstance(true);
 					final TreeNode newNode = new TreeNode(((SimpleNode)node.jjtGetChild(0)).getText(), TreeNode.RelationTypeEnum.ROOT);					
+<<<<<<< HEAD
 					q.setFragmentationVariable("$"+newNode.getLabel()); // indica a última variável XML lida, referente a um FOR.	
 					//System.out.println(q.getFragmentationVariable());
+=======
+					q.setFragmentationVariable("$"+newNode.getLabel()); // indica a última variável XML lida, referente a um FOR.					
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

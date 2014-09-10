@@ -1,17 +1,23 @@
 package mediadorxml.engine.flworprocessor;
 
+<<<<<<< HEAD
 import globalqueryprocessor.subquerygenerator.svp.ExecucaoConsulta;
 import globalqueryprocessor.subquerygenerator.svp.ExistsJoinOperation;
 import globalqueryprocessor.subquerygenerator.svp.Query;
 import globalqueryprocessor.subquerygenerator.svp.SimpleVirtualPartitioning;
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+<<<<<<< HEAD
 import wrapper.sedna.XQueryResult;
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import mediadorxml.algebra.basic.Predicate;
 import mediadorxml.algebra.basic.TreeNode;
 import mediadorxml.algebra.operators.AbstractOperator;
@@ -26,6 +32,13 @@ import mediadorxml.engine.flworprocessor.util.Variable;
 import mediadorxml.exceptions.AlgebraParserException;
 import mediadorxml.exceptions.FragmentReductionException;
 import mediadorxml.exceptions.OptimizerException;
+<<<<<<< HEAD
+=======
+import mediadorxml.fragmentacaoVirtualSimples.ExecucaoConsulta;
+import mediadorxml.fragmentacaoVirtualSimples.ExistsJoinOperation;
+import mediadorxml.fragmentacaoVirtualSimples.Query;
+import mediadorxml.fragmentacaoVirtualSimples.SimpleVirtualPartitioning;
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import mediadorxml.javaccparser.SimpleNode;
 
 public class FLWOR extends Clause{
@@ -36,7 +49,10 @@ public class FLWOR extends Clause{
 	protected ArrayList<AbstractOperator> debugPlans;	
 	
 	private OrderByClause orderBy;
+<<<<<<< HEAD
 	protected XQueryResult xqResult;
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 	
 	public FLWOR() {
 		super();
@@ -660,6 +676,7 @@ public class FLWOR extends Clause{
 			}
 		}
 		return returnInt;
+<<<<<<< HEAD
 	}
 
 	public XQueryResult getXqResult() {
@@ -669,4 +686,7 @@ public class FLWOR extends Clause{
 	public void setXqResult(XQueryResult xqResult) {
 		this.xqResult = xqResult;
 	}
+=======
+	}	
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 }

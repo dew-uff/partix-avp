@@ -1,9 +1,12 @@
 package mediadorxml.catalog;
 
+<<<<<<< HEAD
 import globalqueryprocessor.subquerygenerator.svp.Collection;
 import globalqueryprocessor.subquerygenerator.svp.Index;
 import globalqueryprocessor.subquerygenerator.svp.Reference;
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,6 +23,12 @@ import mediadorxml.exceptions.GlobalViewNotFoundException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+<<<<<<< HEAD
+=======
+import mediadorxml.fragmentacaoVirtualSimples.Collection;
+import mediadorxml.fragmentacaoVirtualSimples.Index;
+import mediadorxml.fragmentacaoVirtualSimples.Reference;
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 
 public class CatalogManager {
 	
@@ -64,6 +73,7 @@ public class CatalogManager {
 			throw(e);
 		}
 	}
+<<<<<<< HEAD
 	
 	public TreeNode getGlobalViewLocalization(String globalViewName) throws GlobalViewNotFoundException{
 		
@@ -329,6 +339,10 @@ public class CatalogManager {
 		}
 	
 		return localization;		
+=======
+	public ArrayList<Reference> getRelationships(){
+		return this._catalog.getRelationships();
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 	}
 	
 	public String getCardinalityQuery(){
@@ -342,7 +356,11 @@ public class CatalogManager {
 	public String getFormattedDocumentsQuery(String collectionName){
 		return this._catalog.getFormattedDocumentsQuery(collectionName);
 	}
+<<<<<<< HEAD
 	
+=======
+		
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 	public String getSVP_Directory(){
 		return this._catalog.getSVP_Directory();
 	}
@@ -350,7 +368,11 @@ public class CatalogManager {
 	public String getAVP_Directory(){
 		return this._catalog.getAVP_Directory();
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 	public String getpartialResults_Directory(){
 		return this._catalog.getPartialResult_Directory();
 	}
@@ -374,5 +396,8 @@ public class CatalogManager {
 	public String getportNumber(){
 		return this._catalog.getPortNumber();
 	}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 }

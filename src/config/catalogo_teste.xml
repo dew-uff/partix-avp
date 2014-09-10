@@ -5,7 +5,11 @@
         O caracter (#) deve ser substituído pelo nome do documento;
         O caracter (?) deve ser substituído pelo nome do elemento.
   -->
+<<<<<<< HEAD
   <cardinalityQuery> let $elm := doc('#.xml'%)/? return count($elm) </cardinalityQuery>
+=======
+  <cardinalityQuery> let $elm := doc('#'%)/? return count($elm) </cardinalityQuery>
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
   <!-- O caracter # é substituído na classe Query pelo nome do documento.
   	   O caracter % é substituído por vírgula + nome da coleção caso seja um documento dentro de uma coleção.
   	   O caracter ? é substituído pelo caminho no documento xml até o elemento que se deseja consultar.
@@ -21,6 +25,7 @@
   <!-- Parâmetros que indicam os diretórios onde os arquivos resultantes da fragmentação são armazenados. -->     
   
   <!-- <svpDirectory>C:/Users/carla/Desktop/Desktop/DissertacaoMestrado/SVP</svpDirectory> -->  
+<<<<<<< HEAD
   <svpDirectory>C:/Users/lais/Desktop/Luiz/doutorado/estudo-orientado/experimento/fragmentos/SVP</svpDirectory>  
   
   <avpDirectory>C:/Users/lais/Desktop/Luiz/doutorado/estudo-orientado/experimento/fragmentos/AVP</avpDirectory> 
@@ -28,12 +33,25 @@
   
   <!--  <partialResultDirectory>C:/Users/lais/Desktop/Luiz/doutorado/estudo-orientado/experimento/fragmentos/partialResults/</partialResultDirectory>-->
   <partialResultDirectory>C:/Users/lais/Desktop/Luiz/doutorado/estudo-orientado/experimento/fragmentos/partialResults/</partialResultDirectory>  
+=======
+  <svpDirectory>C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/SVP</svpDirectory>  
+  
+  <avpDirectory>C:/Users/carla/Desktop/Desktop/DissertacaoMestrado/AVP</avpDirectory> 
+  <!-- <avpDirectory>C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/AVP</avpDirectory> -->
+  
+  <!--  <partialResultDirectory>C:/Users/carla/Desktop/Desktop/DissertacaoMestrado/partialResults/</partialResultDirectory>-->
+  <partialResultDirectory>C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/partialResults/</partialResultDirectory>  
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
   
   <!-- Parâmetros que indicam os servidor, o banco de dados, o nome e senha do usuário e o número da porta,
   necessários para estabelecer a conexão com o SGBDX Sedna.
   -->  
   <serverName>127.0.0.1</serverName>
+<<<<<<< HEAD
   <databaseName>dblp</databaseName>
+=======
+  <databaseName>examplesdb</databaseName>
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
   <userName>SYSTEM</userName>
   <userPassword>MANAGER</userPassword>
   <portNumber>5050</portNumber>
@@ -47,6 +65,7 @@
   -->
    
   <relationships>      
+<<<<<<< HEAD
     <globalqueryprocessor.subquerygenerator.svp.Reference>
 	  <path>site/regions/samerica/item/incategory/@category</path>
 	  <referencedBy>
@@ -79,6 +98,40 @@
 		</globalqueryprocessor.subquerygenerator.svp.ReferencedBy>
 	  </referencedBy>
     </globalqueryprocessor.subquerygenerator.svp.Reference>
+=======
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>site/regions/samerica/item/incategory/@category</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>site/people/person/profile/interest/@category</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>orders/itens/item/incategory/@category</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>orders/people/person/profile/interest/@category</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>site/regions/africa/item/@id</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>site/closed_auctions/closed_auction/@item</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>site/regions/asia/item/incategory/@category</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>site/people/person/profile/interest/@category</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
   </relationships>
   
 </mediadorxml.catalog.util.Catalog>

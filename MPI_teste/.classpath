@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/carla/workspace/MPI_teste/lib/mpj.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/carla/workspace/MPI_teste/lib/log4j-1.2.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/carla/workspace/MPI_teste/lib/sednadriver.jar"/>
+	<classpathentry kind="lib" path="C:/Users/carla/workspace/MPI_teste/lib/sxqj-beta2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/carla/workspace/MPI_teste/lib/xmldb.jar"/>
+	<classpathentry kind="lib" path="C:/Users/carla/workspace/MPI_teste/lib/sedna-xmldb.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

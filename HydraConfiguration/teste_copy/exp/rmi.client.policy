@@ -1,0 +1,4 @@
+grant codebase "file:/home/users/carlarod/teste_copy/exp/HydraStarter.jar" {
+    permission java.security.AllPermission;
+};
+

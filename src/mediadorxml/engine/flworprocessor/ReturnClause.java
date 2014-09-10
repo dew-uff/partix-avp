@@ -1,7 +1,10 @@
 package mediadorxml.engine.flworprocessor;
 
+<<<<<<< HEAD
 import globalqueryprocessor.subquerygenerator.svp.Query;
 
+=======
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -12,6 +15,10 @@ import mediadorxml.algebra.operators.ConstructOperator;
 import mediadorxml.algebra.operators.SelectOperator;
 import mediadorxml.algebra.operators.functions.FunctionOperator;
 import mediadorxml.engine.flworprocessor.util.EnclosedExpr;
+<<<<<<< HEAD
+=======
+import mediadorxml.fragmentacaoVirtualSimples.Query;
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import mediadorxml.javaccparser.SimpleNode;
 
 public class ReturnClause extends Clause {

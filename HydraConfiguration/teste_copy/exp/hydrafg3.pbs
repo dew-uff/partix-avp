@@ -1,0 +1,15 @@
+#!/bin/bash
+conf=$3
+cores=$2
+launcher=$(hostname)
+~/teste_copy/exp/hydrafg.launch $cores $conf &
+sleep 2
+nodes=`sort $1 | uniq`
+for i in `echo $nodes`; do
+	rsh $i "cd ~/teste_copy/exp; ./hydrafg.start $launcher ~/mpj/testefg4.jar $3 $4 $5 $6 $7 $8; rm -f $1" &
+done
+while [ -f $1 ]
+do
+sleep 10
+done
+

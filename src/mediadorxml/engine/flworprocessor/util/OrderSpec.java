@@ -1,8 +1,14 @@
 package mediadorxml.engine.flworprocessor.util;
 
+<<<<<<< HEAD
 import globalqueryprocessor.subquerygenerator.svp.Query;
 import mediadorxml.algebra.basic.TreeNode;
 import mediadorxml.engine.flworprocessor.Clause;
+=======
+import mediadorxml.algebra.basic.TreeNode;
+import mediadorxml.engine.flworprocessor.Clause;
+import mediadorxml.fragmentacaoVirtualSimples.Query;
+>>>>>>> e5fbc1cea5dfd6fc988da05b836ff82d02601a48
 import mediadorxml.javaccparser.SimpleNode;
 
 public class OrderSpec extends Clause {
