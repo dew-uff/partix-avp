@@ -304,7 +304,8 @@ public class FinalResult {
 
 					while ((item = rs.next()) != null) {
 						//retorno = retorno + "\n" + item;
-						f.write(item + "\n");
+						f.write(item);
+						f.write("\r\n");
 						f.flush();
 					}
 
