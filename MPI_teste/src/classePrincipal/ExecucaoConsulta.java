@@ -28,7 +28,7 @@ public class ExecucaoConsulta {
 			xqd.setProperty("port", "5050");  
 			//System.out.println("ExecucaoConsulta class: 50"+threadId);
 			xqd.setProperty("serverName", "127.0.0.1"); 
-			xqd.setProperty("databaseName", "xmark");
+			xqd.setProperty("databaseName", "expdb");
 			
 			xqc = xqd.getConnection("SYSTEM", "MANAGER");
 			xqe = xqc.createExpression();			

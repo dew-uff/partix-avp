@@ -282,7 +282,7 @@ public class FinalResult {
 			try {
 				ConnectionSedna con = new ConnectionSedna();
 				SednaConnection scon = con.establishSednaConnection(host
-						+ ":5050", "xmark"); // con.establishSednaConnection("localhost",
+						+ ":5050", "expdb"); // con.establishSednaConnection("localhost",
 												// "examplesdb");
 				scon.begin();
 
@@ -346,7 +346,7 @@ public class FinalResult {
 
 			ConnectionSedna con = new ConnectionSedna();
 			SednaConnection scon = con.establishSednaConnection(
-					"localhost:5050", "xmark"); // con.establishSednaConnection("localhost",
+					"localhost:5050", "expdb"); // con.establishSednaConnection("localhost",
 												// "examplesdb");
 			SednaStatement st = scon.createStatement();
 

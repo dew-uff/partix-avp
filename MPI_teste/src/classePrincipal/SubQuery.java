@@ -167,7 +167,7 @@ public class SubQuery {
 			long starttime = System.nanoTime();		
 			ConnectionSedna con = new ConnectionSedna();					
 			String url = "localhost:5050";
-			String dbName = "xmark";
+			String dbName = "expdb";
 			//System.out.println("SubQuery.executeSubQuery(): thread" + threadId + "tentando se conectar com "+url + ";"+dbName);
 			scon = con.establishSednaConnection(url, dbName);
 			scon.begin();
@@ -313,7 +313,7 @@ public class SubQuery {
 			
 			try {
 				//con = DatabaseManager.getConnection("localhost","examplesdb","SYSTEM","MANAGER");
-				con = DatabaseManager.getConnection("localhost:5050","xmark","SYSTEM","MANAGER");
+				con = DatabaseManager.getConnection("localhost:5050","expdb","SYSTEM","MANAGER");
 				con.begin();
 				st = con.createStatement();
 				st.execute("DROP COLLECTION 'tmpResultadosParciais'");
@@ -337,7 +337,7 @@ public class SubQuery {
 		else {
 			try {
 				//con = DatabaseManager.getConnection("localhost","examplesdb","SYSTEM","MANAGER");
-				con = DatabaseManager.getConnection("localhost:5050","xmark","SYSTEM","MANAGER");
+				con = DatabaseManager.getConnection("localhost:5050","expdb","SYSTEM","MANAGER");
 				con.begin();
 				st = con.createStatement();			
 				
@@ -421,7 +421,7 @@ public class SubQuery {
 			
 			
 			//con = DatabaseManager.getConnection("localhost","examplesdb","SYSTEM","MANAGER");
-			con = DatabaseManager.getConnection("localhost:5050","xmark","SYSTEM","MANAGER");
+			con = DatabaseManager.getConnection("localhost:5050","expdb","SYSTEM","MANAGER");
 			//con = DatabaseManager.getConnection("146.164.31.140:5082","experiments_db","SYSTEM","MANAGER");
 			con.begin();
 			st = con.createStatement();
