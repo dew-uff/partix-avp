@@ -268,8 +268,8 @@ public class FinalResult {
 		/* MODIFICADO PARA OBTER OS RESULTADOS PARCIAIS DE CADA INST�NCIA */
 
 		//String retorno = "";
-		//String path = basepath + "/finalResult/xqueryAnswer.xml";
-		String path = "/usr/local/gabriel/partix-files/finalResult/xqueryAnswer.xml";
+		String path = basepath + "/finalResult/xqueryAnswer.xml";
+		//String path = "/usr/local/gabriel/partix-files/finalResult/xqueryAnswer.xml";
 		//String retornoComplete = "";
 
 		String[] allHosts = getAllHosts();

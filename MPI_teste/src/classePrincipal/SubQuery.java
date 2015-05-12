@@ -150,8 +150,8 @@ public class SubQuery {
 		
 		String intervalBeginning = getIntervalBeginning(xquery);
 		String filePath = "partialResult_intervalBeginning_"+ intervalBeginning + ".xml";
-		//String completePath = basepath + "/partialResults/" + filePath;
-		String completePath = "/usr/local/gabriel/partix-files/partialResults/" + filePath;
+		String completePath = basepath + "/partialResults/" + filePath;
+		//String completePath = "/usr/local/gabriel/partix-files/partialResults/" + filePath;
 		
 		boolean hasResults = false;
 		
@@ -407,8 +407,8 @@ public class SubQuery {
 	private static synchronized void storeXMLDocumentIntoCollection(String fileName, String threadId) throws IOException{
 				
 		//String absolutePathToXMLDocuments = "C:\\Users\\carla\\Desktop\\Desktop\\DissertacaoMestrado\\partialResults\\";
-		//String absolutePathToXMLDocuments = basepath + "/partialResults/";
-		String absolutePathToXMLDocuments = "/usr/local/gabriel/partix-files/partialResults/";
+		String absolutePathToXMLDocuments = basepath + "/partialResults/";
+		//String absolutePathToXMLDocuments = "/usr/local/gabriel/partix-files/partialResults/";
 		//String absolutePathToXMLDocuments = "C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/partialResults/";
 		SednaConnection con = null;
 		SednaStatement st = null;

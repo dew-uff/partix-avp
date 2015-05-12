@@ -91,7 +91,9 @@ public class HelloWorld {
 				long wait = System.nanoTime();
 				// caminho onde ser� salvo o documento com a resposta final
 				//String completeFileName = svpHome + "/finalResult/xqueryAnswer.xml";
-				String completeFileName = "/usr/local/gabriel/partix-files/finalResult/xqueryAnswer.xml";
+//				String completeFileName = "/usr/local/gabriel/partix-files/finalResult/xqueryAnswer.xml";
+                String completeFileName = svpHome + "/finalResult/xqueryAnswer.xml";
+
 				File file = new File(completeFileName);		
 				FileOutputStream out = new FileOutputStream(file);
 				results = fr.getFinalResult(TOTAL_NUMBER_THREADS, svpHome, out);				
