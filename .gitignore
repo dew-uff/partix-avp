@@ -1,3 +1,9 @@
-deleteme.txt
 bin/
 build/
+MPI_Teste/bin/
+MPI_Teste/build/
+deleteme.txt
+.externalToolBuilders/
+.project
+.settings/
+.classpath

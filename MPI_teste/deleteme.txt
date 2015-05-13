@@ -1,1 +1,0 @@
-for $col in doc('$collections')/collections/collection/@name="tmpResultadosParciais" return $col
