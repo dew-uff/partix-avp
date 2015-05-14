@@ -1,0 +1,84 @@
+<mediadorxml.catalog.util.Catalog>
+  <catalogName>Catalogo_Experimentos</catalogName>
+
+  <!-- Consulta que verifica a cardinalidade do elemento em um documento.
+        O caracter (#) deve ser substituído pelo nome do documento;
+        O caracter (?) deve ser substituído pelo nome do elemento.
+  -->
+  <cardinalityQuery> let $elm := doc('#'%)/? return count($elm) </cardinalityQuery>
+  <!-- O caracter # é substituído na classe Query pelo nome do documento.
+  	   O caracter % é substituído por vírgula + nome da coleção caso seja um documento dentro de uma coleção.
+  	   O caracter ? é substituído pelo caminho no documento xml até o elemento que se deseja consultar.
+  	   Exemplo: let $elm := doc('dblpR.xml','dblp')/dblp/inproceedings return count($elm) 
+  -->
+  
+  
+  <!-- Consulta que obtém os nomes dos documentos dentro de uma coleção, separando-os por vírgula.
+       O caracter (?) deve ser substituído pelo nome da coleção a ser consultada.
+  -->     
+  <documentsQuery> for $c in doc('$documents')//collection[@name='?']/document/@name return concat( substring($c,1),',') </documentsQuery>
+  
+  <!-- Parâmetros que indicam os diretórios onde os arquivos resultantes da fragmentação são armazenados. -->     
+  
+  <!-- <svpDirectory>C:/Users/carla/Desktop/Desktop/DissertacaoMestrado/SVP</svpDirectory> -->  
+  <svpDirectory>/home/gabriel/partix-files/SVP</svpDirectory>  
+  
+  <avpDirectory>/home/gabriel/partix-files/AVP</avpDirectory> 
+  <!-- <avpDirectory>C:/Documents and Settings/Carla.UNIVERSI-C771D1/Meus documentos/UFRJ/Mestrado/PESC/DissertacaoMestrado/AVP</avpDirectory> -->
+  
+  <!--  <partialResultDirectory>C:/Users/carla/Desktop/Desktop/DissertacaoMestrado/partialResults/</partialResultDirectory>-->
+  <partialResultDirectory>home/gabriel/partix-files/partialResults/</partialResultDirectory>  
+  
+  <!-- Parâmetros que indicam os servidor, o banco de dados, o nome e senha do usuário e o número da porta,
+  necessários para estabelecer a conexão com o SGBDX Sedna.
+  -->  
+  <serverName>127.0.0.1</serverName>
+  <databaseName>expdb</databaseName>
+  <userName>admin</userName>
+  <userPassword>admin</userPassword>
+  <portNumber>1984</portNumber>
+  
+  <!-- Parâmetros que indicam os relacionamentos entre chave primária e estrangeira, quando a chave primária
+  não é o atributo id do elemento. Assim, a fragmentação de consultas com junções só poderá ser realizada após
+  leitura deste catálogo,para verificar qual elemento possui a chave primária, sobre o qual a fragmentação deve ser aplicada.
+  
+  	AS INFORMAÇÕES ABAIXO NÃO SÃO UTILIZADAS PELO SISTEMA. É APENAS INFORMATIVO. 
+  
+  -->
+<!--   
+  <relationships>      
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>site/regions/samerica/item/incategory/@category</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>site/people/person/profile/interest/@category</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>orders/itens/item/incategory/@category</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>orders/people/person/profile/interest/@category</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>site/regions/africa/item/@id</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>site/closed_auctions/closed_auction/@item</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+    <mediadorxml.fragmentacaoVirtualSimples.Reference>
+	  <path>site/regions/asia/item/incategory/@category</path>
+	  <referencedBy>
+	    <mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	    	<name>site/people/person/profile/interest/@category</name>	    
+		</mediadorxml.fragmentacaoVirtualSimples.ReferencedBy>
+	  </referencedBy>
+    </mediadorxml.fragmentacaoVirtualSimples.Reference>
+  </relationships>
+  -->
+</mediadorxml.catalog.util.Catalog>

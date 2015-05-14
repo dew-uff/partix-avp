@@ -1,4 +1,0 @@
-grant codebase "file:/home/users/carlarod/teste_copy/exp/HydraLauncher.jar" {
-    permission java.security.AllPermission;
-};
-

@@ -7,3 +7,4 @@ deleteme.txt
 .project
 .settings/
 .classpath
+/target/
