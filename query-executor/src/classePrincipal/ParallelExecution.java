@@ -70,11 +70,13 @@ public class ParallelExecution implements Runnable {
 		        FileOutputStream fos = new FileOutputStream(completePath);
 				
 				sqe.executeQuery(fos);
+				fos.flush();
+				fos.close();
 			    
 			    // tempo de leitura de arquivo + execução da consulta
 			    delay = ((System.nanoTime() - startTime)/1000000);
-			    
-			    System.out.println("ParallelExecution.run(): - thread:" + identificacao + ", myrank:" + this.getMyrank() + " -- Execution Time:" + delay);
+			     
+			    System.out.println("ParallelExecution.run(): - thread: " + identificacao + ", myrank: " + this.getMyrank() + " -- Execution Time: " + delay);
 			    
 				try {
             	   Thread.sleep(2000);  // tempo especificado em milissegundos	            	   

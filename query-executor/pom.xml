@@ -26,7 +26,7 @@
         <dependency>
             <groupId>mpj</groupId>
             <artifactId>mpj</artifactId>
-            <version>0.38</version>
+            <version>0.44</version>
         </dependency>
     </dependencies>
 

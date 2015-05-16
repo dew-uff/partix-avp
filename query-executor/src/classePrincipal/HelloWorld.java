@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -79,7 +78,7 @@ public class HelloWorld {
 		if (myrank==0) { // Nó 0 é o nó de controle, responsável pela consolidação dos resultados.			
 
 		    delay = (System.nanoTime() - init)/1000000; // Calcula o tempo de execução de todas as sub-consultas. Tempo retornado em milisegundos.		
-		    System.out.println("Subquery phase execution time:" + delay);
+		    System.out.println("Subquery phase execution time: " + delay);
 			
 			try {
 				long t1 = System.nanoTime();
@@ -121,11 +120,10 @@ public class HelloWorld {
 				
 			    // Calcula o tempo de composição do resultado. Tempo retornado em milisegundos.
 			    delay = ((System.nanoTime() - t2)/1000000);
-				System.out.println("Composition time:" + delay);
+				System.out.println("Composition time: " + delay);
 				
-			    
 			    long totalTime = ((System.nanoTime() - init)/1000000);
-			    System.out.println("Total execution time:" + totalTime);
+			    System.out.println("Total execution time: " + totalTime);
                 if ( out!=null ){
                     out.close();
                 }
