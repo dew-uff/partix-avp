@@ -3,10 +3,12 @@ package mediadorxml.fragmentacaoVirtualSimples;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -19,14 +21,23 @@ public class PartixSVPMain {
 
     private String inputQuery;
     private int nfragments = 30;
-	
-	public PartixSVPMain(int numberOfNodes, String query) {
-		nfragments = numberOfNodes;
-		inputQuery = query;
-	}
+    private InputStream catalog = null;
+
+   public PartixSVPMain(int numberOfNodes, String query, InputStream catalog) {
+        nfragments = numberOfNodes;
+        inputQuery = query;
+        this.catalog = catalog;
+    }
+
 	
 	public void execute() throws DatabaseException, PartitioningException, IOException {
-        Partitioner partitioner = new Partitioner("localhost", 1984, "admin", "admin", "expdb", "BASEX");
+        Partitioner partitioner = null;
+        if (catalog == null) {
+            partitioner = new Partitioner("localhost", 1984, "admin", "admin", "expdb", "BASEX");
+        }
+        else {
+            partitioner = new Partitioner(catalog);
+        }
         List<String> fragments = partitioner.executePartitioning(inputQuery, nfragments);
         saveFragments(fragments);
 	}
@@ -81,7 +92,7 @@ public class PartixSVPMain {
     
     public static void main(String[] args) {
     	if (args.length < 2) {
-    		System.err.println("Arguments missing <nfragments> <queryfile>");
+    		System.err.println("Arguments missing <nfragments> <queryfile> [<catalogfile>]");
     		System.exit(1);
     	}
     	
@@ -102,9 +113,19 @@ public class PartixSVPMain {
     		System.exit(1);
     	}
     	
+    	InputStream catalogStream = null;
+    	if (args.length == 3) {
+    	    try {
+                catalogStream = new FileInputStream(args[2]);
+            } catch (FileNotFoundException e) {
+                System.err.println("Catalog file was not found!");
+                System.exit(1);
+            }
+    	}
+    	
     	try {
             long start = System.currentTimeMillis();
-    		PartixSVPMain main = new PartixSVPMain(nodes, query);
+    		PartixSVPMain main = new PartixSVPMain(nodes, query, catalogStream);
     		main.execute();
             long partitionTime = System.currentTimeMillis() - start;
     		System.out.println("SVP done! Partitioning time: " + partitionTime + " ms.");
